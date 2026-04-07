@@ -36,6 +36,23 @@ header {
 h1 { font-size: 48px; font-weight: 800; color: #F0ECE4; line-height: 1; margin-bottom: 48px; letter-spacing: -1px; }
 h1 span { color: #C9A84C; }
 
+/* ALERTA INSTRUÇÃO */
+.leitura-obrigatoria {
+  background: rgba(201,168,76,0.06);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-left: 3px solid #C9A84C;
+  border-radius: 6px;
+  padding: 14px 20px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.leitura-obrigatoria .lo-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.leitura-obrigatoria .lo-title { font-size: 9px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #C9A84C; margin-bottom: 4px; }
+.leitura-obrigatoria .lo-text { font-size: 10px; color: #7A8FA8; line-height: 1.6; }
+.leitura-obrigatoria .lo-text strong { color: #F0ECE4; }
+
 /* STATUS BAR */
 .status-bar {
   background: rgba(74,222,128,0.06);
@@ -43,7 +60,7 @@ h1 span { color: #C9A84C; }
   border-left: 3px solid #4ade80;
   border-radius: 8px;
   padding: 16px 24px;
-  margin-bottom: 48px;
+  margin-bottom: 12px;
   display: flex;
   align-items: flex-start;
   gap: 16px;
@@ -57,6 +74,11 @@ h1 span { color: #C9A84C; }
   background: rgba(74,222,128,0.08);
   border: 1px solid rgba(74,222,128,0.2);
   color: #a7f3c0;
+}
+.status-chip.gold {
+  background: rgba(201,168,76,0.08);
+  border-color: rgba(201,168,76,0.25);
+  color: #E8C97A;
 }
 
 /* OWNER BADGES */
@@ -135,7 +157,10 @@ h1 span { color: #C9A84C; }
   font-size: 9px; font-weight: 600; color: #7A8FA8;
 }
 .module-chip.done { border-color: rgba(74,222,128,0.2); color: #a7f3c0; }
-.module-chip span { display: block; font-size: 7px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #4ade80; margin-bottom: 2px; }
+.module-chip.new  { border-color: rgba(201,168,76,0.3); color: #E8C97A; }
+.module-chip span { display: block; font-size: 7px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2px; }
+.module-chip.done span { color: #4ade80; }
+.module-chip.new  span { color: #C9A84C; }
 .platform-links { display: flex; flex-wrap: wrap; gap: 10px; }
 .plat-link {
   font-size: 9px; font-weight: 600; letter-spacing: 1px;
@@ -144,6 +169,27 @@ h1 span { color: #C9A84C; }
 .plat-link:hover { opacity: 0.75; }
 .plat-link.github { background: rgba(122,143,168,0.1); border: 1px solid rgba(122,143,168,0.25); color: #A0B8D0; }
 .plat-link.local  { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); color: #E8C97A; }
+.plat-link.prod   { background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; }
+
+/* FLUXOS */
+.fluxo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 48px; }
+@media (max-width: 700px) { .fluxo-grid { grid-template-columns: 1fr; } }
+.fluxo-card {
+  background: #111F35;
+  border: 1px solid rgba(201,168,76,0.15);
+  border-top: 2px solid #C9A84C;
+  padding: 20px 24px;
+}
+.fluxo-title { font-size: 13px; font-weight: 700; color: #F0ECE4; margin-bottom: 4px; }
+.fluxo-sub   { font-size: 9px; color: #7A8FA8; margin-bottom: 14px; line-height: 1.5; }
+.fluxo-steps { display: flex; flex-direction: column; gap: 6px; }
+.fluxo-step  {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 9px; color: #7A8FA8; padding: 6px 10px;
+  background: rgba(22,39,68,0.5); border-radius: 3px;
+}
+.fluxo-step-n { font-size: 7px; font-weight: 800; color: #C9A84C; background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.25); width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 2px; flex-shrink: 0; margin-top: 1px; }
+.fluxo-step strong { color: #F0ECE4; display: block; font-size: 9px; margin-bottom: 1px; }
 
 /* GIT WORKFLOW */
 .git-bar {
@@ -218,8 +264,10 @@ h1 span { color: #C9A84C; }
 }
 .link-card:hover { background: #162744; }
 .link-card.hamilton-link { border-color: rgba(122,143,168,0.15); }
+.link-card.prod-link { border-color: rgba(74,222,128,0.2); }
 .link-label { font-size: 8px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C9A84C; opacity: 0.7; margin-bottom: 6px; }
 .link-card.hamilton-link .link-label { color: #A0B8D0; }
+.link-card.prod-link .link-label { color: #4ade80; }
 .link-name  { font-size: 11px; font-weight: 600; color: #F0ECE4; }
 .link-note  { font-size: 8px; color: #7A8FA8; margin-top: 3px; }
 
@@ -255,21 +303,47 @@ footer .tag { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: #C9A
   </div>
   <div class="header-right">
     <div class="header-date" id="data-hoje"></div>
-    <div class="header-sync">&#9679; GitHub Sincronizado — João + Hamilton</div>
+    <div class="header-sync">&#9679; GitHub Sincronizado — João + Hamilton · Vercel em Produção</div>
   </div>
 </header>
 
-<!-- STATUS BAR -->
+<!-- INSTRUÇÃO OBRIGATÓRIA -->
+<div class="leitura-obrigatoria">
+  <div class="lo-icon">&#128278;</div>
+  <div>
+    <div class="lo-title">Leitura obrigatória antes de desenvolver</div>
+    <div class="lo-text">
+      <strong>Todo membro do time lê este portal antes de começar qualquer sessão de desenvolvimento.</strong>
+      Ele reflete o estado atual da plataforma — módulos prontos, fluxos implementados, pendências e links de acesso.
+      Atualizado a cada entrega significativa. Em caso de dúvida sobre o que já existe, consulte aqui antes de construir.
+      <br><br>
+      <strong>Repo principal:</strong> github.com/hamiltonsantosinvestimentos-cmyk/v3-partner &nbsp;·&nbsp;
+      <strong>Produção:</strong> v3-partner-chi.vercel.app &nbsp;·&nbsp;
+      <strong>Dev local:</strong> localhost:3000 (npm run dev)
+    </div>
+  </div>
+</div>
+
+<!-- STATUS BAR — ÚLTIMAS ENTREGAS -->
 <div class="status-bar">
-  <span class="status-bar-label">Entregue hoje</span>
+  <span class="status-bar-label">Últimas entregas</span>
   <div class="status-bar-items">
-    <span class="status-chip">GITHUB — João + Hamilton conectados</span>
-    <span class="status-chip">BRANDBOOK — DM Sans + Paleta V3 aplicados</span>
-    <span class="status-chip">CLAUDE.md — Contexto unificado no repo</span>
-    <span class="status-chip">18 componentes corrigidos</span>
-    <span class="status-chip">AIOS + 12 Squads instalados</span>
-    <span class="status-chip">SEC — Auditoria OWASP</span>
-    <span class="status-chip">DESIGN — Design System v1.0</span>
+    <span class="status-chip gold">PRODUÇÃO — Vercel no ar · 07/04/2026</span>
+    <span class="status-chip">Comunidade de Negócios — vitrine + formulários</span>
+    <span class="status-chip">Fluxo M&amp;A completo — Partner → Mesa → NDA/Mandato → ClickSign</span>
+    <span class="status-chip">FORJA — validação IA de deals</span>
+    <span class="status-chip">Preview criativos — CIM, Teaser, LinkedIn</span>
+    <span class="status-chip">Correções RHF — Controller + validações</span>
+    <span class="status-chip">75 commits · main</span>
+  </div>
+</div>
+<div class="status-bar" style="margin-bottom:48px; background: rgba(122,143,168,0.04); border-color: rgba(122,143,168,0.2); border-left-color: #A0B8D0;">
+  <span class="status-bar-label" style="color:#A0B8D0;">Próximos passos</span>
+  <div class="status-bar-items">
+    <span class="status-chip" style="background:rgba(122,143,168,0.06); border-color:rgba(122,143,168,0.2); color:#A0B8D0;">Motor de Crédito — trabalho hoje</span>
+    <span class="status-chip" style="background:rgba(122,143,168,0.06); border-color:rgba(122,143,168,0.2); color:#A0B8D0;">Supabase produção — Hamilton configurar env vars no Vercel</span>
+    <span class="status-chip" style="background:rgba(122,143,168,0.06); border-color:rgba(122,143,168,0.2); color:#A0B8D0;">ClickSign token real</span>
+    <span class="status-chip" style="background:rgba(122,143,168,0.06); border-color:rgba(122,143,168,0.2); color:#A0B8D0;">Resend API key produção</span>
   </div>
 </div>
 
@@ -295,15 +369,15 @@ footer .tag { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: #C9A
       <div class="frente" onclick="abrirTerminal('v3-pipeline.bat')">
         <div class="owner owner-joao"><div class="owner-dot"></div>João</div>
         <div class="frente-num">Frente 02</div>
-        <div class="frente-title">Pipeline &amp; Deals</div>
-        <div class="frente-desc">Originação de ativos, qualificação 5 SIMs, CRM, documentos de mandato e NDA. R$4,4B mapeados.</div>
+        <div class="frente-title">Pipeline &amp; Deals M&amp;A</div>
+        <div class="frente-desc">Originação de ativos, qualificação 5 SIMs, CRM, NDA/Mandato via ClickSign, FORJA IA. R$4,4B mapeados.</div>
         <div class="frente-cmd"><code>v3-launchers\v3-pipeline.bat</code></div>
       </div>
       <div class="frente" onclick="abrirTerminal('v3-materiais.bat')">
         <div class="owner owner-joao"><div class="owner-dot"></div>João</div>
         <div class="frente-num">Frente 03</div>
         <div class="frente-title">Materiais &amp; Identidade</div>
-        <div class="frente-desc">Apresentações, decks, posts, e-mails, materiais de partners. Arquétipo Mago Soberano aplicado.</div>
+        <div class="frente-desc">Apresentações, decks, posts, e-mails, criativos M&amp;A (CIM, Teaser Cego, LinkedIn). Arquétipo Mago Soberano.</div>
         <div class="frente-cmd"><code>v3-launchers\v3-materiais.bat</code></div>
       </div>
       <div class="frente" onclick="abrirSite()">
@@ -327,29 +401,32 @@ footer .tag { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: #C9A
         <div class="owner owner-hamilton"><div class="owner-dot"></div>Hamilton</div>
         <div class="frente-num">Frente 05</div>
         <div class="frente-title">Plataforma SaaS — v3-partner</div>
-        <div class="frente-desc">Next.js 16 + Supabase. Dashboard, CRM, M&amp;A, Split Fiscal, Mesa Crédito 3 níveis, Academy, IA Partner. 47 commits.</div>
+        <div class="frente-desc">Next.js 16 + Supabase. 18 módulos prontos. Produção no ar: v3-partner-chi.vercel.app. 75 commits.</div>
         <div class="frente-cmd"><code>github.com/hamiltonsantosinvestimentos-cmyk/v3-partner</code></div>
       </div>
       <div class="frente hamilton-frente" onclick="copiarCaminho('C:\\Users\\jlemo\\Documents\\v3-partner')">
         <div class="owner owner-hamilton"><div class="owner-dot"></div>Hamilton · Dev</div>
         <div class="frente-num">Frente 06</div>
         <div class="frente-title">Backend &amp; Banco de Dados</div>
-        <div class="frente-desc">Supabase — 9 tabelas, RLS completo, 6 roles (ADMIN, PARTNER_PRO, MESA, GESTAO, FINANCEIRO). Schema SQL versionado.</div>
+        <div class="frente-desc">Supabase — 9 tabelas, RLS completo, 6 roles. Pendente: configurar env vars no Vercel para sair do modo demo.</div>
         <div class="frente-cmd"><code>v3-partner\supabase-schema.sql</code></div>
       </div>
       <div class="frente hamilton-frente">
         <div class="owner owner-hamilton"><div class="owner-dot"></div>Hamilton</div>
         <div class="frente-num">Frente 07</div>
         <div class="frente-title">V3 IA Partner</div>
-        <div class="frente-desc">Anthropic SDK integrado. Chat assistente financeiro com contexto V3. Histórico persistido no Supabase (ai_conversations).</div>
+        <div class="frente-desc">Anthropic SDK integrado. Chat assistente financeiro com contexto V3. Histórico persistido no Supabase.</div>
         <div class="frente-cmd"><code>app/(platform)/ia-assistant</code></div>
       </div>
       <div class="frente hamilton-frente">
         <div class="owner owner-hamilton"><div class="owner-dot"></div>Hamilton</div>
         <div class="frente-num">Frente 08</div>
         <div class="frente-title">Deploy &amp; Infraestrutura</div>
-        <div class="frente-desc">Build Next.js, variáveis de ambiente, Supabase credentials, deploy produção. Configurar domínio app.v3partners.com.br.</div>
-        <div class="frente-cmd"><code>npm run build · npm run start</code></div>
+        <div class="frente-desc">Vercel no ar (modo demo). Próximo: adicionar env vars Supabase + Anthropic + Resend + ClickSign no painel Vercel.</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+          <a href="https://v3-partner-chi.vercel.app" target="_blank" style="font-size:9px; color:#4ade80; text-decoration:none; border:1px solid rgba(74,222,128,0.3); padding:3px 10px;">&#9654; Produção ao vivo</a>
+          <a href="https://vercel.com/joao-lemos/v3-partner" target="_blank" style="font-size:9px; color:#A0B8D0; text-decoration:none; border:1px solid rgba(122,143,168,0.25); padding:3px 10px;">&#9881; Painel Vercel</a>
+        </div>
       </div>
     </div>
   </div>
@@ -365,9 +442,16 @@ footer .tag { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: #C9A
         <div class="frente-desc">AIOS + 12 Squads, triggers remotos, crons, GitHub Actions. Agente diário 8:17 BRT ativo.</div>
         <div class="frente-cmd"><code>v3-launchers\v3-automacoes.bat</code></div>
       </div>
-      <div class="frente ambos-frente full">
+      <div class="frente ambos-frente">
         <div class="owner owner-ambos"><div class="owner-dot"></div>Ambos</div>
         <div class="frente-num">Frente 10</div>
+        <div class="frente-title">Comunidade de Negócios</div>
+        <div class="frente-desc">Vitrine de ativos (blind cards). Formulários sell-side (5 etapas) e buy-side (4 etapas). KYC trial para não-partners. Rota: /comunidade</div>
+        <div class="frente-cmd"><code>app/(platform)/comunidade · components/comunidade</code></div>
+      </div>
+      <div class="frente ambos-frente full">
+        <div class="owner owner-ambos"><div class="owner-dot"></div>Ambos</div>
+        <div class="frente-num">Frente 11</div>
         <div class="frente-title">Rede de Partners — Meta 50 (Q2) · 1.000 (Dez/26)</div>
         <div class="frente-desc">João: originação, materiais, onboarding, Instagram. Hamilton: plataforma de acesso, comissões, dashboard partner, academy.</div>
         <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
@@ -384,23 +468,24 @@ footer .tag { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: #C9A
 <!-- PLATAFORMA SAAS DETALHE -->
 <div class="eyebrow" style="margin-bottom:16px;">
   <div class="eyebrow-line"></div>
-  <div class="eyebrow-text">Plataforma v3-partner — Módulos Prontos</div>
+  <div class="eyebrow-text">Plataforma v3-partner — Estado Atual dos Módulos</div>
 </div>
 <div class="platform-card">
   <div class="platform-header">
     <div>
       <div class="platform-title">v3-partner — Plataforma SaaS V3</div>
-      <div class="platform-sub">Next.js 16 · TypeScript · Tailwind CSS v4 · Supabase · Anthropic SDK · PWA · Brandbook V2.0 aplicado</div>
+      <div class="platform-sub">Next.js 16 · TypeScript · Tailwind CSS v4 · Supabase · Anthropic SDK · Vercel · Brandbook V2.0 aplicado</div>
     </div>
-    <div class="platform-badge">47 Commits · Ativo</div>
+    <div class="platform-badge">75 Commits · Produção no ar</div>
   </div>
   <div class="platform-modules">
-    <div class="module-chip done"><span>Pronto</span>Auth + Roles</div>
+    <div class="module-chip done"><span>Pronto</span>Auth + Roles (6 níveis)</div>
     <div class="module-chip done"><span>Pronto</span>Dashboard KPIs</div>
     <div class="module-chip done"><span>Pronto</span>CRM</div>
     <div class="module-chip done"><span>Pronto</span>M&amp;A Pipeline</div>
     <div class="module-chip done"><span>Pronto</span>Split Fiscal</div>
     <div class="module-chip done"><span>Pronto</span>Mesa Crédito N1/N2/N3</div>
+    <div class="module-chip done"><span>Pronto</span>Mesa M&amp;A (Caixa Entrada)</div>
     <div class="module-chip done"><span>Pronto</span>Mesa Consórcio</div>
     <div class="module-chip done"><span>Pronto</span>Mesa Operacional</div>
     <div class="module-chip done"><span>Pronto</span>Academy</div>
@@ -410,12 +495,54 @@ footer .tag { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: #C9A
     <div class="module-chip done"><span>Pronto</span>Notificações</div>
     <div class="module-chip done"><span>Pronto</span>Gestão Usuários</div>
     <div class="module-chip done"><span>Pronto</span>Comissões</div>
-    <div class="module-chip"><span>Pendente</span>Deploy Produção</div>
+    <div class="module-chip new"><span>Novo · 07/04</span>Comunidade Negócios</div>
+    <div class="module-chip new"><span>Novo · 06/04</span>FORJA + Criativos M&amp;A</div>
+    <div class="module-chip new"><span>Novo · 06/04</span>NDA / Mandato / ClickSign</div>
+    <div class="module-chip new"><span>Novo · 07/04</span>Deploy Vercel (Produção)</div>
+    <div class="module-chip" style="border-color:rgba(201,168,76,0.2); color:#E8C97A;"><span style="color:#C9A84C;">Hoje</span>Motor de Crédito</div>
+    <div class="module-chip"><span>Pendente</span>Supabase produção (env vars)</div>
+    <div class="module-chip"><span>Pendente</span>ClickSign token real</div>
+    <div class="module-chip"><span>Pendente</span>Resend API produção</div>
   </div>
   <div class="platform-links">
+    <a class="plat-link prod" href="https://v3-partner-chi.vercel.app" target="_blank">&#9654; Produção ao vivo</a>
     <a class="plat-link github" href="https://github.com/hamiltonsantosinvestimentos-cmyk/v3-partner" target="_blank">&#128279; GitHub — v3-partner</a>
-    <a class="plat-link local" href="#" onclick="copiarCaminho('C:\\Users\\jlemo\\Documents\\v3-partner');return false;">&#128193; Clone local — C:\Users\jlemo\Documents\v3-partner</a>
-    <a class="plat-link local" href="#" onclick="copiarCmd('cd C:\\\\Users\\\\jlemo\\\\Documents\\\\v3-partner && npm run dev');return false;">&#9654; npm run dev</a>
+    <a class="plat-link local" href="#" onclick="copiarCaminho('C:\\Users\\jlemo\\Documents\\v3-partner');return false;">&#128193; Clone João — C:\Users\jlemo\Documents\v3-partner</a>
+    <a class="plat-link local" href="#" onclick="copiarCmd('cd C:\\\\Users\\\\jlemo\\\\Documents\\\\v3-partner && npm run dev');return false;">&#9654; npm run dev (local)</a>
+    <a class="plat-link github" href="https://vercel.com/joao-lemos/v3-partner" target="_blank">&#9881; Painel Vercel</a>
+  </div>
+</div>
+
+
+<!-- FLUXOS IMPLEMENTADOS -->
+<div class="eyebrow" style="margin-bottom:16px; margin-top:48px;">
+  <div class="eyebrow-line"></div>
+  <div class="eyebrow-text">Fluxos Implementados — End-to-End</div>
+</div>
+<div class="fluxo-grid">
+  <div class="fluxo-card">
+    <div class="fluxo-title">Fluxo M&amp;A — Partner → Fechamento</div>
+    <div class="fluxo-sub">Rota: /ma → /ma/[id] · Mesa: /mesa-ma</div>
+    <div class="fluxo-steps">
+      <div class="fluxo-step"><div class="fluxo-step-n">1</div><div><strong>Nova Operação (Partner)</strong>Formulário 6 etapas + upload docs → código MA-26-XXXXXX gerado → email automático</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">2</div><div><strong>Caixa de Entrada (Mesa M&amp;A)</strong>Deal aparece na fila PROSPECTING → analista clica Analisar</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">3</div><div><strong>Validação Documental IA</strong>FORJA analisa docs → score + campos validados + campos faltantes</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">4</div><div><strong>Kit de Criativos</strong>Preview CIM (6 págs A4), Teaser Cego, LinkedIn Post, Story — PT-BR e EN</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">5</div><div><strong>NDA / Mandato</strong>Geração HTML → preview → envio ClickSign → status PENDING → SIGNED</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">6</div><div><strong>Pipeline Kanban</strong>Deal avança pelos stages até CLOSED_WON</div></div>
+    </div>
+  </div>
+  <div class="fluxo-card">
+    <div class="fluxo-title">Fluxo Comunidade de Negócios</div>
+    <div class="fluxo-sub">Rota: /comunidade → /comunidade/ativo ou /investidor</div>
+    <div class="fluxo-steps">
+      <div class="fluxo-step"><div class="fluxo-step-n">1</div><div><strong>Vitrine (Landing)</strong>Cards cegos de ativos + KPIs + Como Funciona. Acesso: Partner ou Trial</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">2</div><div><strong>Qualificação</strong>/comunidade/qualificacao → escolhe Ativo (sell-side) ou Investidor (buy-side)</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">3A</div><div><strong>Formulário Ativo (5 etapas)</strong>Segmento → Identificação → Financeiro → Jurídico → Contato → código PROS-26-3XXXXX</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">3B</div><div><strong>Formulário Investidor (4 etapas)</strong>Perfil → Interesse → Capacidade → Contato → código PROS-26-4XXXXX</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">4</div><div><strong>KYC Trial (não-partner)</strong>/comunidade/cadastro → CPF/CNPJ + LGPD → código TRIAL-26-XXXXX → 30 dias acesso</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">5</div><div><strong>Banner Sucesso</strong>Após submit → redirect /comunidade?novo=ativo&amp;code=PROS-26-3XXXXX → banner dourado</div></div>
+    </div>
   </div>
 </div>
 
@@ -450,6 +577,11 @@ footer .tag { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: #C9A
     <div class="git-step-num">5</div>
     <div class="git-step-text"><strong>Merge no main</strong>PR revisado pelo outro</div>
   </div>
+  <div class="git-arrow">→</div>
+  <div class="git-step">
+    <div class="git-step-num">6</div>
+    <div class="git-step-text"><strong>Vercel auto-deploy</strong>Push no main → deploy automático</div>
+  </div>
 </div>
 
 
@@ -467,7 +599,8 @@ footer .tag { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: #C9A
     <div class="okr-kr"><span>Design System v1.0</span><span class="okr-kr-status done">Feito</span></div>
     <div class="okr-kr"><span>GitHub João + Hamilton sync</span><span class="okr-kr-status done">Feito</span></div>
     <div class="okr-kr"><span>Brandbook plataforma aplicado</span><span class="okr-kr-status done">Feito</span></div>
-    <div class="okr-kr"><span>Deploy plataforma produção</span><span class="okr-kr-status active">Próximo</span></div>
+    <div class="okr-kr"><span>Deploy plataforma produção (Vercel)</span><span class="okr-kr-status done">Feito · 07/04</span></div>
+    <div class="okr-kr"><span>Supabase produção (env vars)</span><span class="okr-kr-status active">Hamilton · Próximo</span></div>
     <div class="okr-kr"><span>Onboarding email sequence</span><span class="okr-kr-status active">Em aberto</span></div>
     <div class="okr-kr"><span>20 partners mês 1</span><span class="okr-kr-status pending">Pendente</span></div>
   </div>
@@ -527,7 +660,7 @@ footer .tag { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: #C9A
     <div class="squad-meta">
       <div class="squad-id">Próximo ativo — aguardando briefing</div>
       <div class="squad-title">+ Novo Squad M&A</div>
-      <div class="squad-sub">Clonar estrutura jazida-esmeralda · Adaptar HTMLs · Commit GitHub</div>
+      <div class="squad-sub">Usar fluxo: /ma → Nova Operação → FORJA → Criativos → NDA/Mandato → ClickSign</div>
     </div>
     <div class="squad-right">
       <div class="squad-badge rascunho">Aguardando</div>
@@ -542,25 +675,40 @@ footer .tag { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: #C9A
   <div class="eyebrow-text">Links Rápidos</div>
 </div>
 <div class="links">
-  <a class="link-card" href="https://claude.ai/code/scheduled" target="_blank">
-    <div class="link-label">Agentes</div>
-    <div class="link-name">Scheduled Triggers</div>
-    <div class="link-note">CCR 8:17 BRT ativo</div>
+  <a class="link-card prod-link" href="https://v3-partner-chi.vercel.app" target="_blank">
+    <div class="link-label">Produção</div>
+    <div class="link-name">v3-partner-chi.vercel.app</div>
+    <div class="link-note">No ar · 07/04/2026</div>
   </a>
-  <a class="link-card" href="file:///C:/Users/jlemo/Documents/v3partners-site/partners.html" target="_blank">
-    <div class="link-label">Grand Slam Offer</div>
-    <div class="link-name">partners.html</div>
-    <div class="link-note">Novo · 04/04/2026</div>
+  <a class="link-card prod-link" href="https://v3-partner-chi.vercel.app/mesa-credito" target="_blank">
+    <div class="link-label">Motor de Crédito</div>
+    <div class="link-name">Mesa de Crédito N1/N2/N3</div>
+    <div class="link-note">Trabalho hoje · 07/04</div>
   </a>
-  <a class="link-card" href="file:///C:/Users/jlemo/Documents/v3partners-site/index.html" target="_blank">
-    <div class="link-label">Dev Local</div>
-    <div class="link-name">Site — index.html</div>
-    <div class="link-note">Copy Mago aplicada</div>
+  <a class="link-card prod-link" href="https://v3-partner-chi.vercel.app/comunidade" target="_blank">
+    <div class="link-label">Comunidade</div>
+    <div class="link-name">Vitrine de Negócios</div>
+    <div class="link-note">Novo · 07/04/2026</div>
+  </a>
+  <a class="link-card prod-link" href="https://v3-partner-chi.vercel.app/ma" target="_blank">
+    <div class="link-label">Pipeline M&amp;A</div>
+    <div class="link-name">M&amp;A + Mesa + Criativos</div>
+    <div class="link-note">Fluxo completo ativo</div>
   </a>
   <a class="link-card hamilton-link" href="https://github.com/hamiltonsantosinvestimentos-cmyk/v3-partner" target="_blank">
     <div class="link-label">Plataforma SaaS</div>
     <div class="link-name">v3-partner — GitHub</div>
-    <div class="link-note">47 commits · Brandbook OK</div>
+    <div class="link-note">75 commits · main</div>
+  </a>
+  <a class="link-card hamilton-link" href="https://vercel.com/joao-lemos/v3-partner" target="_blank">
+    <div class="link-label">Deploy</div>
+    <div class="link-name">Painel Vercel</div>
+    <div class="link-note">Env vars · Logs · Builds</div>
+  </a>
+  <a class="link-card" href="https://claude.ai/code/scheduled" target="_blank">
+    <div class="link-label">Agentes</div>
+    <div class="link-name">Scheduled Triggers</div>
+    <div class="link-note">CCR 8:17 BRT ativo</div>
   </a>
   <a class="link-card" href="https://github.com/Jlnetto35/projeto-banners-animados" target="_blank">
     <div class="link-label">Motion Design · Display Ads</div>
@@ -572,17 +720,25 @@ footer .tag { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: #C9A
     <div class="link-name">GitHub — V3 Reports</div>
     <div class="link-note">&#128274; Privado</div>
   </a>
-  <a class="link-card" href="file:///C:/Users/jlemo/Documents/v3partners/reports/v3-report-2026-03-29.html" target="_blank">
-    <div class="link-label">Último Relatório</div>
-    <div class="link-name">V3 Report 29/03</div>
+  <a class="link-card" href="file:///C:/Users/jlemo/Documents/v3partners-site/partners.html" target="_blank">
+    <div class="link-label">Grand Slam Offer</div>
+    <div class="link-name">partners.html</div>
+    <div class="link-note">Copy Mago · 04/04/2026</div>
   </a>
-  <a class="link-card" href="https://github.com/Jlnetto35/-v3-partners--site-intitucional" target="_blank">
-    <div class="link-label">GitHub</div>
-    <div class="link-name">Site Institucional</div>
+  <a class="link-card" href="file:///C:/Users/jlemo/Documents/v3partners-site/index.html" target="_blank">
+    <div class="link-label">Dev Local</div>
+    <div class="link-name">Site — index.html</div>
+    <div class="link-note">Copy Mago aplicada</div>
+  </a>
+  <a class="link-card" href="file:///C:/Users/jlemo/Documents/v3-partner/public/hamilton-setup.html" target="_blank">
+    <div class="link-label">Guia Hamilton</div>
+    <div class="link-name">Setup Produção</div>
+    <div class="link-note">Env vars + Supabase + Railway</div>
   </a>
   <a class="link-card" href="https://claude.ai/settings/connectors" target="_blank">
     <div class="link-label">Conectores</div>
     <div class="link-name">MCP Connectors</div>
+    <div class="link-note">claude.ai</div>
   </a>
 </div>
 
