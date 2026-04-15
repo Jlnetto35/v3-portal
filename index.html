@@ -328,6 +328,8 @@ footer .tag { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: #C9A
 <div class="status-bar">
   <span class="status-bar-label">Últimas entregas</span>
   <div class="status-bar-items">
+    <span class="status-chip gold">CRM Integrado — estratégia Obsidian + Drive + Gmail + WhatsApp · 15/04</span>
+    <span class="status-chip gold">Google Drive — estrutura 8 pastas + matriz acessos time · 15/04</span>
     <span class="status-chip gold">Design System v1.0 + fotos sócios + partners.html · 11/04</span>
     <span class="status-chip gold">Site institucional — portfólio accordion + logo 3D alpha · 10/04</span>
     <span class="status-chip">Mesa Operacional — dados proposta + consulta Escavador · 09/04</span>
@@ -343,6 +345,10 @@ footer .tag { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: #C9A
 <div class="status-bar" style="margin-bottom:48px; background: rgba(122,143,168,0.04); border-color: rgba(122,143,168,0.2); border-left-color: #A0B8D0;">
   <span class="status-bar-label" style="color:#A0B8D0;">Próximos passos</span>
   <div class="status-bar-items">
+    <span class="status-chip" style="background:rgba(122,143,168,0.06); border-color:rgba(122,143,168,0.2); color:#A0B8D0;">CRM Obsidian — estrutura vault + templates + Dataview</span>
+    <span class="status-chip" style="background:rgba(122,143,168,0.06); border-color:rgba(122,143,168,0.2); color:#A0B8D0;">Google Drive — executar script + preencher e-mails time</span>
+    <span class="status-chip" style="background:rgba(122,143,168,0.06); border-color:rgba(122,143,168,0.2); color:#A0B8D0;">P3 Follow-up — Apps Script Gmail automatizado</span>
+    <span class="status-chip" style="background:rgba(122,143,168,0.06); border-color:rgba(122,143,168,0.2); color:#A0B8D0;">WhatsApp — decidir Zapi.io (R$97-197/mês) ou manual</span>
     <span class="status-chip" style="background:rgba(122,143,168,0.06); border-color:rgba(122,143,168,0.2); color:#A0B8D0;">Motor de Crédito</span>
     <span class="status-chip" style="background:rgba(122,143,168,0.06); border-color:rgba(122,143,168,0.2); color:#A0B8D0;">Supabase produção — Hamilton configurar env vars no Vercel</span>
     <span class="status-chip" style="background:rgba(122,143,168,0.06); border-color:rgba(122,143,168,0.2); color:#A0B8D0;">ClickSign token real</span>
@@ -777,6 +783,140 @@ footer .tag { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: #C9A
     <div class="link-name">MCP Connectors</div>
     <div class="link-note">claude.ai</div>
   </a>
+</div>
+
+
+<!-- AUTOMAÇÕES & CRM -->
+<div class="eyebrow" style="margin-bottom:16px;">
+  <div class="eyebrow-line"></div>
+  <div class="eyebrow-text">Automações & CRM Integrado — Frente 12</div>
+</div>
+
+<!-- AUTOMAÇÕES P1/P2/P3 -->
+<div class="fluxo-grid" style="margin-bottom:16px;">
+  <div class="fluxo-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+      <div class="fluxo-title">P1 — Reunião → Relatório</div>
+      <span style="font-size:7px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:3px 10px; background:rgba(74,222,128,0.1); border:1px solid rgba(74,222,128,0.3); color:#4ade80;">Ativo</span>
+    </div>
+    <div class="fluxo-sub">Meet transcript → Gemini 2.5 Flash → Draft Gmail automatizado</div>
+    <div class="fluxo-steps">
+      <div class="fluxo-step"><div class="fluxo-step-n">1</div><div><strong>Trigger</strong>Transcrição do Meet chega via Gmail</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">2</div><div><strong>Gemini</strong>Analisa → estrutura relatório executivo V3</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">3</div><div><strong>Output</strong>Draft no Gmail pronto para revisão e envio</div></div>
+    </div>
+  </div>
+  <div class="fluxo-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+      <div class="fluxo-title">P2 — Áudio → Estratégia</div>
+      <span style="font-size:7px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:3px 10px; background:rgba(74,222,128,0.1); border:1px solid rgba(74,222,128,0.3); color:#4ade80;">Ativo</span>
+    </div>
+    <div class="fluxo-sub">Gmail → Gemini 2.5 Flash (áudio) → Draft com análise estratégica</div>
+    <div class="fluxo-steps">
+      <div class="fluxo-step"><div class="fluxo-step-n">1</div><div><strong>Trigger</strong>Áudio recebido via Gmail</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">2</div><div><strong>Gemini</strong>Transcreve + extrai pontos estratégicos V3</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">3</div><div><strong>Output</strong>Draft Gmail com resumo + próximos passos</div></div>
+    </div>
+  </div>
+  <div class="fluxo-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+      <div class="fluxo-title">P3 — Follow-up Automático</div>
+      <span style="font-size:7px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:3px 10px; background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.3); color:#C9A84C;">Em construção</span>
+    </div>
+    <div class="fluxo-sub">Lead entra no CRM → sequência automática Gmail + WhatsApp</div>
+    <div class="fluxo-steps">
+      <div class="fluxo-step"><div class="fluxo-step-n">1</div><div><strong>Trigger</strong>Novo contato registrado no Obsidian CRM</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">2</div><div><strong>D+0</strong>E-mail boas-vindas / apresentação V3 (Gmail)</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">3</div><div><strong>D+2</strong>WhatsApp follow-up (Zapi.io a confirmar)</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">4</div><div><strong>D+7</strong>E-mail com conteúdo vertical relevante</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">5</div><div><strong>D+14</strong>Reunião / qualificação 5 SIMs</div></div>
+    </div>
+  </div>
+  <div class="fluxo-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+      <div class="fluxo-title">Infra Apps Script</div>
+      <span style="font-size:7px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:3px 10px; background:rgba(74,222,128,0.1); border:1px solid rgba(74,222,128,0.3); color:#4ade80;">Ativa</span>
+    </div>
+    <div class="fluxo-sub">Google Apps Script + Gemini API — projeto Ai-Agente-leitor-de-audio</div>
+    <div class="fluxo-steps">
+      <div class="fluxo-step"><div class="fluxo-step-n">ID</div><div><strong>Script</strong>1EHsj-F_BDAV-s4EGPqRr8HpqsI8yiyrMPpEGniWbJKvP89Zj3RXO3RYA</div></div>
+      <div class="fluxo-step"><div class="fluxo-step-n">GCP</div><div><strong>Gemini API</strong>Projeto 455590680257 — Ai-Agente-leitor-de-audio</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CRM STACK -->
+<div style="background:#111F35; border:1px solid rgba(201,168,76,0.15); border-top:2px solid #C9A84C; padding:28px 32px; margin-bottom:12px;">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+    <div>
+      <div style="font-size:18px; font-weight:700; color:#F0ECE4;">CRM Integrado — Stack Completo</div>
+      <div style="font-size:9px; color:#7A8FA8; margin-top:4px;">Obsidian (cérebro) · Google Drive (docs) · Gmail (email) · WhatsApp Business</div>
+    </div>
+    <span style="font-size:7px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:4px 12px; background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.3); color:#C9A84C;">Em implantação · 15/04/2026</span>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:20px;">
+    <div style="background:rgba(22,39,68,0.8); border:1px solid rgba(201,168,76,0.2); padding:12px; border-radius:4px;">
+      <div style="font-size:7px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#C9A84C; margin-bottom:6px;">Obsidian</div>
+      <div style="font-size:10px; font-weight:600; color:#F0ECE4; margin-bottom:4px;">CRM — Cérebro</div>
+      <div style="font-size:8px; color:#7A8FA8; line-height:1.5;">Vault: Operações Claude V3 Partners · Templates Contato/Deal/Partner · Dataview dashboards · Templater automação</div>
+    </div>
+    <div style="background:rgba(22,39,68,0.8); border:1px solid rgba(201,168,76,0.2); padding:12px; border-radius:4px;">
+      <div style="font-size:7px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#C9A84C; margin-bottom:6px;">Google Drive</div>
+      <div style="font-size:10px; font-weight:600; color:#F0ECE4; margin-bottom:4px;">Documentos</div>
+      <div style="font-size:8px; color:#7A8FA8; line-height:1.5;">8 pastas · 9 membros · matriz de acessos por vertical · Script criador: v3partners/scripts/criar-estrutura-drive.js</div>
+    </div>
+    <div style="background:rgba(22,39,68,0.8); border:1px solid rgba(74,222,128,0.2); padding:12px; border-radius:4px;">
+      <div style="font-size:7px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#4ade80; margin-bottom:6px;">Gmail</div>
+      <div style="font-size:10px; font-weight:600; color:#F0ECE4; margin-bottom:4px;">Email · P1 · P2 · P3</div>
+      <div style="font-size:8px; color:#7A8FA8; line-height:1.5;">P1 reunião ativo · P2 áudio ativo · P3 follow-up sequência D+0/2/7/14 — em construção</div>
+    </div>
+    <div style="background:rgba(22,39,68,0.8); border:1px solid rgba(122,143,168,0.2); padding:12px; border-radius:4px;">
+      <div style="font-size:7px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#A0B8D0; margin-bottom:6px;">WhatsApp Business</div>
+      <div style="font-size:10px; font-weight:600; color:#F0ECE4; margin-bottom:4px;">Mensagens</div>
+      <div style="font-size:8px; color:#7A8FA8; line-height:1.5;">App gratuito ativo · Automação via Zapi.io (~R$97-197/mês) · Decisão pendente</div>
+    </div>
+  </div>
+  <div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <a style="font-size:9px; font-weight:600; padding:6px 14px; background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.2); color:#E8C97A; text-decoration:none;" href="file:///C:/Users/jlemo/Documents/v3partners/scripts/criar-estrutura-drive.js" target="_blank">Script Drive</a>
+    <a style="font-size:9px; font-weight:600; padding:6px 14px; background:rgba(122,143,168,0.08); border:1px solid rgba(122,143,168,0.2); color:#A0B8D0; text-decoration:none;" href="https://script.google.com" target="_blank">Google Apps Script</a>
+    <a style="font-size:9px; font-weight:600; padding:6px 14px; background:rgba(74,222,128,0.06); border:1px solid rgba(74,222,128,0.2); color:#4ade80; text-decoration:none;" href="https://zapi.io" target="_blank">Zapi.io — WhatsApp API</a>
+  </div>
+</div>
+
+<!-- GOOGLE DRIVE ESTRUTURA -->
+<div style="background:#162744; border:1px solid rgba(201,168,76,0.1); padding:20px 28px; margin-bottom:48px; font-size:9px; color:#7A8FA8; line-height:1.8;">
+  <div style="font-size:8px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:#C9A84C; margin-bottom:12px;">Google Drive — Hierarquia de Pastas e Acessos</div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+    <div>
+      <div style="color:#F0ECE4; font-weight:600; margin-bottom:6px;">Estrutura</div>
+      00 - GOVERNANÇA E JURÍDICO &nbsp;<span style="color:#C9A84C;">Sócios</span><br>
+      01 - FINANCEIRO &nbsp;<span style="color:#C9A84C;">Sócios + Aline</span><br>
+      02 - PIPELINE DE ATIVOS<br>
+      &nbsp;&nbsp;&nbsp;Crédito e Recebíveis &nbsp;<span style="color:#C9A84C;">+Giovana</span><br>
+      &nbsp;&nbsp;&nbsp;Real Estate &nbsp;<span style="color:#C9A84C;">Sócios</span><br>
+      &nbsp;&nbsp;&nbsp;Precatórios &nbsp;<span style="color:#C9A84C;">+Ataide</span><br>
+      &nbsp;&nbsp;&nbsp;Mineração &nbsp;<span style="color:#C9A84C;">+Ralfi</span><br>
+      &nbsp;&nbsp;&nbsp;M&amp;A / Private Equity &nbsp;<span style="color:#C9A84C;">+Taisa</span><br>
+      03 - RELACIONAMENTO E CRM &nbsp;<span style="color:#C9A84C;">+Monica</span><br>
+      04 - REDE DE PARTNERS &nbsp;<span style="color:#C9A84C;">+Monica · Partners VIEW</span><br>
+      05 - INTELIGÊNCIA DE MERCADO &nbsp;<span style="color:#C9A84C;">Todos VIEW</span><br>
+      06 - MATERIAIS E IDENTIDADE &nbsp;<span style="color:#C9A84C;">Todos VIEW · Partners VIEW</span><br>
+      07 - OPERAÇÕES E AUTOMAÇÕES &nbsp;<span style="color:#C9A84C;">Sócios + Hamilton</span>
+    </div>
+    <div>
+      <div style="color:#F0ECE4; font-weight:600; margin-bottom:6px;">Time Interno — 9 membros</div>
+      <span style="color:#C9A84C; font-weight:700;">SÓCIOS EDIT:</span> João · Hamilton · Robson<br><br>
+      <span style="color:#F0ECE4; font-weight:600;">DIRETORES:</span><br>
+      Aline — Financeiro<br>
+      Monica — Relacionamento / CRM<br>
+      Taisa — M&amp;A e Private Equity<br>
+      Ataide — Precatórios / Dir. Creditório<br>
+      Ralfi — Importação e Mineração<br>
+      Giovana Lemos — Analista de Crédito<br><br>
+      <span style="color:#7A8FA8;">Script: v3partners/scripts/criar-estrutura-drive.js<br>
+      Executar em: script.google.com → novo projeto</span>
+    </div>
+  </div>
 </div>
 
 
