@@ -1,0 +1,29 @@
+/**
+ * V3 Partners — Design Tokens
+ * Fonte da verdade para toda a plataforma V3 Content Studio
+ * NUNCA alterar sem aprovação dos 3 sócios
+ * Versão: 2.0 · Abril 2026
+ */
+
+:root {
+  /* ── PALETA APROVADA ── */
+  --navy:    #09081A;   /* Capa, fundos principais */
+  --base:    #111F35;   /* Páginas internas, cards */
+  --card:    #162744;   /* Cards secundários */
+  --mid:     #243A66;   /* Hover, destaques */
+  --gold:    #C9A84C;   /* Logo, labels, assinaturas */
+  --goldl:   #E8C97A;   /* Destaque secundário */
+  --cream:   #F0ECE4;   /* Títulos, texto primário */
+  --muted:   #7A8FA8;   /* Corpo, descrições */
+
+  /* ── TIPOGRAFIA ── */
+  --font:    'DM Sans', sans-serif;
+
+  /* ── BORDAS DOURADAS ── */
+  --border-gold:     1px solid rgba(201,168,76,0.2);
+  --border-gold-md:  1px solid rgba(201,168,76,0.35);
+  --border-gold-hi:  2px solid var(--gold);
+
+  /* ── SOMBRAS ── */
+  --shadow-gold: 0 0 20px rgba(201,168,76,0.08);
+}

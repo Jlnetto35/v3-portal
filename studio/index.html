@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V3 Content Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: #09081A; color: #F0ECE4; min-height: 100vh; }
+
+/* ── HEADER ── */
+header {
+  padding: 24px 48px;
+  border-bottom: 1px solid rgba(201,168,76,0.12);
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(9,8,26,0.97);
+  backdrop-filter: blur(8px);
+}
+.logo-area { display: flex; align-items: center; gap: 18px; }
+.logo-area img { height: 40px; width: auto; }
+.logo-divider { width: 1px; height: 32px; background: rgba(201,168,76,0.2); }
+.studio-label { font-size: 10px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #C9A84C; }
+.studio-sub { font-size: 9px; color: #7A8FA8; letter-spacing: 1px; margin-top: 3px; }
+.header-badge {
+  font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  padding: 6px 16px; background: rgba(74,222,128,0.08);
+  border: 1px solid rgba(74,222,128,0.25); color: #4ade80;
+}
+
+/* ── HERO ── */
+.hero { padding: 56px 48px 40px; max-width: 760px; }
+.eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #C9A84C; margin-bottom: 18px; }
+.hero h1 { font-size: 52px; font-weight: 800; line-height: 1.05; color: #F0ECE4; letter-spacing: -1.5px; margin-bottom: 16px; }
+.hero h1 span { color: #C9A84C; }
+.hero p { font-size: 14px; color: #7A8FA8; line-height: 1.7; max-width: 500px; }
+
+/* ── INFO BAR ── */
+.info-bar {
+  margin: 0 48px 48px;
+  background: #111F35; border: 1px solid rgba(201,168,76,0.1);
+  border-left: 3px solid #C9A84C; padding: 16px 24px;
+  display: flex; align-items: center; gap: 32px; flex-wrap: wrap;
+}
+.info-item { font-size: 10px; color: #7A8FA8; }
+.info-item strong { color: #F0ECE4; display: block; font-size: 11px; margin-bottom: 2px; }
+
+/* ── SEÇÕES ── */
+.studio-body { padding: 0 48px 80px; }
+
+.section-block { margin-bottom: 52px; }
+.section-header {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 20px; padding-bottom: 14px;
+  border-bottom: 1px solid rgba(240,236,228,0.06);
+}
+.section-tag {
+  font-size: 9px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  color: #7A8FA8;
+}
+.section-count {
+  font-size: 9px; color: #243A66; font-weight: 700;
+  background: rgba(36,58,102,0.3); padding: 2px 8px; letter-spacing: 1px;
+}
+
+/* ── GRID ── */
+.modules-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.modules-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (max-width: 960px) { .modules-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 600px) { .modules-grid, .modules-grid-2 { grid-template-columns: 1fr; } }
+
+/* ── CARDS ── */
+.module-card {
+  background: #111F35;
+  border: 1px solid rgba(201,168,76,0.1);
+  border-top: 2px solid #C9A84C;
+  padding: 24px 24px 20px;
+  text-decoration: none;
+  display: flex; flex-direction: column;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  position: relative; cursor: pointer;
+}
+.module-card:hover {
+  background: #162744;
+  border-color: rgba(201,168,76,0.28);
+  transform: translateY(-1px);
+}
+.module-card.soon {
+  border-top-color: #1e3158;
+  opacity: 0.65; cursor: default;
+}
+.module-card.soon:hover { background: #111F35; border-color: rgba(201,168,76,0.1); transform: none; }
+
+.module-tag { font-size: 8px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C9A84C; margin-bottom: 10px; }
+.module-card.soon .module-tag { color: #7A8FA8; }
+.module-title { font-size: 17px; font-weight: 700; color: #F0ECE4; margin-bottom: 7px; line-height: 1.25; }
+.module-desc { font-size: 12px; color: #7A8FA8; line-height: 1.65; margin-bottom: 16px; flex: 1; }
+.module-formats { display: flex; gap: 5px; flex-wrap: wrap; }
+.fmt {
+  font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  padding: 3px 8px; background: rgba(201,168,76,0.06);
+  border: 1px solid rgba(201,168,76,0.15); color: #C9A84C;
+}
+.module-card.soon .fmt { background: rgba(122,143,168,0.05); border-color: rgba(122,143,168,0.12); color: #7A8FA8; }
+
+/* BADGES */
+.badge {
+  position: absolute; top: 14px; right: 14px;
+  font-size: 8px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  padding: 3px 9px;
+}
+.badge-ativo  { background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.28); color: #4ade80; }
+.badge-soon   { background: rgba(122,143,168,0.07); border: 1px solid rgba(122,143,168,0.18); color: #7A8FA8; }
+.badge-build  { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.25); color: #C9A84C; }
+
+/* CARD WIDE (destaque) */
+.module-card-wide {
+  background: #111F35;
+  border: 1px solid rgba(201,168,76,0.1);
+  border-top: 2px solid #C9A84C;
+  padding: 28px 28px 24px;
+  text-decoration: none; display: flex;
+  gap: 28px; align-items: flex-start;
+  transition: background 0.2s, transform 0.15s;
+  position: relative; cursor: default;
+  opacity: 0.65;
+}
+.module-card-wide .mw-icon {
+  font-size: 32px; flex-shrink: 0; margin-top: 2px;
+  width: 52px; height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.12);
+}
+.module-card-wide .mw-body { flex: 1; }
+.module-card-wide .module-tag { margin-bottom: 8px; }
+.module-card-wide .module-title { font-size: 20px; margin-bottom: 8px; }
+.module-card-wide .module-desc { font-size: 13px; margin-bottom: 16px; }
+
+/* DIMENSÕES BADGE */
+.dim-badge {
+  font-size: 9px; color: #243A66; font-weight: 700; font-family: monospace;
+  background: rgba(36,58,102,0.2); padding: 3px 8px; letter-spacing: 0.5px;
+  display: inline-block;
+}
+
+/* FOOTER */
+footer { border-top: 1px solid rgba(201,168,76,0.08); padding: 20px 48px; display: flex; justify-content: space-between; align-items: center; }
+footer p { font-size: 10px; color: #7A8FA8; letter-spacing: 1px; }
+footer .tag { font-size: 9px; font-weight: 700; letter-spacing: 3px; color: #C9A84C; opacity: 0.45; text-transform: uppercase; }
+
+@media (max-width: 600px) {
+  header { padding: 18px 20px; }
+  .hero { padding: 36px 20px 28px; }
+  .info-bar { margin: 0 20px 32px; }
+  .studio-body { padding: 0 20px 60px; }
+  footer { padding: 16px 20px; flex-direction: column; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <img src="assets/logos/v3-logo-3d-alpha.png" alt="V3 Partners">
+    <div class="logo-divider"></div>
+    <div>
+      <div class="studio-label">Content Studio</div>
+      <div class="studio-sub">Produção de Peças · V3 Partners</div>
+    </div>
+  </div>
+  <div class="header-badge">Online · v1.1</div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">Plataforma Interna · Times de Mídia e M&A</div>
+  <h1>Crie peças<br><span>no padrão V3.</span></h1>
+  <p>Todas as peças geradas aqui seguem o brandbook aprovado automaticamente. Nenhuma peça sai fora do padrão.</p>
+</section>
+
+<div class="info-bar">
+  <div class="info-item"><strong>Paleta</strong>#09081A · #C9A84C · #F0ECE4</div>
+  <div class="info-item"><strong>Tipografia</strong>DM Sans exclusiva · mín 9px</div>
+  <div class="info-item"><strong>Logo nav</strong>40px height mínimo</div>
+  <div class="info-item"><strong>Regra</strong>90% navy · 8% cream · 2% ouro</div>
+</div>
+
+<main class="studio-body">
+
+  <!-- ──────────────────────────────────────────
+       SEÇÃO 1 — IDENTIDADE
+  ────────────────────────────────────────── -->
+  <div class="section-block">
+    <div class="section-header">
+      <span class="section-tag">Identidade Visual</span>
+      <span class="section-count">2 módulos</span>
+    </div>
+    <div class="modules-grid-2">
+
+      <a href="modules/assinatura/index.html" class="module-card">
+        <div class="badge badge-ativo">Ativo</div>
+        <div class="module-tag">Identidade · Time</div>
+        <div class="module-title">Assinatura de Email</div>
+        <div class="module-desc">Gere sua assinatura institucional com logo, nome, cargo e contatos. Preview em tempo real, download PNG 600×200 e código HTML para Gmail e Outlook.</div>
+        <div class="module-formats">
+          <span class="fmt">PNG</span>
+          <span class="fmt">HTML</span>
+        </div>
+        <div class="dim-badge" style="margin-top:10px;">600 × 200 px</div>
+      </a>
+
+      <a href="modules/cartao/index.html" class="module-card soon">
+        <div class="badge badge-build">Em construção</div>
+        <div class="module-tag">Identidade · Físico</div>
+        <div class="module-title">Cartão de Visita</div>
+        <div class="module-desc">Frente e verso. Preencha nome e cargo — o cartão segue o brandbook automaticamente. Exporta em alta resolução para gráfica e versão digital.</div>
+        <div class="module-formats">
+          <span class="fmt">PDF</span>
+          <span class="fmt">PNG</span>
+        </div>
+        <div class="dim-badge" style="margin-top:10px;">90 × 50 mm · 300dpi</div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────
+       SEÇÃO 2 — SOCIAL MEDIA
+  ────────────────────────────────────────── -->
+  <div class="section-block">
+    <div class="section-header">
+      <span class="section-tag">Social Media</span>
+      <span class="section-count">3 módulos</span>
+    </div>
+    <div class="modules-grid">
+
+      <a href="modules/linkedin/index.html" class="module-card">
+        <div class="badge badge-ativo">Ativo</div>
+        <div class="module-tag">Social · LinkedIn</div>
+        <div class="module-title">LinkedIn Post M&A</div>
+        <div class="module-desc">Cards para deals, teses e conteúdo institucional. Portrait 1080×1350 e landscape 1200×628. Tom sem emoji, máx 3 hashtags.</div>
+        <div class="module-formats">
+          <span class="fmt">PNG</span>
+          <span class="fmt">JPEG</span>
+        </div>
+        <div class="dim-badge" style="margin-top:10px;">1080×1350 · 1200×628</div>
+      </a>
+
+      <a href="modules/instagram/index.html" class="module-card">
+        <div class="badge badge-ativo">Ativo</div>
+        <div class="module-tag">Social · Instagram</div>
+        <div class="module-title">Instagram Feed</div>
+        <div class="module-desc">Posts quadrados para @eujoaolemosnetto e canais V3. Grade consistente, paleta navy/ouro. Máx 1 emoji, máx 5 hashtags, legenda máx 150 palavras.</div>
+        <div class="module-formats">
+          <span class="fmt">PNG</span>
+          <span class="fmt">JPEG</span>
+        </div>
+        <div class="dim-badge" style="margin-top:10px;">1080 × 1080 px</div>
+      </a>
+
+      <a href="modules/stories/index.html" class="module-card soon">
+        <div class="badge badge-build">Em construção</div>
+        <div class="module-tag">Social · Stories</div>
+        <div class="module-title">Stories & Carrossel</div>
+        <div class="module-desc">Instagram Stories e LinkedIn carrossel. Texto máx 3 linhas visíveis. Formatação vertical nativa, sem filtros não aprovados.</div>
+        <div class="module-formats">
+          <span class="fmt">PNG</span>
+          <span class="fmt">JPEG</span>
+        </div>
+        <div class="dim-badge" style="margin-top:10px;">1080 × 1920 px</div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────
+       SEÇÃO 3 — MOTION DESIGN
+  ────────────────────────────────────────── -->
+  <div class="section-block">
+    <div class="section-header">
+      <span class="section-tag">Motion Design</span>
+      <span class="section-count">1 módulo</span>
+    </div>
+    <div class="modules-grid-2">
+
+      <div class="module-card-wide">
+        <div class="badge badge-build">Em construção</div>
+        <div class="mw-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5">
+            <polygon points="5,3 19,12 5,21"/>
+          </svg>
+        </div>
+        <div class="mw-body">
+          <div class="module-tag">Motion · Reels &amp; Stories</div>
+          <div class="module-title">Motion Design — Vídeo</div>
+          <div class="module-desc">Templates animados para Reels e Stories. 7 keyframes padrão V3: slideUp, fadeUp, lineExpand, msgCycle, sweep, ctaPulse, logoFloat. Exporta em MP4 pronto para publicar.</div>
+          <div class="module-formats">
+            <span class="fmt">MP4</span>
+            <span class="fmt">GIF</span>
+          </div>
+          <div class="dim-badge" style="margin-top:10px;">1080 × 1920 px · 30fps · MP4</div>
+        </div>
+      </div>
+
+      <div class="module-card-wide">
+        <div class="badge badge-soon">Em breve</div>
+        <div class="mw-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7A8FA8" stroke-width="1.5">
+            <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+          </svg>
+        </div>
+        <div class="mw-body">
+          <div class="module-tag">Motion · Banner Digital</div>
+          <div class="module-title">Banner Adhesion</div>
+          <div class="module-desc">Banner digital animado com entrada suave, mensagens rotativas e CTA com shimmer dourado. Zero JavaScript externo, arquivo abaixo de 100KB.</div>
+          <div class="module-formats">
+            <span class="fmt">HTML</span>
+            <span class="fmt">PNG</span>
+          </div>
+          <div class="dim-badge" style="margin-top:10px;">970 × 90 px · 320 × 100 px</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────
+       SEÇÃO 4 — DOCUMENTOS M&A
+  ────────────────────────────────────────── -->
+  <div class="section-block">
+    <div class="section-header">
+      <span class="section-tag">Documentos M&A</span>
+      <span class="section-count">3 módulos</span>
+    </div>
+    <div class="modules-grid">
+
+      <a href="modules/documentos/teaser.html" class="module-card soon">
+        <div class="badge badge-build">Em construção</div>
+        <div class="module-tag">M&A · Originação</div>
+        <div class="module-title">Teaser Cego</div>
+        <div class="module-desc">1 página A4. Identificação mínima do ativo — nunca nome, localização ou proprietário. PT-BR e EN. NDA obrigatório antes de enviar versão identificada.</div>
+        <div class="module-formats">
+          <span class="fmt">PDF</span>
+          <span class="fmt">PNG</span>
+        </div>
+        <div class="dim-badge" style="margin-top:10px;">A4 · 210 × 297 mm</div>
+      </a>
+
+      <a href="modules/documentos/cim.html" class="module-card soon">
+        <div class="badge badge-build">Em construção</div>
+        <div class="module-tag">M&A · Due Diligence</div>
+        <div class="module-title">CIM</div>
+        <div class="module-desc">Confidential Information Memorandum — 6 páginas obrigatórias. PT-BR e EN. Dados e valores verificados com João antes de exportar. NDA obrigatório.</div>
+        <div class="module-formats">
+          <span class="fmt">PDF</span>
+          <span class="fmt">PNG</span>
+        </div>
+        <div class="dim-badge" style="margin-top:10px;">A4 · 6 páginas · CMYK</div>
+      </a>
+
+      <a href="modules/documentos/papel-timbrado.html" class="module-card soon">
+        <div class="badge badge-soon">Em breve</div>
+        <div class="module-tag">Papelaria · Contratos</div>
+        <div class="module-title">Papel Timbrado</div>
+        <div class="module-desc">Cabeçalho e rodapé institucional para contratos, mandatos, NDAs e comunicações formais. Margem mínima 5mm. Fonte mínima 8pt para impressão.</div>
+        <div class="module-formats">
+          <span class="fmt">PDF</span>
+          <span class="fmt">DOCX</span>
+        </div>
+        <div class="dim-badge" style="margin-top:10px;">A4 · 210 × 297 mm · 300dpi</div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────
+       SEÇÃO 5 — COMUNICAÇÃO
+  ────────────────────────────────────────── -->
+  <div class="section-block">
+    <div class="section-header">
+      <span class="section-tag">Comunicação</span>
+      <span class="section-count">1 módulo</span>
+    </div>
+    <div class="modules-grid-2">
+
+      <a href="modules/whatsapp/index.html" class="module-card soon">
+        <div class="badge badge-soon">Em breve</div>
+        <div class="module-tag">Comunicação · WhatsApp</div>
+        <div class="module-title">Templates WhatsApp</div>
+        <div class="module-desc">Cards visuais e textos padronizados para abordagem de leads, follow-up e apresentação de deals. Tom institucional sem emoji excessivo.</div>
+        <div class="module-formats">
+          <span class="fmt">PNG</span>
+          <span class="fmt">TEXTO</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>V3 Partners Soluções Ltda · CNPJ 14.219.287/0001-50 · Uso interno</p>
+  <div class="tag">Structured to Perform</div>
+</footer>
+
+</body>
+</html>
