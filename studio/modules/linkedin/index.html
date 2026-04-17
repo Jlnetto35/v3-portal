@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkedIn Post M&A · V3 Content Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { font-family: 'DM Sans', sans-serif; background: #09081A; color: #F0ECE4; min-height: 100vh; }
+
+/* ── HEADER ── */
+header {
+  padding: 18px 40px;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(9,8,26,0.97); position: sticky; top: 0; z-index: 100;
+}
+.nav-left { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+.nav-left img { height: 36px; width: auto; }
+.nav-div { width: 1px; height: 24px; background: rgba(201,168,76,0.18); }
+.nav-lbl { font-size: 9px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #C9A84C; }
+.nav-sub { font-size: 8px; color: #7A8FA8; letter-spacing: 1px; margin-top: 2px; }
+.bc { font-size: 10px; color: #7A8FA8; }
+.bc a { color: rgba(201,168,76,0.6); text-decoration: none; }
+.bc a:hover { color: #C9A84C; }
+.bc span { margin: 0 8px; color: #1e3158; }
+
+/* ── WORKSPACE ── */
+.workspace { display: grid; grid-template-columns: 300px 1fr; min-height: calc(100vh - 65px); }
+
+/* ── FORM PANEL ── */
+.fp { background: #0b1525; border-right: 1px solid rgba(201,168,76,0.07); padding: 24px 22px 48px; overflow-y: auto; }
+.fp-lbl { font-size: 9px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #7A8FA8; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(240,236,228,0.05); }
+.fld { margin-bottom: 14px; }
+.fld label { display: block; font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(201,168,76,0.75); margin-bottom: 6px; }
+.fld label small { font-weight: 400; color: rgba(122,143,168,0.5); font-size: 9px; text-transform: none; letter-spacing: 0.5px; }
+.fld input, .fld select, .fld textarea {
+  width: 100%; background: rgba(9,8,26,0.7);
+  border: 1px solid rgba(201,168,76,0.12); border-bottom-color: rgba(201,168,76,0.22);
+  color: #F0ECE4; font-family: 'DM Sans', sans-serif; font-size: 13px;
+  padding: 9px 12px; outline: none; transition: border-color 0.2s, background 0.2s;
+  -webkit-appearance: none; resize: vertical;
+}
+.fld input:focus, .fld select:focus, .fld textarea:focus { border-color: rgba(201,168,76,0.4); background: rgba(17,31,53,0.5); }
+.fld input::placeholder, .fld textarea::placeholder { color: rgba(122,143,168,0.35); }
+.fld select option { background: #111F35; }
+.fld textarea { min-height: 72px; line-height: 1.6; }
+
+.fsep { font-size: 9px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: rgba(36,58,102,0.8); margin: 20px 0 14px; padding-top: 16px; border-top: 1px solid rgba(240,236,228,0.04); }
+
+/* FORMATO */
+.fmt-row { display: flex; gap: 6px; }
+.fmt-btn {
+  flex: 1; background: rgba(9,8,26,0.6); border: 1px solid rgba(201,168,76,0.1);
+  color: #7A8FA8; font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 700;
+  letter-spacing: 1.5px; padding: 9px 8px; cursor: pointer; text-align: center;
+  text-transform: uppercase; transition: all 0.15s;
+}
+.fmt-btn.on { background: rgba(201,168,76,0.07); border-color: rgba(201,168,76,0.32); color: #C9A84C; }
+
+/* BOTÕES */
+.acts { margin-top: 24px; display: flex; flex-direction: column; gap: 8px; }
+.bg { background: #C9A84C; color: #09081A; border: none; font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; padding: 14px 20px; cursor: pointer; transition: background 0.15s; width: 100%; }
+.bg:hover { background: #E8C97A; }
+.bo { background: transparent; color: #C9A84C; border: 1px solid rgba(201,168,76,0.25); font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 12px 20px; cursor: pointer; transition: all 0.15s; width: 100%; }
+.bo:hover { background: rgba(201,168,76,0.05); border-color: rgba(201,168,76,0.42); }
+.bgh { background: transparent; color: rgba(122,143,168,0.55); border: 1px solid rgba(122,143,168,0.1); font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; padding: 11px 20px; cursor: pointer; transition: all 0.15s; width: 100%; }
+.bgh:hover { color: #7A8FA8; }
+
+/* ── PREVIEW PANEL ── */
+.pp { padding: 32px 40px 48px; display: flex; flex-direction: column; gap: 28px; overflow-y: auto; }
+.pp-topbar { display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid rgba(240,236,228,0.05); }
+.pp-lbl { font-size: 9px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #7A8FA8; }
+.pp-dim { font-size: 9px; color: #1e3158; font-family: monospace; letter-spacing: 0.5px; }
+
+/* SCALER — exibe o card em escala reduzida */
+.card-stage { display: flex; align-items: flex-start; }
+.card-scaler-wrap { position: relative; flex-shrink: 0; }
+.card-scaler { transform-origin: top left; display: block; }
+
+/* ══════════════════════════════════════════════════════
+   CARD LINKEDIN — SOP Sec. 4.2
+   Landscape: 1200 × 628 px
+   Square:    1080 × 1080 px
+   Fundo: Navy · Logo: flat gold alpha · DM Sans
+══════════════════════════════════════════════════════ */
+#card {
+  background: #09081A;
+  border-top: 3px solid #C9A84C;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Textura sutil */
+#card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 110%, rgba(201,168,76,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 90% -10%, rgba(17,31,53,0.6) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.card-inner {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Topo: label + logo */
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 36px 44px 0;
+}
+.card-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase;
+  color: #C9A84C;
+}
+.card-logo img {
+  height: 28px; width: auto; display: block; opacity: 0.9;
+}
+
+/* Corpo central */
+.card-body {
+  flex: 1;
+  padding: 28px 44px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.card-headline {
+  font-size: 42px; font-weight: 800; color: #F0ECE4;
+  line-height: 1.1; letter-spacing: -1px;
+  margin-bottom: 16px;
+}
+.card-headline span { color: #C9A84C; }
+.card-sub {
+  font-size: 15px; font-weight: 400; color: #7A8FA8;
+  line-height: 1.65; max-width: 640px;
+}
+
+/* Dado/Stat destaque (opcional) */
+.card-stat-row {
+  display: flex; gap: 32px; margin-top: 24px;
+}
+.card-stat {
+  border-left: 2px solid #C9A84C;
+  padding-left: 14px;
+}
+.card-stat-val {
+  font-size: 28px; font-weight: 800; color: #F0ECE4; letter-spacing: -0.5px; line-height: 1;
+}
+.card-stat-val span { color: #C9A84C; }
+.card-stat-lbl {
+  font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: #7A8FA8; margin-top: 4px;
+}
+
+/* Rodapé */
+.card-footer {
+  padding: 20px 44px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid rgba(201,168,76,0.1);
+  margin-top: 20px;
+}
+.card-cta {
+  font-size: 11px; font-weight: 700; color: #C9A84C;
+  letter-spacing: 1px;
+}
+.card-domain {
+  font-size: 10px; color: rgba(122,143,168,0.5);
+  letter-spacing: 1px; text-transform: lowercase;
+}
+
+/* ── VARIANTE SQUARE ── */
+#card.square .card-top { padding: 44px 52px 0; }
+#card.square .card-body { padding: 32px 52px 0; }
+#card.square .card-headline { font-size: 52px; letter-spacing: -1.5px; max-width: 860px; }
+#card.square .card-sub { font-size: 16px; max-width: 800px; }
+#card.square .card-eyebrow { font-size: 12px; letter-spacing: 6px; }
+#card.square .card-footer { padding: 24px 52px 36px; margin-top: 28px; }
+#card.square .card-logo img { height: 32px; }
+
+/* ── COPY TEXT OUTPUT ── */
+.copy-box { background: #0b1525; border: 1px solid rgba(201,168,76,0.08); }
+.copy-box-top { padding: 11px 16px; border-bottom: 1px solid rgba(201,168,76,0.06); display: flex; align-items: center; justify-content: space-between; }
+.copy-box-lbl { font-size: 9px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #7A8FA8; }
+.copy-btn { background: transparent; border: none; color: #C9A84C; font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; padding: 0; }
+.copy-btn:hover { opacity: 0.65; }
+.copy-box-body { padding: 16px; font-size: 12px; color: #7A8FA8; line-height: 1.8; white-space: pre-wrap; font-family: 'DM Sans', sans-serif; }
+.copy-box-body strong { color: #F0ECE4; }
+.copy-box-body .hash { color: #C9A84C; }
+
+/* AVISO SOP */
+.sop-bar { background: rgba(201,168,76,0.04); border: 1px solid rgba(201,168,76,0.1); border-left: 2px solid rgba(201,168,76,0.3); padding: 10px 14px; font-size: 9px; color: #7A8FA8; line-height: 1.6; }
+.sop-bar strong { color: #C9A84C; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 28px; right: 28px; background: #162744; border: 1px solid rgba(201,168,76,0.18); border-left: 2px solid #C9A84C; padding: 12px 18px; font-size: 10px; color: #F0ECE4; z-index: 999; opacity: 0; transform: translateY(8px); transition: all 0.25s; pointer-events: none; }
+.toast.on { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../../index.html" class="nav-left">
+    <img src="../../assets/logos/v3-logo-3d-alpha.png" alt="V3 Partners">
+    <div class="nav-div"></div>
+    <div>
+      <div class="nav-lbl">Content Studio</div>
+      <div class="nav-sub">V3 Partners · Uso Interno</div>
+    </div>
+  </a>
+  <div class="bc">
+    <a href="../../index.html">Studio</a>
+    <span>/</span>
+    LinkedIn Post M&A
+  </div>
+</header>
+
+<div class="workspace">
+
+  <!-- FORMULÁRIO -->
+  <div class="fp">
+    <div class="fp-lbl">Conteúdo do Post</div>
+
+    <div class="fsep" style="margin-top:0; padding-top:0; border-top:none;">Formato</div>
+    <div class="fmt-row" style="margin-bottom:16px;">
+      <button class="fmt-btn on" id="fb-land" onclick="setFmt('landscape')">Landscape<br><span style="font-size:8px;opacity:0.6;">1200×628</span></button>
+      <button class="fmt-btn" id="fb-sq" onclick="setFmt('square')">Square<br><span style="font-size:8px;opacity:0.6;">1080×1080</span></button>
+    </div>
+
+    <div class="fld">
+      <label>Vertical</label>
+      <select id="f-vertical" onchange="render()">
+        <option value="M&A · Cross-Border">M&A · Cross-Border</option>
+        <option value="Securitização · Crédito">Securitização · Crédito</option>
+        <option value="Real Estate Estruturado">Real Estate Estruturado</option>
+        <option value="Mineração · Commodities">Mineração · Commodities</option>
+        <option value="Originação · Ativos">Originação · Ativos</option>
+        <option value="Mercado de Capitais">Mercado de Capitais</option>
+      </select>
+    </div>
+
+    <div class="fld">
+      <label>Label / Eyebrow <small>— aparece no card</small></label>
+      <input type="text" id="f-label" placeholder="DEAL FECHADO · M&A" oninput="render()">
+    </div>
+
+    <div class="fld">
+      <label>Headline Principal</label>
+      <textarea id="f-headline" placeholder="R$ 45M em CRI estruturado para ativo logístico no interior de SP" oninput="render()" style="min-height:80px;"></textarea>
+    </div>
+
+    <div class="fld">
+      <label>Subtítulo / Contexto <small>— opcional</small></label>
+      <input type="text" id="f-sub" placeholder="Operação com FII listado em B3 e prazo de 7 anos" oninput="render()">
+    </div>
+
+    <div class="fsep">Dado Destaque <small style="color:rgba(122,143,168,0.5);font-weight:400;letter-spacing:0;text-transform:none;font-size:9px;">— opcional, até 2 stats</small></div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+      <div class="fld" style="margin:0;">
+        <label>Valor 1</label>
+        <input type="text" id="f-stat1-val" placeholder="R$ 45M" oninput="render()">
+      </div>
+      <div class="fld" style="margin:0;">
+        <label>Label 1</label>
+        <input type="text" id="f-stat1-lbl" placeholder="Volume estruturado" oninput="render()">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+      <div class="fld" style="margin:0;">
+        <label>Valor 2</label>
+        <input type="text" id="f-stat2-val" placeholder="7 anos" oninput="render()">
+      </div>
+      <div class="fld" style="margin:0;">
+        <label>Label 2</label>
+        <input type="text" id="f-stat2-lbl" placeholder="Prazo da operação" oninput="render()">
+      </div>
+    </div>
+
+    <div class="fld">
+      <label>CTA do card</label>
+      <input type="text" id="f-cta" placeholder="Entre em contato para acesso à tese completa" oninput="render()">
+    </div>
+
+    <div class="fsep">Copy do Post LinkedIn</div>
+
+    <div class="fld">
+      <label>Abertura — dado ou fato <small>— sem "Olá pessoal!"</small></label>
+      <input type="text" id="f-abertura" placeholder="O mercado de CRI atingiu R$ 12B em emissões no 1T25." oninput="renderCopy()">
+    </div>
+
+    <div class="fld">
+      <label>Corpo <small>— máx 100 palavras</small></label>
+      <textarea id="f-corpo" placeholder="2-3 parágrafos de contexto institucional." oninput="renderCopy()" style="min-height:88px;"></textarea>
+    </div>
+
+    <div class="fld">
+      <label>CTA do post <small>— uma linha</small></label>
+      <input type="text" id="f-cta-post" placeholder="Conecte-se para acesso à análise completa." oninput="renderCopy()">
+    </div>
+
+    <div class="fld">
+      <label>Hashtag 2 <small>— vertical</small></label>
+      <input type="text" id="f-h2" placeholder="#CRI" oninput="renderCopy()">
+    </div>
+    <div class="fld">
+      <label>Hashtag 3 <small>— tema</small></label>
+      <input type="text" id="f-h3" placeholder="#MercadoDeCapitais" oninput="renderCopy()">
+    </div>
+
+    <div class="acts">
+      <button class="bg" onclick="baixarPNG()">Baixar Card PNG</button>
+      <button class="bo" onclick="copiarCopy()">Copiar Texto do Post</button>
+      <button class="bgh" onclick="location.href='../../index.html'">Voltar ao Studio</button>
+    </div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="pp">
+    <div class="pp-topbar">
+      <span class="pp-lbl">Preview em Tempo Real</span>
+      <span class="pp-dim" id="dim-label">1200 × 628 px · Landscape</span>
+    </div>
+
+    <!-- SOP AVISO -->
+    <div class="sop-bar">
+      <strong>Regras SOP:</strong> sem emoji · sem exclamação · máx 3 hashtags · tom institucional · dados verificados · máx 150 palavras no post
+    </div>
+
+    <!-- CARD PREVIEW (escalado) -->
+    <div class="card-stage">
+      <div class="card-scaler-wrap" id="scaler-wrap">
+        <div class="card-scaler" id="card-scaler">
+          <!-- ══ CARD LINKEDIN ══ -->
+          <div id="card">
+            <div class="card-inner">
+
+              <div class="card-top">
+                <div class="card-eyebrow" id="card-eyebrow">M&A · CROSS-BORDER</div>
+                <div class="card-logo">
+                  <img src="../../assets/logos/v3-logo-flat-gold-alpha.png" alt="V3 Partners" crossorigin="anonymous">
+                </div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-headline" id="card-headline">Headline principal<br>do post aqui</div>
+                <div class="card-sub" id="card-sub"></div>
+                <div class="card-stat-row" id="card-stats" style="display:none;">
+                  <div class="card-stat" id="stat1" style="display:none;">
+                    <div class="card-stat-val" id="stat1-val">—</div>
+                    <div class="card-stat-lbl" id="stat1-lbl">—</div>
+                  </div>
+                  <div class="card-stat" id="stat2" style="display:none;">
+                    <div class="card-stat-val" id="stat2-val">—</div>
+                    <div class="card-stat-lbl" id="stat2-lbl">—</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer">
+                <div class="card-cta" id="card-cta">Entre em contato para acesso à tese completa</div>
+                <div class="card-domain">v3partners.com.br</div>
+              </div>
+
+            </div>
+          </div>
+          <!-- ══ /CARD ══ -->
+        </div>
+      </div>
+    </div>
+
+    <!-- COPY TEXT -->
+    <div class="copy-box" id="copy-box">
+      <div class="copy-box-top">
+        <span class="copy-box-lbl">Texto do Post · LinkedIn</span>
+        <button class="copy-btn" onclick="copiarCopy()">Copiar</button>
+      </div>
+      <div class="copy-box-body" id="copy-preview"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── ESTADO ───────────────────────────────────────────────────────────────────
+var fmt = 'landscape';
+var DIMS = {
+  landscape: { w: 1200, h: 628,  scale: 0.5,   label: '1200 × 628 px · Landscape' },
+  square:    { w: 1080, h: 1080, scale: 0.485,  label: '1080 × 1080 px · Square'   }
+};
+
+// ── FORMATO ──────────────────────────────────────────────────────────────────
+function setFmt(f) {
+  fmt = f;
+  document.querySelectorAll('.fmt-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('fb-' + (f === 'landscape' ? 'land' : 'sq')).classList.add('on');
+  applyDim();
+  render();
+}
+
+function applyDim() {
+  var d   = DIMS[fmt];
+  var card = document.getElementById('card');
+  var scaler = document.getElementById('card-scaler');
+  var wrap   = document.getElementById('scaler-wrap');
+
+  card.style.width  = d.w + 'px';
+  card.style.height = d.h + 'px';
+  card.className = fmt === 'square' ? 'square' : '';
+  scaler.style.transform = 'scale(' + d.scale + ')';
+  wrap.style.width  = (d.w * d.scale) + 'px';
+  wrap.style.height = (d.h * d.scale) + 'px';
+  document.getElementById('dim-label').textContent = d.label;
+}
+
+// ── RENDER CARD ───────────────────────────────────────────────────────────────
+function render() {
+  var vertical  = document.getElementById('f-vertical').value;
+  var label     = document.getElementById('f-label').value.trim()    || vertical.toUpperCase();
+  var headline  = document.getElementById('f-headline').value.trim() || 'Headline principal do post aqui';
+  var sub       = document.getElementById('f-sub').value.trim();
+  var cta       = document.getElementById('f-cta').value.trim()      || 'Entre em contato para acesso à tese completa';
+  var s1v = document.getElementById('f-stat1-val').value.trim();
+  var s1l = document.getElementById('f-stat1-lbl').value.trim();
+  var s2v = document.getElementById('f-stat2-val').value.trim();
+  var s2l = document.getElementById('f-stat2-lbl').value.trim();
+
+  document.getElementById('card-eyebrow').textContent = label.toUpperCase();
+  document.getElementById('card-headline').textContent = headline;
+  document.getElementById('card-sub').textContent = sub;
+  document.getElementById('card-cta').textContent = cta;
+
+  // stats
+  var hasStat = s1v || s2v;
+  document.getElementById('card-stats').style.display = hasStat ? 'flex' : 'none';
+  var st1 = document.getElementById('stat1');
+  var st2 = document.getElementById('stat2');
+  if (s1v) { document.getElementById('stat1-val').textContent = s1v; document.getElementById('stat1-lbl').textContent = s1l; st1.style.display = ''; }
+  else { st1.style.display = 'none'; }
+  if (s2v) { document.getElementById('stat2-val').textContent = s2v; document.getElementById('stat2-lbl').textContent = s2l; st2.style.display = ''; }
+  else { st2.style.display = 'none'; }
+
+  renderCopy();
+}
+
+// ── RENDER COPY ───────────────────────────────────────────────────────────────
+function renderCopy() {
+  var abertura = document.getElementById('f-abertura').value.trim();
+  var corpo    = document.getElementById('f-corpo').value.trim();
+  var ctaPost  = document.getElementById('f-cta-post').value.trim();
+  var h2 = document.getElementById('f-h2').value.trim().replace(/^#*/,'');
+  var h3 = document.getElementById('f-h3').value.trim().replace(/^#*/,'');
+
+  var lines = [];
+  if (abertura) lines.push(abertura);
+  if (corpo)    lines.push('', corpo);
+  if (ctaPost)  lines.push('', ctaPost);
+  var tags = ['#V3Partners'];
+  if (h2) tags.push('#' + h2.replace(/^#/,''));
+  if (h3) tags.push('#' + h3.replace(/^#/,''));
+  lines.push('', tags.join(' '));
+
+  var text = lines.join('\n');
+
+  // contagem de palavras (excluindo hashtags)
+  var semTags = text.replace(/#\w+/g,'').trim();
+  var palavras = semTags.split(/\s+/).filter(w => w.length > 0).length;
+  var aviso = palavras > 150 ? ' ⚠ ' + palavras + ' palavras — reduzir' : palavras + ' palavras';
+
+  var el = document.getElementById('copy-preview');
+  el.innerHTML = '';
+
+  lines.forEach((l, i) => {
+    if (l === '') { el.appendChild(document.createElement('br')); return; }
+    var div = document.createElement('div');
+    if (l.match(/^#/)) {
+      div.innerHTML = l.split(' ').map(function(t) {
+        return t.startsWith('#') ? '<span class="hash">' + t + '</span>' : t;
+      }).join(' ');
+    } else if (i === 0 && abertura) {
+      div.innerHTML = '<strong>' + l + '</strong>';
+    } else {
+      div.textContent = l;
+    }
+    el.appendChild(div);
+  });
+
+  // aviso palavras
+  var aw = document.createElement('div');
+  aw.style.cssText = 'margin-top:12px;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:' + (palavras > 150 ? '#C9A84C' : 'rgba(122,143,168,0.4)') + ';';
+  aw.textContent = aviso;
+  el.appendChild(aw);
+
+  // guardar texto puro para copiar
+  window._copyText = text;
+}
+
+// ── DOWNLOAD PNG ─────────────────────────────────────────────────────────────
+function baixarPNG() {
+  var v  = document.getElementById('f-vertical').value.replace(/[^a-zA-Z]/g,'-').toLowerCase();
+  var filename = 'linkedin-v3-' + fmt + '-' + v + '.png';
+  toast('Gerando PNG…');
+  html2canvas(document.getElementById('card'), {
+    scale: 2,
+    backgroundColor: '#09081A',
+    useCORS: true,
+    logging: false,
+    imageTimeout: 8000
+  }).then(function(c) {
+    var a = document.createElement('a');
+    a.download = filename;
+    a.href = c.toDataURL('image/png');
+    a.click();
+    toast('PNG salvo — ' + filename);
+  }).catch(function(e) {
+    toast('Erro PNG: abra via servidor local.');
+    console.error(e);
+  });
+}
+
+// ── COPIAR COPY ───────────────────────────────────────────────────────────────
+function copiarCopy() {
+  if (!window._copyText) return;
+  navigator.clipboard.writeText(window._copyText)
+    .then(function() { toast('Texto copiado — cole direto no LinkedIn.'); })
+    .catch(function() { toast('Selecione o texto abaixo e copie manualmente.'); });
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+var _t;
+function toast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('on');
+  clearTimeout(_t);
+  _t = setTimeout(function() { el.classList.remove('on'); }, 3200);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+applyDim();
+render();
+renderCopy();
+</script>
+</body>
+</html>
