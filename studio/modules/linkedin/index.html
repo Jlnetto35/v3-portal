@@ -6,6 +6,7 @@
 <title>LinkedIn Post M&A · V3 Content Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="../../shared/deal-picker.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
@@ -323,6 +324,7 @@ header {
     </div>
 
     <div class="acts">
+      <button class="bo" onclick="abrirDealPicker()" style="border-color:rgba(201,168,76,0.4);color:#C9A84C;display:flex;align-items:center;justify-content:center;gap:8px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Puxar de um Deal</button>
       <button class="bg" onclick="baixarPNG()">Baixar Card PNG</button>
       <button class="bo" onclick="copiarCopy()">Copiar Texto do Post</button>
       <button class="bgh" onclick="location.href='../../index.html'">Voltar ao Studio</button>
@@ -550,6 +552,74 @@ function toast(msg) {
   el.classList.add('on');
   clearTimeout(_t);
   _t = setTimeout(function() { el.classList.remove('on'); }, 3200);
+}
+
+// ── DEAL PICKER ──────────────────────────────────────────────────────────────
+function abrirDealPicker() {
+  V3DealPicker.open({
+    onSelect: function(deal) {
+      // Mapear campos do deal → formulário LinkedIn
+      var vertical = deal.Vertical || deal.vertical || '';
+      var tipo     = deal['Tipo Ativo'] || deal.tipo_ativo || '';
+      var nome     = deal.Nome || deal.nome || '';
+      var descricao = deal['Descrição Cega'] || deal.descricao || '';
+      var valor    = deal.Valor || deal.valor || '';
+      var prazo    = deal.Prazo || deal.prazo || '';
+      var status   = deal.Status || deal.status || '';
+
+      // Vertical — tentar match no select
+      var sel = document.getElementById('f-vertical');
+      for (var i = 0; i < sel.options.length; i++) {
+        if (sel.options[i].value.toLowerCase().indexOf(vertical.split('·')[0].trim().toLowerCase()) > -1) {
+          sel.selectedIndex = i; break;
+        }
+      }
+
+      // Label eyebrow: Tipo Ativo + Status
+      document.getElementById('f-label').value = (tipo + (status ? ' · ' + status.toUpperCase() : '')).toUpperCase();
+
+      // Headline: nome do projeto
+      document.getElementById('f-headline').value = nome || '';
+
+      // Subtítulo: descrição cega (truncada em 120 chars)
+      document.getElementById('f-sub').value = descricao.length > 120 ? descricao.substring(0,117) + '...' : descricao;
+
+      // Stats
+      document.getElementById('f-stat1-val').value = valor;
+      document.getElementById('f-stat1-lbl').value = 'Volume estruturado';
+      if (prazo) {
+        document.getElementById('f-stat2-val').value = prazo;
+        document.getElementById('f-stat2-lbl').value = 'Prazo da operação';
+      }
+
+      // CTA padrão
+      document.getElementById('f-cta').value = 'Entre em contato para acesso à tese completa';
+
+      // Copy: abertura automática com dados do deal
+      document.getElementById('f-abertura').value = valor ? valor + ' em ' + (tipo || 'ativo estruturado') + '.' : '';
+      document.getElementById('f-corpo').value = descricao || '';
+      document.getElementById('f-cta-post').value = 'Conecte-se para acesso ao memorando completo.';
+
+      // Hashtags por vertical
+      var hashMap = {
+        'Real Estate':    ['CRI', 'RealEstate'],
+        'Securitização':  ['FIDC', 'Securitizacao'],
+        'Mineração':      ['Mineracao', 'Commodities'],
+        'M&A':            ['MA', 'CrossBorder'],
+        'Originação':     ['Originacao', 'Ativos']
+      };
+      var hTags = ['CRI','MercadoDeCapitais'];
+      Object.keys(hashMap).forEach(function(k) {
+        if (vertical.indexOf(k) > -1) hTags = hashMap[k];
+      });
+      document.getElementById('f-h2').value = '#' + hTags[0];
+      document.getElementById('f-h3').value = '#' + hTags[1];
+
+      render();
+      renderCopy();
+      toast('Deal ' + (deal.ID || '') + ' carregado — revise e ajuste antes de exportar.');
+    }
+  });
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
