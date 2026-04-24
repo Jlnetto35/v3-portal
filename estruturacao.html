@@ -210,6 +210,7 @@ tbody tr.total-row td{font-weight:700;color:#C9A84C;border-top:1px solid rgba(20
     <button class="tab" onclick="showTab('alteracoes',this)">Alterações</button>
     <button class="tab" onclick="showTab('time',this)">Time</button>
     <button class="tab" onclick="showTab('docs',this)">Documentos</button>
+    <button class="tab" onclick="showTab('squad',this)">Squad IA</button>
   </div>
 
   <!-- ── TAB 1: SOCIETÁRIO ──────────────────────────────────────────────── -->
@@ -522,6 +523,97 @@ tbody tr.total-row td{font-weight:700;color:#C9A84C;border-top:1px solid rgba(20
     </div>
   </div>
 
+  <!-- ── TAB SQUAD IA ──────────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-squad">
+    <div class="section-title">V3 Estruturação Squad — Comandos Disponíveis</div>
+    <div class="info"><strong>Como usar:</strong> No terminal Claude Code, chame o squad diretamente. Em um novo chat Claude.ai, cole o Prompt Master abaixo para restaurar o contexto completo desta sessão.</div>
+
+    <div class="section-title" style="margin-top:32px;">Agentes e Tasks</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Comando</th><th>Tipo</th><th>Para que serve</th></tr></thead>
+        <tbody>
+          <tr><td class="gold" style="font-family:monospace;font-size:11px;">/v3-estruturacao:agents:v3-master</td><td class="muted">Agente</td><td class="muted">Orquestrador principal — carrega todo o contexto V3 e roteia para especialistas</td></tr>
+          <tr><td class="gold" style="font-family:monospace;font-size:11px;">/v3-estruturacao:agents:v3-juridico</td><td class="muted">Agente</td><td class="muted">Especialista em direito societário, LSA, CLT, CVM — questões legais</td></tr>
+          <tr><td class="gold" style="font-family:monospace;font-size:11px;">/v3-estruturacao:agents:v3-financeiro</td><td class="muted">Agente</td><td class="muted">Modelagem financeira, ESOP, valuation, captação</td></tr>
+          <tr><td class="gold" style="font-family:monospace;font-size:11px;">/v3-estruturacao:agents:v3-tokenizacao</td><td class="muted">Agente</td><td class="muted">Estratégia CVM 88, STO, tokenização de equity via Bloxs</td></tr>
+          <tr><td class="gold" style="font-family:monospace;font-size:11px;">/v3-estruturacao:tasks:validar-tese</td><td class="muted">Task</td><td class="muted">Valida qualquer nova ideia pelo framework 5 fatores antes de executar</td></tr>
+          <tr><td class="gold" style="font-family:monospace;font-size:11px;">/v3-estruturacao:tasks:nova-captacao</td><td class="muted">Task</td><td class="muted">Analisa nova estratégia de captação vs. plano atual</td></tr>
+          <tr><td class="gold" style="font-family:monospace;font-size:11px;">/v3-estruturacao:tasks:nova-estruturacao</td><td class="muted">Task</td><td class="muted">Nova sessão de estruturação com check do roadmap atual</td></tr>
+          <tr><td class="gold" style="font-family:monospace;font-size:11px;">/v3-estruturacao:checklists:validacao-5-fatores</td><td class="muted">Checklist</td><td class="muted">5 fatores: Jurídico · Financeiro · Estratégico · Execução · Cap Table</td></tr>
+          <tr><td class="gold" style="font-family:monospace;font-size:11px;">/v3-estruturacao:README</td><td class="muted">Docs</td><td class="muted">Documentação completa do squad</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title" style="margin-top:32px;">Framework de Validação — 5 Fatores</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fator</th><th>O que valida</th><th>Bloqueador?</th></tr></thead>
+        <tbody>
+          <tr><td class="gold">F1 — Jurídico</td><td class="muted">Base legal, compliance CVM/CLT/LSA, impacto no contrato social</td><td class="urgent">Sim</td></tr>
+          <tr><td class="gold">F2 — Financeiro</td><td class="muted">Custo, retorno esperado, impacto no fluxo de caixa</td><td class="muted">Alto</td></tr>
+          <tr><td class="gold">F3 — Estratégico</td><td class="muted">Alinhamento com as 4 verticais e o roadmap da S.A.</td><td class="muted">Alto</td></tr>
+          <tr><td class="gold">F4 — Execução</td><td class="muted">Quem executa, prazo, dependências, reversibilidade</td><td class="muted">Médio</td></tr>
+          <tr><td class="gold">F5 — Cap Table</td><td class="muted">Impacto no equity dos fundadores, ESOP e Advisory Board</td><td class="urgent">Sim</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title" style="margin-top:32px;">Prompt Master — Para Novo Chat</div>
+    <div class="info">Cole o texto abaixo como primeira mensagem em qualquer novo chat Claude.ai para restaurar o contexto completo da V3 Partners instantaneamente.</div>
+    <br>
+    <div style="background:#09081A;border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:20px;position:relative;">
+      <div style="font-size:8px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#C9A84C;margin-bottom:12px;">PROMPT MASTER — COPIAR TUDO ABAIXO</div>
+      <pre id="masterPrompt" style="font-family:monospace;font-size:10px;color:#F0ECE4;white-space:pre-wrap;line-height:1.6;margin:0;">Você é o consultor estratégico privado de João Lemos Netto, sócio fundador da V3 Partners Soluções Ltda.
+Carregue e mantenha o seguinte contexto em toda a conversa.
+
+EMPRESA: V3 Partners Soluções Ltda → V3 Partners S.A. | CNPJ 14.219.287/0001-50
+Sede: Rua Visconde de Pirajá, 414, Sala 718 — Ipanema, Rio de Janeiro/RJ
+Posicionamento: Boutique institucional de securitização multiproduto
+
+SÓCIOS: João Lemos Netto (Originação 50%) · Hamilton Santos (Financeiro 50% pós-2ªalt) · Robson Lino (Compliance, entra 3ªalt)
+CAP TABLE S.A.: Fundadores 70% (23,33% cada) · Sócio Capitalista 10% (R$200K) · ESOP 10% · Advisory 10%
+
+ROADMAP:
+1ª Alt. REGISTRADA 06/04/2026: João + Aline (50/50, R$30K)
+2ª Alt. URGENTE: Saída Aline → Entrada Hamilton + Acordo de Sócios (assinatura conjunta obrigatória)
+3ª Alt.: Entrada Robson (capital R$45K)
+4ª Alt.: Sócio Capitalista R$200K → 10%
+5ª Alt.: Transformação V3 Partners S.A.
+
+RISCO ATIVO: Aline pode assinar pela empresa até 2ª alt. ser arquivada.
+
+4 VERTICAIS: Securitização/Recebíveis · Real Estate · Mineração/Commodities · M&A Cross-Border
+TECH: Bloxs White Label (tokenização + KYC + OTC 24/7 + CVM 88/160)
+PIPELINE: R$4,4B mapeado | ESOP: cliff 12m · vest 60m | Valuation referência: R$2M
+
+COMANDOS NO TERMINAL:
+/v3-estruturacao:agents:v3-master → orquestrador
+/v3-estruturacao:tasks:validar-tese → framework 5-fatores
+/v3-estruturacao:tasks:nova-captacao → análise de captação
+/v3-estruturacao:agents:v3-tokenizacao → CVM 88/STO/Bloxs
+
+REGRAS: Autonomia total · Zero emojis · Anti-alucinação (WebSearch para dados mercado) · PT-BR informal
+FRAMEWORK: Toda nova tese passa por 5 fatores: F1-Jurídico · F2-Financeiro · F3-Estratégico · F4-Execução · F5-CapTable
+
+V3 Master: "V3 Master ativo. Roadmap atual: 2ª Alteração pendente (urgente). O que resolvemos hoje?"</pre>
+      <button onclick="copiarPrompt()" style="margin-top:16px;background:#C9A84C;color:#09081A;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;padding:10px 20px;border:none;border-radius:4px;cursor:pointer;">COPIAR PROMPT</button>
+    </div>
+
+    <div class="section-title" style="margin-top:32px;">Localização dos Arquivos</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Arquivo</th><th>Caminho</th></tr></thead>
+        <tbody>
+          <tr><td>Squad completo</td><td class="muted" style="font-size:10px;font-family:monospace;">C:\Users\jlemo\.claude\commands\v3-estruturacao\</td></tr>
+          <tr><td>Prompt Master</td><td class="muted" style="font-size:10px;font-family:monospace;">C:\Users\jlemo\.claude\commands\v3-estruturacao\data\master-prompt.md</td></tr>
+          <tr><td>Repositório Squad</td><td class="muted" style="font-size:10px;font-family:monospace;">https://github.com/Jlnetto35/estruturacao-empresarial</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <div class="lock-footer">
     <div class="lf-text">V3 Partners Soluções Ltda · CNPJ 14.219.287/0001-50 · Documento Confidencial</div>
     <button class="logout-btn" onclick="logout()">Encerrar Sessão</button>
@@ -573,6 +665,16 @@ function initPage() {
   const d = new Date();
   document.getElementById('headerDate').textContent =
     d.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}).toUpperCase();
+}
+
+function copiarPrompt() {
+  const txt = document.getElementById('masterPrompt').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const btn = event.target;
+    btn.textContent = 'COPIADO!';
+    btn.style.background = '#4ade80';
+    setTimeout(()=>{ btn.textContent='COPIAR PROMPT'; btn.style.background='#C9A84C'; }, 2000);
+  });
 }
 
 // ── Auto unlock if session active ─────────────────────────────────────────────
