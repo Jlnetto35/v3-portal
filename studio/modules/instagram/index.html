@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Instagram Feed — V3 Content Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{--nd:#09081A;--nb:#111F35;--nc:#162744;--nm:#243A66;--g:#C9A84C;--gl:#E8C97A;--cr:#F0ECE4;--mt:#7A8FA8;}
@@ -199,8 +200,14 @@ textarea{resize:vertical;min-height:72px;line-height:1.5;}
     <div class="eb">
       <div class="et">Exportar</div>
       <div class="ea">
-        <button class="btn bg2" id="btn-dl">Baixar HTML</button>
-        <button class="btn bo" id="btn-copy2">Copiar código</button>
+        <button class="btn bg2" id="btn-export-png">Exportar PNG (1080×1350)</button>
+        <button class="btn bo" id="btn-dl">Baixar HTML</button>
+      </div>
+      <div id="exp-prog" style="display:none;margin-top:10px;">
+        <div style="height:3px;background:rgba(201,168,76,.15);border-radius:2px;overflow:hidden;">
+          <div id="exp-bar" style="height:100%;width:0%;background:#C9A84C;border-radius:2px;transition:width .4s;"></div>
+        </div>
+        <p style="font-size:10px;color:var(--mt);margin-top:5px;" id="exp-label">Gerando PNG...</p>
       </div>
     </div>
   </div>
@@ -357,9 +364,51 @@ document.getElementById('btn-dl').addEventListener('click',()=>{
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download=`ig-post-v3-${S.tema}-${Date.now()}.html`;a.click();toast('HTML baixado');
 });
+
+document.getElementById('btn-export-png').addEventListener('click', async ()=>{
+  const btn=document.getElementById('btn-export-png');
+  const prog=document.getElementById('exp-prog');
+  const bar=document.getElementById('exp-bar');
+  const label=document.getElementById('exp-label');
+  const preview=document.getElementById('post-preview');
+
+  btn.disabled=true;
+  prog.style.display='block';
+  bar.style.width='30%';
+  label.textContent='Renderizando post...';
+  await new Promise(r=>setTimeout(r,200));
+
+  try{
+    bar.style.width='60%';
+    const canvas=await html2canvas(preview,{
+      width:390,
+      height:390,
+      scale:1080/390,
+      useCORS:true,
+      allowTaint:true,
+      logging:false,
+      backgroundColor:'#09081A'
+    });
+    bar.style.width='90%';
+    await new Promise(r=>setTimeout(r,150));
+    const a=document.createElement('a');
+    a.download=`v3-ig-post-${S.tema}-${Date.now()}.png`;
+    a.href=canvas.toDataURL('image/png');
+    a.click();
+    bar.style.width='100%';
+    label.textContent='PNG exportado.';
+    toast('PNG baixado — 1080×1080px');
+  }catch(e){
+    label.textContent='Erro: '+e.message;
+    toast('Erro ao exportar');
+  }
+
+  btn.disabled=false;
+  setTimeout(()=>{ prog.style.display='none'; bar.style.width='0%'; },3000);
+});
+
 function copyHTML(){navigator.clipboard.writeText(buildFullHTML()).then(()=>toast('HTML copiado'));}
 document.getElementById('btn-copy').addEventListener('click',copyHTML);
-document.getElementById('btn-copy2').addEventListener('click',copyHTML);
 
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
 
