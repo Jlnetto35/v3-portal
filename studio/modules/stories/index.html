@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Carrossel Instagram — V3 Content Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{--navy-deep:#09081A;--navy-base:#111F35;--navy-card:#162744;--navy-mid:#243A66;--gold:#C9A84C;--gold-light:#E8C97A;--cream:#F0ECE4;--muted:#7A8FA8;}
@@ -266,18 +267,18 @@ textarea{resize:vertical;min-height:66px;line-height:1.5;}
     </div>
 
     <div class="export-box">
-      <div class="export-title">Exportar</div>
+      <div class="export-title">Exportar Slides</div>
       <div class="export-actions">
-        <button class="btn btn-gold" id="btn-download">Baixar HTML</button>
-        <button class="btn btn-out" id="btn-pw-toggle">Script Playwright</button>
+        <button class="btn btn-gold" id="btn-export-png">Exportar PNGs (1080×1350)</button>
+        <button class="btn btn-out" id="btn-download">Baixar HTML</button>
       </div>
-      <div class="pw-box" id="pw-box">
-        <strong>Export PNG 1080×1350 via Playwright</strong>
-        1. Salve o HTML gerado como <code>carousel.html</code><br>
-        2. <code>pip install playwright &amp;&amp; python -m playwright install chromium</code><br>
-        3. Use o script de export do skill <code>instagram-carousel</code> no Claude Code<br>
-        4. Saída: <code>slide_1.png</code> → <code>slide_N.png</code> em 1080×1350px
+      <div id="export-progress" style="display:none;margin-top:10px;font-size:11px;color:var(--muted);">
+        <div style="height:3px;background:rgba(201,168,76,.15);border-radius:2px;overflow:hidden;margin-bottom:6px;">
+          <div id="export-bar" style="height:100%;width:0%;background:#C9A84C;border-radius:2px;transition:width .3s;"></div>
+        </div>
+        <span id="export-label">Exportando slide 1/7...</span>
       </div>
+      <p style="font-size:10px;color:rgba(122,143,168,.5);margin-top:10px;line-height:1.5;">Os PNGs são baixados um a um direto pelo browser.<br>Resolução final: 1080 × 1350 px por slide.</p>
     </div>
 
   </div>
@@ -771,6 +772,7 @@ document.getElementById('sel-tema').addEventListener('change',e=>{ S.tema=e.targ
 document.getElementById('inp-handle').addEventListener('input',e=>{ S.handle=e.target.value; dbUpdate(); });
 document.getElementById('sel-formato').addEventListener('change',e=>{ S.formato=e.target.value; S.cur=0; renderSlides(); updatePreview(); });
 document.getElementById('btn-gerar').addEventListener('click',()=>{ updatePreview(); toast('Preview atualizado'); });
+
 document.getElementById('btn-download').addEventListener('click',()=>{
   const blob=new Blob([buildHTML()],{type:'text/html'});
   const a=document.createElement('a');
@@ -778,8 +780,63 @@ document.getElementById('btn-download').addEventListener('click',()=>{
   a.download=`carousel-v3-${S.tema}-${Date.now()}.html`;
   a.click(); toast('HTML baixado');
 });
+
 document.getElementById('btn-copy').addEventListener('click',()=>{ navigator.clipboard.writeText(buildHTML()).then(()=>toast('HTML copiado')); });
-document.getElementById('btn-pw-toggle').addEventListener('click',()=>{ const b=document.getElementById('pw-box'); b.style.display=b.style.display==='none'||!b.style.display?'block':'none'; });
+
+document.getElementById('btn-export-png').addEventListener('click', async ()=>{
+  const btnExp=document.getElementById('btn-export-png');
+  const progress=document.getElementById('export-progress');
+  const bar=document.getElementById('export-bar');
+  const label=document.getElementById('export-label');
+  const track=document.getElementById('preview-track');
+  const viewport=track.parentElement;
+  const slides=FORMATS[S.formato];
+  const total=slides.length;
+  const SCALE=1080/420;
+
+  btnExp.disabled=true;
+  btnExp.textContent='Exportando...';
+  progress.style.display='block';
+
+  for(let i=0;i<total;i++){
+    label.textContent=`Exportando slide ${i+1} de ${total}...`;
+    bar.style.width=`${Math.round((i/total)*100)}%`;
+
+    // Navega para o slide
+    track.style.transition='none';
+    track.style.transform=`translateX(${-i*420}px)`;
+    await new Promise(r=>setTimeout(r,200));
+
+    try{
+      const canvas=await html2canvas(viewport,{
+        width:420,
+        height:525,
+        scale:SCALE,
+        useCORS:true,
+        allowTaint:true,
+        logging:false,
+        backgroundColor:'#09081A'
+      });
+      const a=document.createElement('a');
+      a.download=`v3-slide-${i+1}-de-${total}.png`;
+      a.href=canvas.toDataURL('image/png');
+      a.click();
+      await new Promise(r=>setTimeout(r,600));
+    } catch(e){
+      toast(`Erro no slide ${i+1}: ${e.message}`);
+    }
+  }
+
+  bar.style.width='100%';
+  label.textContent=`${total} slides exportados com sucesso.`;
+  btnExp.disabled=false;
+  btnExp.textContent='Exportar PNGs (1080×1350)';
+  toast(`${total} PNGs baixados`);
+
+  // Volta para o slide atual
+  track.style.transform=`translateX(${-S.cur*420}px)`;
+  setTimeout(()=>{ progress.style.display='none'; bar.style.width='0%'; },4000);
+});
 
 // ── TOAST ─────────────────────────────────────────────────────────────────────
 
