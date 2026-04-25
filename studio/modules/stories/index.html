@@ -945,8 +945,17 @@ document.getElementById('btn-transformar').addEventListener('click', async ()=>{
 
   let content=materia;
 
-  // Fetch URL via proxy se necessário
+  // Detectar URLs que bloqueiam proxy
   if(materia.startsWith('http')){
+    const blocked=['linkedin.com','instagram.com','facebook.com','twitter.com','x.com','tiktok.com'];
+    const isBlocked=blocked.some(d=>materia.includes(d));
+    if(isBlocked){
+      btn.disabled=false; status.style.display='none';
+      toast('LinkedIn/Instagram bloqueiam leitura automática');
+      document.getElementById('inp-materia').value='';
+      document.getElementById('inp-materia').placeholder='LinkedIn e Instagram bloqueiam leitura automática.\n\nCopie o texto do artigo e cole aqui diretamente.';
+      return;
+    }
     status.textContent='Lendo URL...';
     try{
       const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(materia)}`);
