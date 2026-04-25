@@ -196,7 +196,8 @@ textarea{resize:vertical;min-height:66px;line-height:1.5;}
         <textarea id="inp-materia" placeholder="https://... ou cole o texto da matéria aqui. Eu leio, processo e crio o carrossel adaptado para a voz V3 e para o João."></textarea>
       </div>
 
-      <button class="ia-transform-btn" id="btn-transformar">Transformar em Carrossel</button>
+      <button class="ia-transform-btn" id="btn-transformar">Transformar com IA</button>
+      <button class="ia-transform-btn" id="btn-gerar-prompt" style="background:transparent;border:1px solid rgba(201,168,76,.35);color:var(--gold);margin-top:6px;">Copiar Prompt para Claude.ai</button>
       <div class="ia-status" id="ia-status">Processando com Claude...</div>
     </div>
 
@@ -974,21 +975,29 @@ document.getElementById('btn-transformar').addEventListener('click', async ()=>{
 
   status.textContent='Gerando slides com Claude...';
 
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':apiKey,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-allow-browser':'true'
-      },
-      body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
-        max_tokens:1400,
-        messages:[{role:'user',content:`${PROMPT_V3}\n\nMATÉRIA:\n${content}`}]
-      })
+  // Tenta direto Anthropic; se CORS falhar, usa proxy no v3-portal
+  const ANTHROPIC_DIRECT = 'https://api.anthropic.com/v1/messages';
+  const PROXY_URL = 'https://v3-portal.vercel.app/api/proxy';
+
+  async function callClaude(endpoint, useProxy) {
+    const headers = { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' };
+    if (!useProxy) headers['anthropic-dangerous-allow-browser'] = 'true';
+    return fetch(endpoint, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ model:'claude-haiku-4-5-20251001', max_tokens:1400, messages:[{role:'user',content:`${PROMPT_V3}\n\nMATÉRIA:\n${content}`}] })
     });
+  }
+
+  try{
+    let response;
+    try {
+      response = await callClaude(ANTHROPIC_DIRECT, false);
+    } catch(corsErr) {
+      status.textContent = 'Direto bloqueado, usando proxy...';
+      response = await callClaude(PROXY_URL, true);
+    }
+    const res = response;
 
     const data=await res.json();
     if(data.error) throw new Error(data.error.message);
@@ -1034,6 +1043,29 @@ document.getElementById('btn-transformar').addEventListener('click', async ()=>{
 });
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
+
+// ── COPIAR PROMPT (fallback sem API key) ─────────────────────────────────────
+document.getElementById('btn-gerar-prompt').addEventListener('click', ()=>{
+  const materia = document.getElementById('inp-materia').value.trim();
+  if (!materia) { toast('Cole uma matéria primeiro'); return; }
+
+  const prompt = `${PROMPT_V3}
+
+MATÉRIA:
+${materia}`;
+
+  navigator.clipboard.writeText(prompt).then(()=>{
+    toast('Prompt copiado — cole no Claude.ai e copie o JSON de volta');
+  }).catch(()=>{
+    const ta = document.createElement('textarea');
+    ta.value = prompt;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('Prompt copiado');
+  });
+});
 
 // ── URL PARAMS (vindo do calendário) ─────────────────────────────────────────
 (function(){
