@@ -135,6 +135,24 @@ textarea{resize:vertical;min-height:66px;line-height:1.5;}
 /* TOAST */
 .toast{position:fixed;bottom:22px;right:22px;background:var(--gold);color:var(--navy-deep);padding:11px 18px;font-size:11px;font-weight:700;letter-spacing:1px;transform:translateY(70px);opacity:0;transition:all .3s;z-index:999;}
 .toast.show{transform:translateY(0);opacity:1;}
+
+/* IA PANEL */
+.ia-panel{padding:18px 20px;border-bottom:2px solid rgba(201,168,76,.2);background:rgba(201,168,76,.04);}
+.ia-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.ia-title{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);}
+.ia-badge{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);color:var(--gold);}
+.ia-key-btn{background:transparent;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:2px 6px;transition:color .2s;}
+.ia-key-btn:hover{color:var(--gold);}
+#inp-materia{min-height:96px;font-size:12px;line-height:1.6;resize:vertical;}
+.ia-transform-btn{width:100%;padding:13px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;background:linear-gradient(135deg,#243A66,#C9A84C);color:#F0ECE4;border:none;cursor:pointer;transition:opacity .2s;margin-top:10px;}
+.ia-transform-btn:hover{opacity:.88;}
+.ia-transform-btn:disabled{opacity:.45;cursor:not-allowed;}
+.ia-status{font-size:11px;color:var(--muted);text-align:center;margin-top:8px;display:none;}
+.ia-key-bar{background:var(--navy-card);border:1px solid rgba(201,168,76,.15);padding:12px;margin-top:10px;display:none;}
+.ia-key-bar label{margin-bottom:5px;}
+.ia-key-bar input{font-size:12px;padding:8px 10px;}
+.ia-key-bar .ia-save{margin-top:7px;padding:8px 16px;background:var(--gold);color:var(--navy-deep);border:none;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;}
+.ia-hint{font-size:10px;color:rgba(122,143,168,.5);line-height:1.5;margin-top:6px;}
 </style>
 </head>
 <body>
@@ -155,6 +173,32 @@ textarea{resize:vertical;min-height:66px;line-height:1.5;}
 
   <!-- LEFT PANEL -->
   <aside class="panel-left">
+
+    <!-- IA PANEL -->
+    <div class="ia-panel">
+      <div class="ia-header">
+        <span class="ia-title">Matéria → Carrossel</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="ia-badge">IA</span>
+          <button class="ia-key-btn" id="btn-api-cfg" title="Configurar API Key">⚙</button>
+        </div>
+      </div>
+
+      <div class="ia-key-bar" id="ia-key-bar">
+        <label>Anthropic API Key</label>
+        <input type="password" id="inp-api-key" placeholder="sk-ant-...">
+        <p class="ia-hint">Obtém em console.anthropic.com · Salvo localmente no browser</p>
+        <button class="ia-save" id="btn-save-key">Salvar Key</button>
+      </div>
+
+      <div class="field" style="margin-top:4px;">
+        <label>Cole a matéria, texto ou URL</label>
+        <textarea id="inp-materia" placeholder="https://... ou cole o texto da matéria aqui. Eu leio, processo e crio o carrossel adaptado para a voz V3 e para o João."></textarea>
+      </div>
+
+      <button class="ia-transform-btn" id="btn-transformar">Transformar em Carrossel</button>
+      <div class="ia-status" id="ia-status">Processando com Claude...</div>
+    </div>
 
     <div class="p-section">
       <div class="p-title">Configuração</div>
@@ -841,6 +885,138 @@ document.getElementById('btn-export-png').addEventListener('click', async ()=>{
 // ── TOAST ─────────────────────────────────────────────────────────────────────
 
 function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400); }
+
+// ── IA TRANSFORM ─────────────────────────────────────────────────────────────
+
+const PROMPT_V3 = `Você é o assistente de conteúdo da V3 Partners. Adapta matérias externas para o Instagram de João Lemos Netto (@eujoaolemosnetto), Head de Ativos da V3 Partners — boutique institucional de securitização.
+
+CONTEXTO V3:
+- Verticais: Securitização/Crédito, Real Estate Estruturado (SLB/BTS), Mineração/Commodities, M&A Cross-Border, Tokenização (Bloxs, CVM 88/160)
+- Posicionamento: "O elo entre a economia real e o mercado de capitais global"
+- Público: assessores XP/BTG, gestores de patrimônio, empresários médio porte
+- Tom: institucional, técnico, direto — ZERO emojis, zero linguagem de coach
+- João fala como especialista, conecta tudo à securitização e às oportunidades de estruturação
+
+REGRAS DOS SLIDES:
+- Slide 1 (Hero): frase que para o scroll — afirmação polêmica, número impactante ou inversão de expectativa
+- Slide 2 (Problema): a dor real do mercado relacionada à matéria
+- Slide 3 (Solução): como a securitização / tokenização / estruturação resolve
+- Slide 4 (O que você obtém): benefícios concretos — máx 2 linhas por item
+- Slide 5 (Profundidade): dado de mercado ou contexto técnico
+- Slide 6 (Como fazer): passos ou processo — como o investidor age agora
+- Slide 7 (CTA): chamada para seguir, engajar ou falar com a V3
+
+Responda SOMENTE com JSON puro, sem markdown, sem explicações:
+{"tema":"securitizacao|real-estate|mineracao|ma-crossborder|tokenizacao|partners","slides":[{"tipo":"Hero","tag":"TAG_CURTA_CAPS","headline":"HEADLINE","body":"SUBTITULO_OPCIONAL"},{"tipo":"Problema","tag":"TAG","headline":"HEADLINE","body":"CORPO"},{"tipo":"Solução","tag":"TAG","headline":"HEADLINE","body":"CORPO"},{"tipo":"O que você obtém","tag":"TAG","headline":"HEADLINE","body":"CORPO"},{"tipo":"Profundidade","tag":"TAG","headline":"HEADLINE","body":"CORPO"},{"tipo":"Como fazer","tag":"TAG","headline":"HEADLINE","body":"CORPO"},{"tipo":"CTA","tag":"TAG","headline":"HEADLINE","body":"@eujoaolemosnetto · V3 Partners"}]}`;
+
+function getApiKey(){ return localStorage.getItem('v3-claude-key')||''; }
+
+document.getElementById('btn-api-cfg').addEventListener('click',()=>{
+  const bar=document.getElementById('ia-key-bar');
+  const visible=bar.style.display==='block';
+  bar.style.display=visible?'none':'block';
+  if(!visible){ const k=getApiKey(); if(k) document.getElementById('inp-api-key').value=k; }
+});
+
+document.getElementById('btn-save-key').addEventListener('click',()=>{
+  const k=document.getElementById('inp-api-key').value.trim();
+  if(!k.startsWith('sk-')) return toast('Key inválida — deve começar com sk-');
+  localStorage.setItem('v3-claude-key',k);
+  document.getElementById('ia-key-bar').style.display='none';
+  toast('API Key salva');
+});
+
+document.getElementById('btn-transformar').addEventListener('click', async ()=>{
+  const materia=document.getElementById('inp-materia').value.trim();
+  if(!materia) return toast('Cole uma matéria ou URL primeiro');
+
+  const apiKey=getApiKey();
+  if(!apiKey){
+    document.getElementById('ia-key-bar').style.display='block';
+    document.getElementById('inp-api-key').focus();
+    toast('Configure sua API Key primeiro');
+    return;
+  }
+
+  const btn=document.getElementById('btn-transformar');
+  const status=document.getElementById('ia-status');
+  btn.disabled=true;
+  status.style.display='block';
+
+  let content=materia;
+
+  // Fetch URL via proxy se necessário
+  if(materia.startsWith('http')){
+    status.textContent='Lendo URL...';
+    try{
+      const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(materia)}`);
+      const d=await r.json();
+      if(d.contents){
+        content=d.contents.replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,6000);
+      }
+    } catch(e){ toast('Não consegui ler a URL. Cole o texto direto.'); btn.disabled=false; status.style.display='none'; return; }
+  }
+
+  status.textContent='Gerando slides com Claude...';
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':apiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-allow-browser':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:1400,
+        messages:[{role:'user',content:`${PROMPT_V3}\n\nMATÉRIA:\n${content}`}]
+      })
+    });
+
+    const data=await res.json();
+    if(data.error) throw new Error(data.error.message);
+
+    let raw=data.content[0].text.trim();
+    // Remove possível markdown fence
+    raw=raw.replace(/^```json?\n?/,'').replace(/\n?```$/,'');
+    const json=JSON.parse(raw);
+
+    // Aplica tema
+    if(json.tema){
+      S.tema=json.tema;
+      const sel=document.getElementById('sel-tema');
+      if(sel) sel.value=json.tema;
+      if(S.bg.type==='abstract') S.bg.key=json.tema;
+    }
+
+    // Popula slides
+    const fmtSlides=FORMATS[S.formato];
+    (json.slides||[]).forEach((slide,i)=>{
+      if(!fmtSlides[i]) return;
+      const k=fmtSlides[i].id;
+      if(!S.slides[k]) S.slides[k]={};
+      S.slides[k].tag=slide.tag||'';
+      S.slides[k].headline=slide.headline||'';
+      S.slides[k].body=slide.body||'';
+    });
+
+    S.cur=0;
+    renderAbsGrid();
+    renderSlides();
+    updatePreview();
+    toast('Carrossel gerado — revise e exporte');
+
+  } catch(e){
+    toast('Erro: '+(e.message||'Tente novamente'));
+    console.error(e);
+  }
+
+  btn.disabled=false;
+  btn.textContent='Transformar em Carrossel';
+  status.style.display='none';
+});
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 
