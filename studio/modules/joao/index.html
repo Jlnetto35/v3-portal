@@ -371,39 +371,47 @@ function debouncedRender() { clearTimeout(dbt); dbt = setTimeout(renderPost, 220
 
 // ── EXPORT PNG ────────────────────────────────────────────────────────────────
 document.getElementById('btn-export').addEventListener('click', async () => {
-  const btn = document.getElementById('btn-export');
+  if (typeof html2canvas === 'undefined') { toast('html2canvas não carregou'); return; }
+  const btn  = document.getElementById('btn-export');
   const prog = document.getElementById('exp-prog');
   const fill = document.getElementById('exp-fill');
   const lbl  = document.getElementById('exp-lbl');
   const preview = document.getElementById('post-preview');
+  if (!preview) { toast('Erro: preview não encontrado'); return; }
+  const postEl = preview.firstElementChild;
+  if (!postEl) { toast('Selecione um template primeiro'); return; }
 
   btn.disabled = true;
   prog.style.display = 'block';
   fill.style.width = '20%';
   lbl.textContent = 'Renderizando...';
-  await new Promise(r => setTimeout(r, 200));
+  await new Promise(r => setTimeout(r, 300));
 
   try {
     fill.style.width = '60%';
-    const canvas = await html2canvas(preview, {
+    const canvas = await html2canvas(postEl, {
       width: 390,
       height: 488,
       scale: 1080 / 390,
       useCORS: true,
       allowTaint: true,
       logging: false,
-      backgroundColor: '#09081A'
+      backgroundColor: '#09081A',
+      x: 0, y: 0
     });
     fill.style.width = '90%';
     await new Promise(r => setTimeout(r, 100));
     const a = document.createElement('a');
     a.download = `joao-${S.template}-${Date.now()}.png`;
     a.href = canvas.toDataURL('image/png');
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
     fill.style.width = '100%';
     lbl.textContent = 'PNG exportado.';
     toast('PNG baixado — 1080×1350px');
   } catch(e) {
+    console.error(e);
     lbl.textContent = 'Erro: ' + e.message;
     toast('Erro ao exportar');
   }

@@ -828,58 +828,64 @@ document.getElementById('btn-download').addEventListener('click',()=>{
 document.getElementById('btn-copy').addEventListener('click',()=>{ navigator.clipboard.writeText(buildHTML()).then(()=>toast('HTML copiado')); });
 
 document.getElementById('btn-export-png').addEventListener('click', async ()=>{
+  if(typeof html2canvas==='undefined'){
+    toast('html2canvas não carregou — verifique conexão');
+    return;
+  }
   const btnExp=document.getElementById('btn-export-png');
   const progress=document.getElementById('export-progress');
   const bar=document.getElementById('export-bar');
   const label=document.getElementById('export-label');
   const track=document.getElementById('preview-track');
-  const viewport=track.parentElement;
-  const slides=FORMATS[S.formato];
-  const total=slides.length;
-  const SCALE=1080/420;
+  if(!track){ toast('Erro: preview não encontrado'); return; }
 
+  const slideEls=track.querySelectorAll('.carousel-slide');
+  const total=slideEls.length;
+  if(!total){ toast('Nenhum slide para exportar'); return; }
+
+  const SCALE=1080/420;
   btnExp.disabled=true;
   btnExp.textContent='Exportando...';
   progress.style.display='block';
 
   for(let i=0;i<total;i++){
     label.textContent=`Exportando slide ${i+1} de ${total}...`;
-    bar.style.width=`${Math.round((i/total)*100)}%`;
+    bar.style.width=`${Math.round(((i)/total)*100)}%`;
 
-    // Navega para o slide
-    track.style.transition='none';
-    track.style.transform=`translateX(${-i*420}px)`;
-    await new Promise(r=>setTimeout(r,200));
+    // Captura o slide diretamente (sem depender de transform/viewport)
+    const slideEl=slideEls[i];
+    await new Promise(r=>setTimeout(r,150));
 
     try{
-      const canvas=await html2canvas(viewport,{
+      const canvas=await html2canvas(slideEl,{
         width:420,
         height:525,
         scale:SCALE,
         useCORS:true,
         allowTaint:true,
         logging:false,
-        backgroundColor:'#09081A'
+        backgroundColor:'#09081A',
+        x:0, y:0
       });
       const a=document.createElement('a');
       a.download=`v3-slide-${i+1}-de-${total}.png`;
       a.href=canvas.toDataURL('image/png');
+      document.body.appendChild(a);
       a.click();
-      await new Promise(r=>setTimeout(r,600));
+      document.body.removeChild(a);
+      await new Promise(r=>setTimeout(r,500));
     } catch(e){
-      toast(`Erro no slide ${i+1}: ${e.message}`);
+      console.error('Slide '+i+' error:',e);
+      toast(`Erro slide ${i+1}`);
     }
   }
 
   bar.style.width='100%';
-  label.textContent=`${total} slides exportados com sucesso.`;
+  label.textContent=`${total} slides exportados.`;
   btnExp.disabled=false;
   btnExp.textContent='Exportar PNGs (1080×1350)';
   toast(`${total} PNGs baixados`);
-
-  // Volta para o slide atual
-  track.style.transform=`translateX(${-S.cur*420}px)`;
-  setTimeout(()=>{ progress.style.display='none'; bar.style.width='0%'; },4000);
+  setTimeout(()=>{ progress.style.display='none'; bar.style.width='0%'; },3500);
 });
 
 // ── TOAST ─────────────────────────────────────────────────────────────────────
@@ -1031,20 +1037,25 @@ document.getElementById('btn-transformar').addEventListener('click', async ()=>{
 
 // ── URL PARAMS (vindo do calendário) ─────────────────────────────────────────
 (function(){
-  const p=new URLSearchParams(window.location.search);
-  if(p.get('tema')){
-    const t=p.get('tema');
-    S.tema=t;
-    const sel=document.getElementById('sel-tema');
-    if(sel) sel.value=t;
-    S.bg.key=t;
-  }
-  const ctx=p.get('ctx');
-  if(ctx){
-    const decoded=decodeURIComponent(ctx);
-    const ta=document.getElementById('inp-materia');
-    if(ta) ta.value=decoded;
-  }
+  try{
+    const p=new URLSearchParams(window.location.search);
+    const tema=p.get('tema');
+    if(tema){
+      S.tema=tema;
+      const sel=document.getElementById('sel-tema');
+      if(sel) sel.value=tema;
+      S.bg.key=tema;
+    }
+    // ctx já vem decoded pelo browser (URLSearchParams faz o decode automaticamente)
+    const ctx=p.get('ctx');
+    if(ctx && ctx.trim()){
+      const ta=document.getElementById('inp-materia');
+      if(ta){
+        ta.value=ctx;
+        ta.style.borderColor='rgba(201,168,76,.4)';
+      }
+    }
+  }catch(e){ console.warn('URL params error:',e); }
 })();
 
 renderAbsGrid();

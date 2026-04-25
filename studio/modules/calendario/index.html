@@ -193,10 +193,10 @@ header{padding:16px 28px;border-bottom:1px solid rgba(201,168,76,.12);display:fl
 
       <div class="sp-card">
         <div class="sp-title">Gerar Agora</div>
-        <button class="quick-btn" onclick="openGen('stories','securitizacao','educacao','O que é securitização e por que patrimônios acima de R$500K precisam conhecer')"><span>📄</span>Carrossel Educativo</button>
-        <button class="quick-btn" onclick="openGen('stories','tokenizacao','hype','Tokenização de ativos reais no Brasil: o que a CVM 88 permite')"><span>📄</span>Carrossel Hype</button>
-        <button class="quick-btn" onclick="openGen('instagram','securitizacao','mercado','')"><span>🖼</span>Post único — Dado</button>
-        <button class="quick-btn" onclick="openGen('instagram','ma-crossborder','opiniao','')"><span>🖼</span>Post único — Opinião</button>
+        <button class="quick-btn" id="qb1"><span>📄</span>Carrossel Educativo</button>
+        <button class="quick-btn" id="qb2"><span>📄</span>Carrossel Hype</button>
+        <button class="quick-btn" id="qb3"><span>🖼</span>Post único — Dado</button>
+        <button class="quick-btn" id="qb4"><span>🖼</span>Post único — Opinião</button>
       </div>
 
       <div class="sp-card" style="background:rgba(201,168,76,.04);border-color:rgba(201,168,76,.2);">
@@ -264,10 +264,18 @@ const MONTHS = [
 let currentMonth = 0;
 const today = new Date();
 
-function openGen(module, tema, pilar, ctx) {
-  const base = module === 'stories' ? '../stories/index.html' : '../instagram/index.html';
-  const params = new URLSearchParams({ tema, pilar, ctx: encodeURIComponent(ctx) });
-  window.open(`${base}?${params.toString()}`, '_blank');
+// Armazena dados dos posts para evitar escaping em onclick inline
+const POST_REGISTRY = {};
+
+function openGen(key) {
+  const p = POST_REGISTRY[key];
+  if (!p) return;
+  const useStories = p.type === 'carousel' || (p.type === 'hype');
+  const base = useStories ? '../stories/index.html' : '../instagram/index.html';
+  const url = base + '?tema=' + encodeURIComponent(p.tema) + '&ctx=' + encodeURIComponent(p.ctx);
+  // Tenta abrir nova aba; se bloqueado pelo browser, navega na mesma aba
+  const w = window.open(url, '_blank');
+  if (!w) window.location.href = url;
 }
 
 function renderCalendar(monthIdx) {
@@ -309,18 +317,38 @@ function renderCalendar(monthIdx) {
     // Post
     if (m.posts && m.posts[d]) {
       const post = m.posts[d];
+      const regKey = monthIdx + '_' + d;
+      POST_REGISTRY[regKey] = post;
+
       const card = document.createElement('div');
-      card.className = `post-card ${post.type}${post.account === '@v3partners' ? ' v3-inst' : ''}`;
+      card.className = 'post-card ' + post.type + (post.account === '@v3partners' ? ' v3-inst' : '');
 
-      const isV3 = post.account === '@v3partners';
-      const acctColor = isV3 ? 'var(--mt)' : 'var(--g)';
+      const acctEl = document.createElement('div');
+      acctEl.className = 'pc-account';
+      acctEl.style.color = post.account === '@v3partners' ? 'var(--mt)' : 'var(--g)';
+      acctEl.textContent = post.account;
 
-      card.innerHTML = `
-        <div class="pc-account" style="color:${acctColor}">${post.account}</div>
-        <span class="pc-type ${post.type}">${post.type === 'carousel' ? 'Carrossel' : post.type === 'hype' ? 'Hype' : 'Post único'}</span>
-        <div class="pc-theme">${post.title}</div>
-        <button class="pc-gerar" onclick="event.stopPropagation();openGen('${post.type === 'single' || post.type === 'hype' && !post.ctx.includes('[Cole') ? 'instagram' : 'stories'}','${post.tema}','${post.pilar.toLowerCase()}',decodeURIComponent('${encodeURIComponent(post.ctx)}'))">Gerar →</button>
-      `;
+      const typeEl = document.createElement('span');
+      typeEl.className = 'pc-type ' + post.type;
+      typeEl.textContent = post.type === 'carousel' ? 'Carrossel' : post.type === 'hype' ? 'Hype' : 'Post único';
+
+      const themeEl = document.createElement('div');
+      themeEl.className = 'pc-theme';
+      themeEl.textContent = post.title;
+
+      const btn = document.createElement('button');
+      btn.className = 'pc-gerar';
+      btn.textContent = 'Gerar →';
+      btn.dataset.regkey = regKey;
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        openGen(this.dataset.regkey);
+      });
+
+      card.appendChild(acctEl);
+      card.appendChild(typeEl);
+      card.appendChild(themeEl);
+      card.appendChild(btn);
       cell.appendChild(card);
     }
 
@@ -345,6 +373,17 @@ function showMonth(idx) {
 }
 
 renderCalendar(0);
+
+// Quick-gen buttons — sem inline onclick
+function quickOpen(module, tema, ctx) {
+  const url = '../' + module + '/index.html?tema=' + encodeURIComponent(tema) + '&ctx=' + encodeURIComponent(ctx);
+  const w = window.open(url, '_blank');
+  if (!w) window.location.href = url;
+}
+document.getElementById('qb1').addEventListener('click', () => quickOpen('stories','securitizacao','O que é securitização e por que patrimônios acima de R$500K precisam conhecer'));
+document.getElementById('qb2').addEventListener('click', () => quickOpen('stories','tokenizacao','Tokenização de ativos reais no Brasil: o que a CVM 88 permite'));
+document.getElementById('qb3').addEventListener('click', () => quickOpen('instagram','securitizacao',''));
+document.getElementById('qb4').addEventListener('click', () => quickOpen('instagram','ma-crossborder',''));
 </script>
 </body>
 </html>

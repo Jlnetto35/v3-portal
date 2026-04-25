@@ -366,39 +366,47 @@ document.getElementById('btn-dl').addEventListener('click',()=>{
 });
 
 document.getElementById('btn-export-png').addEventListener('click', async ()=>{
+  if(typeof html2canvas==='undefined'){ toast('html2canvas não carregou'); return; }
   const btn=document.getElementById('btn-export-png');
   const prog=document.getElementById('exp-prog');
   const bar=document.getElementById('exp-bar');
   const label=document.getElementById('exp-label');
   const preview=document.getElementById('post-preview');
+  if(!preview){ toast('Erro: preview não encontrado'); return; }
+  const postEl=preview.firstElementChild;
+  if(!postEl){ toast('Gere um post primeiro'); return; }
 
   btn.disabled=true;
   prog.style.display='block';
-  bar.style.width='30%';
-  label.textContent='Renderizando post...';
-  await new Promise(r=>setTimeout(r,200));
+  bar.style.width='20%';
+  label.textContent='Renderizando...';
+  await new Promise(r=>setTimeout(r,300));
 
   try{
     bar.style.width='60%';
-    const canvas=await html2canvas(preview,{
+    const canvas=await html2canvas(postEl,{
       width:390,
       height:390,
       scale:1080/390,
       useCORS:true,
       allowTaint:true,
       logging:false,
-      backgroundColor:'#09081A'
+      backgroundColor:'#09081A',
+      x:0, y:0
     });
     bar.style.width='90%';
-    await new Promise(r=>setTimeout(r,150));
+    await new Promise(r=>setTimeout(r,100));
     const a=document.createElement('a');
-    a.download=`v3-ig-post-${S.tema}-${Date.now()}.png`;
+    a.download=`v3-ig-${S.tema}-${Date.now()}.png`;
     a.href=canvas.toDataURL('image/png');
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
     bar.style.width='100%';
     label.textContent='PNG exportado.';
     toast('PNG baixado — 1080×1080px');
   }catch(e){
+    console.error(e);
     label.textContent='Erro: '+e.message;
     toast('Erro ao exportar');
   }
