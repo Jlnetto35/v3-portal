@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carrossel Instagram — V3 Content Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--navy-deep:#09081A;--navy-base:#111F35;--navy-card:#162744;--navy-mid:#243A66;--gold:#C9A84C;--gold-light:#E8C97A;--cream:#F0ECE4;--muted:#7A8FA8;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy-deep);color:var(--cream);min-height:100vh;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+/* HEADER */
+header{padding:16px 28px;border-bottom:1px solid rgba(201,168,76,0.12);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;background:rgba(9,8,26,0.97);backdrop-filter:blur(8px);}
+.hd-left{display:flex;align-items:center;gap:14px;}
+.hd-left img{height:30px;}
+.breadcrumb{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);}
+.breadcrumb a{color:var(--muted);text-decoration:none;}
+.breadcrumb a:hover{color:var(--cream);}
+.breadcrumb strong{color:var(--cream);font-weight:600;}
+.hd-badge{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);color:var(--gold);}
+
+/* LAYOUT */
+.generator{display:grid;grid-template-columns:360px 1fr;min-height:calc(100vh - 57px);}
+
+/* LEFT PANEL */
+.panel-left{border-right:1px solid rgba(201,168,76,0.1);overflow-y:auto;max-height:calc(100vh - 57px);}
+.p-section{padding:20px;border-bottom:1px solid rgba(240,236,228,0.05);}
+.p-title{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+
+/* FORM */
+label{display:block;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.5px;margin-bottom:5px;}
+select,input[type=text],textarea{width:100%;background:var(--navy-card);border:1px solid rgba(201,168,76,0.15);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;outline:none;transition:border-color .2s;}
+select:focus,input:focus,textarea:focus{border-color:rgba(201,168,76,0.4);}
+textarea{resize:vertical;min-height:66px;line-height:1.5;}
+.field{margin-bottom:12px;}
+
+/* ACCORDION */
+.slide-item{background:var(--navy-card);border:1px solid rgba(201,168,76,0.1);margin-bottom:6px;}
+.slide-hd{padding:11px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
+.slide-hd:hover{background:rgba(36,58,102,0.4);}
+.slide-lbl{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);}
+.slide-type{font-size:11px;color:var(--muted);}
+.chevron{font-size:11px;color:var(--muted);transition:transform .2s;}
+.slide-item.open .chevron{transform:rotate(180deg);}
+.slide-bd{display:none;padding:14px;border-top:1px solid rgba(201,168,76,0.08);}
+.slide-item.open .slide-bd{display:block;}
+
+/* IMG LIBRARY TABS */
+.itabs{display:flex;border:1px solid rgba(201,168,76,0.15);margin-bottom:12px;}
+.itab{flex:1;padding:8px 4px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-align:center;cursor:pointer;color:var(--muted);background:transparent;border:none;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.itab.active{background:rgba(201,168,76,0.1);color:var(--gold);}
+.itab-panel{display:none;}
+.itab-panel.active{display:block;}
+
+/* ABSTRACT GRID */
+.abs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.abs-thumb{aspect-ratio:4/5;cursor:pointer;border:2px solid transparent;transition:border-color .2s;overflow:hidden;position:relative;}
+.abs-thumb.sel{border-color:var(--gold);}
+.abs-thumb svg{width:100%;height:100%;display:block;}
+.abs-lbl{position:absolute;bottom:0;left:0;right:0;padding:5px 6px;background:rgba(9,8,26,0.82);font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--cream);}
+
+/* BANK */
+.bank-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.bank-thumb{aspect-ratio:4/5;cursor:pointer;border:2px solid transparent;overflow:hidden;position:relative;background:var(--navy-card);}
+.bank-thumb img{width:100%;height:100%;object-fit:cover;}
+.bank-thumb.sel{border-color:var(--gold);}
+.bank-del{position:absolute;top:3px;right:3px;width:18px;height:18px;background:rgba(9,8,26,0.85);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--cream);opacity:0;transition:opacity .2s;cursor:pointer;}
+.bank-thumb:hover .bank-del{opacity:1;}
+.bank-empty{font-size:12px;color:var(--muted);text-align:center;padding:18px 0;}
+
+/* UPLOAD */
+.upload-zone{border:2px dashed rgba(201,168,76,0.2);padding:24px 14px;text-align:center;cursor:pointer;transition:border-color .2s;}
+.upload-zone:hover{border-color:rgba(201,168,76,0.45);}
+.upload-zone p{font-size:12px;color:var(--muted);margin-bottom:6px;}
+.upload-hint{font-size:10px;color:rgba(122,143,168,0.5);}
+#file-input{display:none;}
+
+/* GENERATE BTN */
+.gen-bar{padding:16px 20px;background:var(--navy-card);border-top:1px solid rgba(201,168,76,0.12);position:sticky;bottom:0;}
+.gen-bar button{width:100%;padding:13px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;background:var(--gold);color:var(--navy-deep);border:none;cursor:pointer;transition:background .2s;}
+.gen-bar button:hover{background:var(--gold-light);}
+
+/* RIGHT PANEL */
+.panel-right{padding:28px 32px;display:flex;flex-direction:column;align-items:center;background:var(--navy-base);overflow-y:auto;}
+.pr-header{width:100%;max-width:480px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.pr-title{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);}
+.pr-actions{display:flex;gap:8px;}
+
+/* BUTTONS */
+.btn{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:9px 18px;cursor:pointer;border:none;transition:all .2s;}
+.btn-gold{background:var(--gold);color:var(--navy-deep);}
+.btn-gold:hover{background:var(--gold-light);}
+.btn-out{background:transparent;color:var(--gold);border:1px solid rgba(201,168,76,0.35);}
+.btn-out:hover{background:rgba(201,168,76,0.08);}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid rgba(122,143,168,0.2);}
+.btn-ghost:hover{border-color:rgba(122,143,168,0.4);color:var(--cream);}
+
+/* IG FRAME */
+.ig-frame{width:420px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+.ig-header{background:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #efefef;}
+.ig-avatar{width:32px;height:32px;border-radius:50%;background:var(--navy-deep);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.ig-avatar img{width:26px;height:auto;}
+.ig-hd-info{flex:1;}
+.ig-hd-name{font-size:12px;font-weight:700;color:#111;font-family:-apple-system,sans-serif;}
+.ig-hd-sub{font-size:11px;color:#8e8e8e;font-family:-apple-system,sans-serif;}
+.carousel-viewport{width:420px;height:525px;overflow:hidden;position:relative;}
+.carousel-track{display:flex;height:100%;transition:transform .3s ease;}
+.carousel-slide{width:420px;height:525px;flex-shrink:0;position:relative;overflow:hidden;}
+.ig-dots{display:flex;gap:4px;justify-content:center;padding:8px 0 6px;background:#fff;}
+.ig-dot{width:6px;height:6px;border-radius:50%;background:#dbdbdb;transition:background .2s;}
+.ig-dot.active{background:#3897f0;}
+.ig-actions{display:flex;align-items:center;gap:14px;padding:10px 14px 4px;background:#fff;}
+.ig-ico{width:22px;height:22px;color:#111;cursor:pointer;}
+.ig-caption{padding:4px 14px 12px;background:#fff;}
+.ig-caption p{font-size:13px;color:#111;font-family:-apple-system,sans-serif;}
+.ig-caption p strong{font-weight:700;}
+
+/* SLIDE NAV */
+.slide-nav{display:flex;align-items:center;gap:10px;margin-top:14px;}
+.nav-btn{width:34px;height:34px;background:var(--navy-card);border:1px solid rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;}
+.nav-btn:hover{background:var(--navy-mid);}
+.nav-btn svg{width:15px;height:15px;stroke:var(--cream);}
+.nav-count{font-size:12px;color:var(--muted);font-weight:600;min-width:38px;text-align:center;}
+
+/* EXPORT */
+.export-box{width:100%;max-width:480px;margin-top:20px;background:var(--navy-card);border:1px solid rgba(201,168,76,0.1);padding:18px;}
+.export-title{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.export-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.pw-box{background:var(--navy-deep);border:1px solid rgba(201,168,76,0.1);padding:12px 14px;font-size:11px;color:var(--muted);line-height:1.75;display:none;}
+.pw-box code{color:var(--gold-light);font-size:10px;background:rgba(201,168,76,0.06);padding:1px 4px;}
+.pw-box strong{color:var(--cream);display:block;margin-bottom:6px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--gold);color:var(--navy-deep);padding:11px 18px;font-size:11px;font-weight:700;letter-spacing:1px;transform:translateY(70px);opacity:0;transition:all .3s;z-index:999;}
+.toast.show{transform:translateY(0);opacity:1;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd-left">
+    <img src="../../assets/logos/v3-logo-3d-alpha.png" alt="V3 Partners" onerror="this.style.display='none'">
+    <nav class="breadcrumb">
+      <a href="../../index.html">Content Studio</a>
+      <span>›</span>
+      <strong>Carrossel Instagram</strong>
+    </nav>
+  </div>
+  <div class="hd-badge">1080 × 1350 · 4:5</div>
+</header>
+
+<div class="generator">
+
+  <!-- LEFT PANEL -->
+  <aside class="panel-left">
+
+    <div class="p-section">
+      <div class="p-title">Configuração</div>
+      <div class="field">
+        <label>Tema</label>
+        <select id="sel-tema">
+          <option value="securitizacao">Securitização &amp; Crédito</option>
+          <option value="real-estate">Real Estate Estruturado</option>
+          <option value="mineracao">Mineração &amp; Commodities</option>
+          <option value="ma-crossborder">M&amp;A Cross-Border</option>
+          <option value="tokenizacao">Tokenização de Ativos</option>
+          <option value="partners">Rede de Partners</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Handle do Instagram</label>
+        <input type="text" id="inp-handle" value="@eujoaolemosnetto">
+      </div>
+      <div class="field">
+        <label>Formato</label>
+        <select id="sel-formato">
+          <option value="padrao">Padrão — 7 slides</option>
+          <option value="listicle">Listicle — 7 slides</option>
+          <option value="tutorial">Tutorial — 7 slides</option>
+          <option value="comparacao">Comparação — 5 slides</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="p-section">
+      <div class="p-title">Imagem de Fundo — Slide 1</div>
+      <div class="itabs">
+        <button class="itab active" data-tab="abstratos">Abstratos</button>
+        <button class="itab" data-tab="banco">Banco V3</button>
+        <button class="itab" data-tab="upload">Upload</button>
+      </div>
+      <div class="itab-panel active" id="tab-abstratos">
+        <div class="abs-grid" id="abs-grid"></div>
+      </div>
+      <div class="itab-panel" id="tab-banco">
+        <div class="bank-grid" id="bank-grid">
+          <div class="bank-empty" id="bank-empty">Nenhuma imagem.<br>Adicione via Upload.</div>
+        </div>
+      </div>
+      <div class="itab-panel" id="tab-upload">
+        <div class="upload-zone" id="upload-zone">
+          <p>Arraste ou clique para selecionar</p>
+          <p class="upload-hint">PNG · JPG · WEBP — máx 8MB</p>
+          <input type="file" id="file-input" accept="image/*">
+        </div>
+      </div>
+    </div>
+
+    <div class="p-section">
+      <div class="p-title">Conteúdo dos Slides</div>
+      <div id="slides-container"></div>
+    </div>
+
+    <div class="gen-bar">
+      <button id="btn-gerar">Atualizar Preview</button>
+    </div>
+
+  </aside>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel-right">
+
+    <div class="pr-header">
+      <span class="pr-title">Preview</span>
+      <div class="pr-actions">
+        <button class="btn btn-ghost" id="btn-copy">Copiar HTML</button>
+      </div>
+    </div>
+
+    <div class="ig-frame">
+      <div class="ig-header">
+        <div class="ig-avatar">
+          <img src="../../assets/logos/v3-symbol-gold-alpha.png" alt="V3" onerror="this.style.display='none'">
+        </div>
+        <div class="ig-hd-info">
+          <div class="ig-hd-name" id="ig-hd-name">eujoaolemosnetto</div>
+          <div class="ig-hd-sub">V3 Partners</div>
+        </div>
+        <span style="font-size:18px;color:#111;cursor:pointer;">···</span>
+      </div>
+      <div class="carousel-viewport">
+        <div class="carousel-track" id="preview-track"></div>
+      </div>
+      <div class="ig-dots" id="ig-dots"></div>
+      <div class="ig-actions">
+        <svg class="ig-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <svg class="ig-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <svg class="ig-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        <svg class="ig-ico" style="margin-left:auto;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="ig-caption">
+        <p><strong id="cap-handle">eujoaolemosnetto</strong> <span id="cap-text">V3 Partners · Securitização</span></p>
+        <span style="font-size:12px;color:#8e8e8e;font-family:-apple-system,sans-serif;">AGORA MESMO</span>
+      </div>
+    </div>
+
+    <div class="slide-nav">
+      <button class="nav-btn" id="nav-prev">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="nav-count" id="nav-count">1 / 7</span>
+      <button class="nav-btn" id="nav-next">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <div class="export-box">
+      <div class="export-title">Exportar</div>
+      <div class="export-actions">
+        <button class="btn btn-gold" id="btn-download">Baixar HTML</button>
+        <button class="btn btn-out" id="btn-pw-toggle">Script Playwright</button>
+      </div>
+      <div class="pw-box" id="pw-box">
+        <strong>Export PNG 1080×1350 via Playwright</strong>
+        1. Salve o HTML gerado como <code>carousel.html</code><br>
+        2. <code>pip install playwright &amp;&amp; python -m playwright install chromium</code><br>
+        3. Use o script de export do skill <code>instagram-carousel</code> no Claude Code<br>
+        4. Saída: <code>slide_1.png</code> → <code>slide_N.png</code> em 1080×1350px
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── SVG ABSTRACT GENERATORS ───────────────────────────────────────────────────
+
+function hexPts(cx,cy,r){
+  return Array.from({length:6},(_,i)=>{const a=Math.PI/180*(60*i-30);return`${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`;}).join(' ');
+}
+function radialLines(cx,cy,n,len){
+  return Array.from({length:n},(_,i)=>{const a=Math.PI*2*i/n;return`<line x1="${cx}" y1="${cy}" x2="${(cx+len*Math.cos(a)).toFixed(1)}" y2="${(cy+len*Math.sin(a)).toFixed(1)}"/>`;}).join('');
+}
+function radialDots(cx,cy,r,n){
+  return Array.from({length:n},(_,i)=>{const a=Math.PI*2*i/n;return`<circle cx="${(cx+r*Math.cos(a)).toFixed(1)}" cy="${(cy+r*Math.sin(a)).toFixed(1)}" r="2.5"/>`;}).join('');
+}
+function gridLines(w,h,step){
+  let d='';
+  for(let x=0;x<=w;x+=step)d+=`<line x1="${x}" y1="0" x2="${x}" y2="${h}"/>`;
+  for(let y=0;y<=h;y+=step)d+=`<line x1="0" y1="${y}" x2="${w}" y2="${y}"/>`;
+  return d;
+}
+
+const ABSTRACTS = {
+  securitizacao: {
+    label:'Crédito',
+    make:()=>`<svg xmlns="http://www.w3.org/2000/svg" width="420" height="525" viewBox="0 0 420 525">
+      <rect fill="#09081A" width="420" height="525"/>
+      <g opacity=".18" stroke="#C9A84C" stroke-width=".8">
+        <line x1="60" y1="120" x2="180" y2="200"/><line x1="180" y1="200" x2="300" y2="140"/>
+        <line x1="300" y1="140" x2="360" y2="260"/><line x1="180" y1="200" x2="240" y2="320"/>
+        <line x1="240" y1="320" x2="360" y2="260"/><line x1="120" y1="340" x2="240" y2="320"/>
+        <line x1="60" y1="120" x2="120" y2="340"/><line x1="120" y1="340" x2="180" y2="440"/>
+        <line x1="240" y1="320" x2="180" y2="440"/><line x1="300" y1="140" x2="380" y2="80"/>
+        <line x1="60" y1="420" x2="120" y2="340"/><line x1="380" y1="380" x2="360" y2="260"/>
+      </g>
+      <g fill="#C9A84C" opacity=".35">
+        <circle cx="60" cy="120" r="3.5"/><circle cx="180" cy="200" r="5"/><circle cx="300" cy="140" r="3.5"/>
+        <circle cx="360" cy="260" r="4"/><circle cx="240" cy="320" r="5"/><circle cx="120" cy="340" r="3.5"/>
+        <circle cx="180" cy="440" r="3"/><circle cx="380" cy="80" r="2.5"/>
+      </g>
+      <circle cx="180" cy="200" r="28" fill="#C9A84C" opacity=".06"/>
+      <circle cx="240" cy="320" r="18" fill="#C9A84C" opacity=".06"/>
+    </svg>`
+  },
+  'real-estate': {
+    label:'Real Estate',
+    make:()=>`<svg xmlns="http://www.w3.org/2000/svg" width="420" height="525" viewBox="0 0 420 525">
+      <rect fill="#09081A" width="420" height="525"/>
+      <g opacity=".14" stroke="#C9A84C" stroke-width=".7" fill="none">
+        <rect x="60" y="190" width="110" height="190"/><rect x="78" y="210" width="28" height="36"/>
+        <rect x="126" y="210" width="28" height="36"/><rect x="78" y="264" width="28" height="36"/>
+        <rect x="126" y="264" width="28" height="116"/>
+        <rect x="210" y="150" width="150" height="230"/><rect x="228" y="176" width="36" height="44"/>
+        <rect x="296" y="176" width="36" height="44"/><rect x="228" y="244" width="36" height="44"/>
+        <rect x="296" y="244" width="36" height="44"/><rect x="228" y="312" width="36" height="68"/>
+        <rect x="296" y="312" width="36" height="68"/><line x1="0" y1="380" x2="420" y2="380" stroke-width="1.2"/>
+        <line x1="60" y1="190" x2="115" y2="140"/><line x1="170" y1="190" x2="115" y2="140"/>
+        <line x1="210" y1="150" x2="285" y2="88"/><line x1="360" y1="150" x2="285" y2="88"/>
+      </g>
+      <g fill="#C9A84C" opacity=".3">
+        <circle cx="115" cy="140" r="2.5"/><circle cx="285" cy="88" r="2.5"/>
+      </g>
+    </svg>`
+  },
+  mineracao: {
+    label:'Mineração',
+    make:()=>{
+      const hexes=[[210,262],[128,216],[292,216],[210,170],[128,308],[292,308],[46,262],[374,262]];
+      const h=hexes.map(([cx,cy])=>`<polygon points="${hexPts(cx,cy,44)}"/>`).join('');
+      return`<svg xmlns="http://www.w3.org/2000/svg" width="420" height="525" viewBox="0 0 420 525">
+        <rect fill="#09081A" width="420" height="525"/>
+        <g opacity=".15" stroke="#C9A84C" stroke-width=".7" fill="none">${h}</g>
+        <polygon points="${hexPts(210,262,44)}" fill="#C9A84C" opacity=".07"/>
+        <g fill="#C9A84C" opacity=".3">
+          <circle cx="210" cy="218" r="2.5"/><circle cx="210" cy="306" r="2.5"/>
+          <circle cx="172" cy="240" r="2"/><circle cx="248" cy="240" r="2"/>
+        </g>
+      </svg>`;
+    }
+  },
+  'ma-crossborder': {
+    label:'M&A Cross',
+    make:()=>`<svg xmlns="http://www.w3.org/2000/svg" width="420" height="525" viewBox="0 0 420 525">
+      <rect fill="#09081A" width="420" height="525"/>
+      <g opacity=".1" stroke="#7A8FA8" stroke-width=".5" fill="none">
+        <ellipse cx="210" cy="262" rx="155" ry="155"/>
+        <ellipse cx="210" cy="262" rx="155" ry="78"/>
+        <ellipse cx="210" cy="262" rx="155" ry="38"/>
+        <ellipse cx="210" cy="262" rx="78" ry="155"/>
+        <ellipse cx="210" cy="262" rx="38" ry="155"/>
+        <line x1="55" y1="262" x2="365" y2="262"/>
+        <line x1="210" y1="107" x2="210" y2="417"/>
+      </g>
+      <g opacity=".25" fill="#C9A84C">
+        <circle cx="100" cy="200" r="3"/><circle cx="320" cy="185" r="3"/>
+        <circle cx="275" cy="345" r="3"/><circle cx="145" cy="355" r="3"/>
+        <circle cx="210" cy="138" r="3"/><circle cx="210" cy="385" r="2.5"/>
+      </g>
+      <g opacity=".16" stroke="#C9A84C" stroke-width=".8" fill="none" stroke-dasharray="3,4">
+        <line x1="100" y1="200" x2="320" y2="185"/>
+        <line x1="320" y1="185" x2="275" y2="345"/>
+        <line x1="275" y1="345" x2="145" y2="355"/>
+        <line x1="145" y1="355" x2="100" y2="200"/>
+      </g>
+    </svg>`
+  },
+  tokenizacao: {
+    label:'Tokenização',
+    make:()=>`<svg xmlns="http://www.w3.org/2000/svg" width="420" height="525" viewBox="0 0 420 525">
+      <rect fill="#09081A" width="420" height="525"/>
+      <g opacity=".1" stroke="#C9A84C" stroke-width=".5" fill="none">${gridLines(420,525,42)}</g>
+      <g opacity=".22" stroke="#C9A84C" stroke-width=".8" fill="none">
+        <rect x="150" y="192" width="120" height="140" rx="3"/>
+        <rect x="164" y="208" width="34" height="34" rx="2"/>
+        <rect x="222" y="208" width="34" height="34" rx="2"/>
+        <rect x="164" y="252" width="34" height="34" rx="2"/>
+        <rect x="222" y="252" width="34" height="34" rx="2"/>
+        <rect x="164" y="296" width="92" height="18" rx="2"/>
+      </g>
+      <g fill="#C9A84C" opacity=".28">
+        <circle cx="150" cy="192" r="3"/><circle cx="270" cy="192" r="3"/>
+        <circle cx="270" cy="332" r="3"/><circle cx="150" cy="332" r="3"/>
+      </g>
+    </svg>`
+  },
+  partners: {
+    label:'Partners',
+    make:()=>`<svg xmlns="http://www.w3.org/2000/svg" width="420" height="525" viewBox="0 0 420 525">
+      <rect fill="#09081A" width="420" height="525"/>
+      <g opacity=".12" stroke="#C9A84C" stroke-width=".7" fill="none">${radialLines(210,262,16,155)}</g>
+      <g opacity=".08" fill="none" stroke="#C9A84C" stroke-width=".5">
+        <circle cx="210" cy="262" r="50"/><circle cx="210" cy="262" r="95"/><circle cx="210" cy="262" r="140"/>
+      </g>
+      <g fill="#C9A84C" opacity=".32">
+        <circle cx="210" cy="262" r="5"/>
+        ${radialDots(210,262,95,12)}
+        ${radialDots(210,262,140,8)}
+      </g>
+    </svg>`
+  }
+};
+
+// ── FORMATS ───────────────────────────────────────────────────────────────────
+
+const FORMATS = {
+  padrao:[
+    {id:'s1',tipo:'Hero',bg:'base'},{id:'s2',tipo:'Problema',bg:'deep'},
+    {id:'s3',tipo:'Solução',bg:'grad'},{id:'s4',tipo:'O que você obtém',bg:'base'},
+    {id:'s5',tipo:'Profundidade',bg:'deep'},{id:'s6',tipo:'Como fazer',bg:'base'},
+    {id:'s7',tipo:'CTA',bg:'grad'}
+  ],
+  listicle:[
+    {id:'s1',tipo:'Hero',bg:'base'},{id:'s2',tipo:'Item 1',bg:'deep'},
+    {id:'s3',tipo:'Item 2',bg:'base'},{id:'s4',tipo:'Item 3',bg:'deep'},
+    {id:'s5',tipo:'Item 4',bg:'base'},{id:'s6',tipo:'Item 5',bg:'deep'},
+    {id:'s7',tipo:'CTA',bg:'grad'}
+  ],
+  tutorial:[
+    {id:'s1',tipo:'Hero',bg:'base'},{id:'s2',tipo:'Por quê',bg:'deep'},
+    {id:'s3',tipo:'Passo 1',bg:'base'},{id:'s4',tipo:'Passo 2',bg:'deep'},
+    {id:'s5',tipo:'Passo 3',bg:'base'},{id:'s6',tipo:'Resultado',bg:'deep'},
+    {id:'s7',tipo:'CTA',bg:'grad'}
+  ],
+  comparacao:[
+    {id:'s1',tipo:'Hero',bg:'base'},{id:'s2',tipo:'Opção A',bg:'base'},
+    {id:'s3',tipo:'Opção B',bg:'deep'},{id:'s4',tipo:'Veredicto',bg:'grad'},
+    {id:'s5',tipo:'CTA',bg:'deep'}
+  ]
+};
+
+const CAPTIONS = {
+  securitizacao:'V3 Partners · Securitização e Mercado de Capitais',
+  'real-estate':'V3 Partners · Real Estate Estruturado',
+  mineracao:'V3 Partners · Mineração e Commodities',
+  'ma-crossborder':'V3 Partners · M&A e Negócios Cross-Border',
+  tokenizacao:'V3 Partners · Tokenização de Ativos Reais',
+  partners:'V3 Partners · Rede de Partners'
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+
+const S = {
+  tema:'securitizacao',
+  handle:'@eujoaolemosnetto',
+  formato:'padrao',
+  bg:{type:'abstract',key:'securitizacao',data:null},
+  slides:{},
+  cur:0,
+  bank:JSON.parse(localStorage.getItem('v3-bank')||'[]')
+};
+
+// ── ABSTRACT GRID ─────────────────────────────────────────────────────────────
+
+function svgToDataURI(svgStr){
+  return 'data:image/svg+xml,' + encodeURIComponent(svgStr);
+}
+
+function renderAbsGrid(){
+  const g=document.getElementById('abs-grid');
+  g.innerHTML='';
+  Object.entries(ABSTRACTS).forEach(([key,abs])=>{
+    const d=document.createElement('div');
+    d.className='abs-thumb'+(S.bg.type==='abstract'&&S.bg.key===key?' sel':'');
+    const uri=svgToDataURI(abs.make());
+    d.style.cssText=`position:relative;overflow:hidden;aspect-ratio:4/5;background:url("${uri}") center/cover no-repeat;`;
+    d.innerHTML=`<div class="abs-lbl">${abs.label}</div>`;
+    d.addEventListener('click',()=>{ S.bg={type:'abstract',key,data:null}; renderAbsGrid(); updatePreview(); });
+    g.appendChild(d);
+  });
+}
+
+// ── BANK ──────────────────────────────────────────────────────────────────────
+
+function renderBank(){
+  const g=document.getElementById('bank-grid');
+  const emp=document.getElementById('bank-empty');
+  if(!S.bank.length){ g.innerHTML=''; g.appendChild(emp); return; }
+  g.innerHTML='';
+  S.bank.forEach((item,idx)=>{
+    const d=document.createElement('div');
+    d.className='bank-thumb'+(S.bg.type==='bank'&&S.bg.key===idx?' sel':'');
+    d.innerHTML=`<img src="${item.data}" alt="${item.name}"><div class="bank-del">✕</div>`;
+    d.addEventListener('click',e=>{
+      if(e.target.classList.contains('bank-del')){
+        S.bank.splice(idx,1); localStorage.setItem('v3-bank',JSON.stringify(S.bank));
+        if(S.bg.type==='bank'&&S.bg.key===idx) S.bg={type:'abstract',key:S.tema,data:null};
+        renderBank(); renderAbsGrid(); updatePreview();
+      } else {
+        S.bg={type:'bank',key:idx,data:item.data}; renderBank(); renderAbsGrid(); updatePreview();
+      }
+    });
+    g.appendChild(d);
+  });
+}
+
+// ── UPLOAD ────────────────────────────────────────────────────────────────────
+
+const zone=document.getElementById('upload-zone');
+const finput=document.getElementById('file-input');
+zone.addEventListener('click',()=>finput.click());
+zone.addEventListener('dragover',e=>{ e.preventDefault(); zone.style.borderColor='rgba(201,168,76,.5)'; });
+zone.addEventListener('dragleave',()=>zone.style.borderColor='');
+zone.addEventListener('drop',e=>{ e.preventDefault(); zone.style.borderColor=''; doFile(e.dataTransfer.files[0]); });
+finput.addEventListener('change',()=>doFile(finput.files[0]));
+
+function doFile(f){
+  if(!f||!f.type.startsWith('image/')) return toast('Arquivo inválido');
+  if(f.size>8*1024*1024) return toast('Imagem maior que 8MB');
+  const r=new FileReader();
+  r.onload=e=>{
+    const item={name:f.name,data:e.target.result};
+    S.bank.push(item); localStorage.setItem('v3-bank',JSON.stringify(S.bank));
+    S.bg={type:'bank',key:S.bank.length-1,data:item.data};
+    renderBank(); renderAbsGrid(); switchTab('banco'); updatePreview(); toast('Imagem adicionada');
+  };
+  r.readAsDataURL(f);
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+
+function switchTab(id){
+  document.querySelectorAll('.itab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
+  document.querySelectorAll('.itab-panel').forEach(p=>p.classList.toggle('active',p.id===`tab-${id}`));
+}
+document.querySelectorAll('.itab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
+
+// ── SLIDES FORM ───────────────────────────────────────────────────────────────
+
+const PH_HL={
+  'Hero':'Ex: 7 ativos que podem virar CRI ainda este ano',
+  'Problema':'Ex: Seu capital rende menos do que deveria',
+  'Solução':'Ex: A securitização resolve em 3 etapas',
+  'CTA':'Ex: Siga para mais sobre mercado de capitais',
+  'default':'Headline do slide'
+};
+const PH_BD={
+  'Hero':'Subtítulo ou contexto breve',
+  'CTA':'Ex: @eujoaolemosnetto · V3 Partners',
+  'default':'Conteúdo, lista ou descrição...'
+};
+
+function renderSlides(){
+  const c=document.getElementById('slides-container');
+  c.innerHTML='';
+  FORMATS[S.formato].forEach((slide,i)=>{
+    const k=slide.id;
+    if(!S.slides[k]) S.slides[k]={tag:'',headline:'',body:''};
+    const el=document.createElement('div');
+    el.className='slide-item'+(i===0?' open':'');
+    el.innerHTML=`
+      <div class="slide-hd">
+        <span class="slide-lbl">Slide ${i+1}</span>
+        <span class="slide-type">${slide.tipo}</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="slide-bd">
+        <div class="field"><label>Tag / Label</label>
+          <input type="text" placeholder="ex: SECURITIZAÇÃO" value="${S.slides[k].tag}"
+            oninput="S.slides['${k}'].tag=this.value;dbUpdate()">
+        </div>
+        <div class="field"><label>Headline</label>
+          <input type="text" placeholder="${PH_HL[slide.tipo]||PH_HL.default}" value="${S.slides[k].headline}"
+            oninput="S.slides['${k}'].headline=this.value;dbUpdate()">
+        </div>
+        <div class="field"><label>Corpo</label>
+          <textarea placeholder="${PH_BD[slide.tipo]||PH_BD.default}"
+            oninput="S.slides['${k}'].body=this.value;dbUpdate()">${S.slides[k].body}</textarea>
+        </div>
+      </div>`;
+    el.querySelector('.slide-hd').addEventListener('click',()=>el.classList.toggle('open'));
+    c.appendChild(el);
+  });
+}
+
+// ── HTML GENERATOR ────────────────────────────────────────────────────────────
+
+function bgCSS(bg){ return bg==='base'?'#111F35':bg==='deep'?'#09081A':''; }
+function bgStyle(bg){
+  if(bg==='grad') return 'background:linear-gradient(165deg,#09081A 0%,#243A66 50%,#C9A84C 100%);';
+  return `background:${bgCSS(bg)};`;
+}
+
+function heroBgHTML(){
+  const {type,key,data}=S.bg;
+  let inner='';
+  if(type==='abstract'){
+    const abs=ABSTRACTS[key]||ABSTRACTS.securitizacao;
+    const enc=encodeURIComponent(abs.make());
+    inner=`<img src="data:image/svg+xml,${enc}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+  } else if(type==='bank'&&data){
+    inner=`<img src="${data}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+  }
+  if(!inner) return '';
+  return `<div style="position:absolute;inset:0;z-index:0;overflow:hidden;">${inner}<div style="position:absolute;inset:0;background:rgba(9,8,26,.52);"></div></div>`;
+}
+
+function makeSlide(slide,idx,total,isHero){
+  const k=slide.id;
+  const d=S.slides[k]||{};
+  const tag=d.tag||'';
+  const hl=d.headline||(slide.tipo==='CTA'?'Siga para mais':slide.tipo);
+  const body=d.body||'';
+  const isCTA=slide.tipo==='CTA';
+  const isGrad=slide.bg==='grad';
+  const tagClr=isGrad?'rgba(255,255,255,.5)':'#C9A84C';
+  const pct=((idx+1)/total*100).toFixed(1);
+  const handle=S.handle.replace('@','');
+
+  const bar=`<div style="position:absolute;bottom:0;left:0;right:0;padding:16px 28px 20px;z-index:10;display:flex;align-items:center;gap:10px;">
+    <div style="flex:1;height:3px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden;">
+      <div style="height:100%;width:${pct}%;background:#C9A84C;border-radius:2px;"></div>
+    </div>
+    <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:rgba(255,255,255,.35);font-weight:500;">${idx+1}/${total}</span>
+  </div>`;
+
+  const arrow=isCTA?'':
+    `<div style="position:absolute;right:0;top:0;bottom:0;width:48px;z-index:9;display:flex;align-items:center;justify-content:center;background:linear-gradient(to right,transparent,rgba(255,255,255,.06));">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,.35)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>`;
+
+  let content;
+  if(isCTA){
+    content=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:36px;text-align:center;position:relative;z-index:2;">
+      <div style="margin-bottom:22px;font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;color:#C9A84C;letter-spacing:2px;">V3</div>
+      ${tag?`<span style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${tagClr};display:block;margin-bottom:10px;">${tag}</span>`:''}
+      <h2 style="font-family:'DM Sans',sans-serif;font-size:24px;font-weight:800;color:#F0ECE4;line-height:1.15;letter-spacing:-.5px;margin-bottom:12px;">${hl}</h2>
+      ${body?`<p style="font-family:'DM Sans',sans-serif;font-size:13px;color:rgba(240,236,228,.6);margin-bottom:26px;line-height:1.55;">${body}</p>`:''}
+      <div style="display:inline-flex;align-items:center;padding:11px 26px;background:#C9A84C;color:#09081A;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:.5px;">@${handle}</div>
+    </div>`;
+  } else {
+    const just=idx===0?'center':'flex-end';
+    const fs=idx===0?'30px':'26px';
+    const fw=idx===0?'800':'700';
+    content=`<div style="display:flex;flex-direction:column;justify-content:${just};height:100%;padding:36px 36px 60px;position:relative;z-index:2;">
+      ${tag?`<span style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${tagClr};display:block;margin-bottom:14px;">${tag}</span>`:''}
+      <h2 style="font-family:'DM Sans',sans-serif;font-size:${fs};font-weight:${fw};color:#F0ECE4;line-height:1.15;letter-spacing:-.5px;margin-bottom:${body?'14px':'0'};">${hl}</h2>
+      ${body?`<p style="font-family:'DM Sans',sans-serif;font-size:13px;color:rgba(240,236,228,.65);line-height:1.6;">${body}</p>`:''}
+    </div>`;
+  }
+
+  return `<div class="carousel-slide" style="${bgStyle(slide.bg)}position:relative;overflow:hidden;">
+    ${isHero?heroBgHTML():''}
+    ${content}${bar}${arrow}
+  </div>`;
+}
+
+function buildHTML(){
+  const slides=FORMATS[S.formato];
+  const total=slides.length;
+  const handle=S.handle.replace('@','');
+  const slidesHTML=slides.map((s,i)=>makeSlide(s,i,total,i===0)).join('');
+  const dotsHTML=slides.map((_,i)=>`<div class="ig-dot${i===0?' active':''}"></div>`).join('');
+
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carrossel — @${handle} — V3 Partners</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:#09081A;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;font-family:'DM Sans',sans-serif;}
+.ig-frame{width:420px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.5);}
+.ig-header{background:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #efefef;}
+.ig-avatar{width:32px;height:32px;border-radius:50%;background:#09081A;display:flex;align-items:center;justify-content:center;}
+.ig-handle{font-size:12px;font-weight:700;color:#111;font-family:-apple-system,sans-serif;}
+.ig-sub{font-size:11px;color:#8e8e8e;font-family:-apple-system,sans-serif;}
+.carousel-viewport{width:420px;height:525px;overflow:hidden;position:relative;}
+.carousel-track{display:flex;height:100%;transition:transform .3s ease;cursor:grab;}
+.carousel-track:active{cursor:grabbing;}
+.carousel-slide{width:420px;height:525px;flex-shrink:0;position:relative;overflow:hidden;}
+.ig-dots{display:flex;gap:4px;justify-content:center;padding:8px 0 6px;background:#fff;}
+.ig-dot{width:6px;height:6px;border-radius:50%;background:#dbdbdb;transition:background .2s;}
+.ig-dot.active{background:#3897f0;}
+.ig-actions{display:flex;align-items:center;gap:14px;padding:10px 14px 4px;background:#fff;}
+.ig-ico{width:22px;height:22px;color:#111;cursor:pointer;}
+.ig-caption{padding:4px 14px 14px;background:#fff;}
+.ig-caption p{font-size:13px;color:#111;font-family:-apple-system,sans-serif;}
+</style>
+</head>
+<body>
+<div class="ig-frame">
+  <div class="ig-header">
+    <div class="ig-avatar"><span style="font-size:12px;font-weight:800;color:#C9A84C;font-family:'DM Sans',sans-serif;">V3</span></div>
+    <div style="flex:1;">
+      <div class="ig-handle">${handle}</div>
+      <div class="ig-sub">V3 Partners</div>
+    </div>
+    <span style="font-size:18px;color:#111;cursor:pointer;">···</span>
+  </div>
+  <div class="carousel-viewport">
+    <div class="carousel-track" id="track">${slidesHTML}</div>
+  </div>
+  <div class="ig-dots" id="dots">${dotsHTML}</div>
+  <div class="ig-actions">
+    <svg class="ig-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <svg class="ig-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <svg class="ig-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    <svg class="ig-ico" style="margin-left:auto;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+  </div>
+  <div class="ig-caption">
+    <p><strong>${handle}</strong> ${CAPTIONS[S.tema]||'V3 Partners'}</p>
+    <span style="font-size:12px;color:#8e8e8e;font-family:-apple-system,sans-serif;">AGORA MESMO</span>
+  </div>
+</div>
+<script>
+const track=document.getElementById('track'),dots=[...document.querySelectorAll('.ig-dot')];
+let cur=0,tot=${total},sx=0,drag=false;
+function go(n){cur=Math.max(0,Math.min(tot-1,n));track.style.transform='translateX('+-cur*420+'px)';dots.forEach((d,i)=>d.classList.toggle('active',i===cur));}
+track.addEventListener('mousedown',e=>{drag=true;sx=e.clientX;});
+window.addEventListener('mouseup',e=>{if(!drag)return;drag=false;const dx=e.clientX-sx;if(dx<-40)go(cur+1);else if(dx>40)go(cur-1);});
+track.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+track.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(dx<-40)go(cur+1);else if(dx>40)go(cur-1);});
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(cur+1);if(e.key==='ArrowLeft')go(cur-1);});
+<\/script>
+</body>
+</html>`;
+}
+
+// ── PREVIEW UPDATE ────────────────────────────────────────────────────────────
+
+function updatePreview(){
+  const slides=FORMATS[S.formato];
+  const total=slides.length;
+  document.getElementById('preview-track').innerHTML=slides.map((s,i)=>makeSlide(s,i,total,i===0)).join('');
+  document.getElementById('ig-dots').innerHTML=slides.map((_,i)=>`<div class="ig-dot${i===S.cur?' active':''}"></div>`).join('');
+  document.getElementById('preview-track').style.transform=`translateX(${-S.cur*420}px)`;
+  const h=S.handle.replace('@','');
+  document.getElementById('ig-hd-name').textContent=h;
+  document.getElementById('cap-handle').textContent=h;
+  document.getElementById('cap-text').textContent=CAPTIONS[S.tema]||'V3 Partners';
+  document.getElementById('nav-count').textContent=`${S.cur+1} / ${total}`;
+}
+
+let dbt;
+function dbUpdate(){ clearTimeout(dbt); dbt=setTimeout(updatePreview,280); }
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+
+document.getElementById('nav-prev').addEventListener('click',()=>{ if(S.cur>0){S.cur--;updatePreview();} });
+document.getElementById('nav-next').addEventListener('click',()=>{ const t=FORMATS[S.formato].length; if(S.cur<t-1){S.cur++;updatePreview();} });
+
+// ── CONTROLS ──────────────────────────────────────────────────────────────────
+
+document.getElementById('sel-tema').addEventListener('change',e=>{ S.tema=e.target.value; if(S.bg.type==='abstract')S.bg.key=e.target.value; renderAbsGrid(); updatePreview(); });
+document.getElementById('inp-handle').addEventListener('input',e=>{ S.handle=e.target.value; dbUpdate(); });
+document.getElementById('sel-formato').addEventListener('change',e=>{ S.formato=e.target.value; S.cur=0; renderSlides(); updatePreview(); });
+document.getElementById('btn-gerar').addEventListener('click',()=>{ updatePreview(); toast('Preview atualizado'); });
+document.getElementById('btn-download').addEventListener('click',()=>{
+  const blob=new Blob([buildHTML()],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`carousel-v3-${S.tema}-${Date.now()}.html`;
+  a.click(); toast('HTML baixado');
+});
+document.getElementById('btn-copy').addEventListener('click',()=>{ navigator.clipboard.writeText(buildHTML()).then(()=>toast('HTML copiado')); });
+document.getElementById('btn-pw-toggle').addEventListener('click',()=>{ const b=document.getElementById('pw-box'); b.style.display=b.style.display==='none'||!b.style.display?'block':'none'; });
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400); }
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+
+renderAbsGrid();
+renderBank();
+renderSlides();
+updatePreview();
+</script>
+</body>
+</html>
