@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendário de Conteúdo — V3 Content Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--nd:#09081A;--nb:#111F35;--nc:#162744;--nm:#243A66;--g:#C9A84C;--gl:#E8C97A;--cr:#F0ECE4;--mt:#7A8FA8;}
+body{font-family:'DM Sans',sans-serif;background:var(--nd);color:var(--cr);min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+/* HEADER */
+header{padding:16px 28px;border-bottom:1px solid rgba(201,168,76,.12);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;background:rgba(9,8,26,.97);backdrop-filter:blur(8px);}
+.hl{display:flex;align-items:center;gap:14px;}
+.hl img{height:30px;}
+.bc{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--mt);}
+.bc a{color:var(--mt);text-decoration:none;}.bc a:hover{color:var(--cr);}
+.bc strong{color:var(--cr);font-weight:600;}
+.hb{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);color:var(--g);}
+
+/* BODY */
+.body{max-width:1200px;margin:0 auto;padding:40px 28px 80px;}
+
+/* STRATEGY STRIP */
+.strategy{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:48px;}
+.pillar{background:var(--nb);border:1px solid rgba(201,168,76,.1);border-top:2px solid var(--g);padding:16px;}
+.pillar-num{font-size:28px;font-weight:800;color:rgba(201,168,76,.2);line-height:1;margin-bottom:6px;}
+.pillar-name{font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.pillar-desc{font-size:11px;color:var(--mt);line-height:1.5;}
+
+/* STATS */
+.stats{display:flex;gap:32px;margin-bottom:40px;padding:20px 24px;background:var(--nb);border:1px solid rgba(201,168,76,.1);border-left:3px solid var(--g);}
+.stat{text-align:center;}
+.stat-n{font-size:24px;font-weight:800;color:var(--g);}
+.stat-l{font-size:10px;color:var(--mt);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+
+/* MONTH NAV */
+.month-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.month-title{font-size:22px;font-weight:800;color:var(--cr);}
+.month-nav-btns{display:flex;gap:8px;}
+.mnb{background:var(--nc);border:1px solid rgba(201,168,76,.15);color:var(--cr);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:8px 16px;cursor:pointer;transition:background .2s;}
+.mnb:hover{background:var(--nm);}
+.mnb.active{background:var(--g);color:var(--nd);}
+
+/* LEGEND */
+.legend{display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap;}
+.leg{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mt);}
+.leg-dot{width:10px;height:10px;border-radius:2px;}
+.leg-carousel{background:#C9A84C;}
+.leg-single{background:#7A8FA8;}
+.leg-hype{background:#E8C97A;}
+.leg-v3{background:#243A66;border:1px solid rgba(201,168,76,.3);}
+
+/* CALENDAR GRID */
+.cal-header{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:2px;}
+.cal-day-name{text-align:center;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mt);padding:8px 4px;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+
+.cal-day{min-height:130px;background:var(--nb);padding:8px;position:relative;transition:background .15s;}
+.cal-day.empty{background:rgba(17,31,53,.4);}
+.cal-day.today{outline:2px solid var(--g);outline-offset:-2px;}
+.cal-day:not(.empty):not(.no-post):hover{background:var(--nc);}
+.cal-date{font-size:12px;font-weight:700;color:var(--mt);margin-bottom:6px;}
+.cal-day.today .cal-date{color:var(--g);}
+
+/* POST CARD inside calendar */
+.post-card{background:var(--nc);border-left:3px solid var(--g);padding:8px 8px 8px 10px;margin-bottom:4px;cursor:pointer;transition:background .15s;}
+.post-card:hover{background:var(--nm);}
+.post-card.carousel{border-left-color:#C9A84C;}
+.post-card.single{border-left-color:#7A8FA8;}
+.post-card.hype{border-left-color:#E8C97A;}
+.post-card.v3-inst{border-left-color:#243A66;background:rgba(36,58,102,.3);}
+.post-card.v3-inst:hover{background:rgba(36,58,102,.5);}
+.pc-account{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mt);margin-bottom:3px;}
+.pc-type{display:inline-block;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;margin-bottom:4px;}
+.pc-type.carousel{background:rgba(201,168,76,.15);color:var(--g);}
+.pc-type.single{background:rgba(122,143,168,.15);color:var(--mt);}
+.pc-type.hype{background:rgba(232,201,122,.15);color:var(--gl);}
+.pc-theme{font-size:10px;font-weight:600;color:var(--cr);line-height:1.35;}
+.pc-gerar{margin-top:6px;padding:4px 8px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--g);color:var(--nd);border:none;font-family:'DM Sans',sans-serif;cursor:pointer;width:100%;transition:background .15s;}
+.pc-gerar:hover{background:var(--gl);}
+
+/* FERIADO */
+.feriado-tag{font-size:9px;color:rgba(122,143,168,.4);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-top:4px;}
+
+/* SIDE PANEL */
+.layout{display:grid;grid-template-columns:1fr 320px;gap:32px;align-items:start;}
+.side-panel{position:sticky;top:80px;}
+.sp-card{background:var(--nb);border:1px solid rgba(201,168,76,.12);padding:20px;margin-bottom:16px;}
+.sp-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--g);margin-bottom:14px;}
+.rhythm-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(240,236,228,.05);}
+.rhythm-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.rhythm-day{font-size:10px;font-weight:700;color:var(--cr);min-width:28px;}
+.rhythm-type{font-size:10px;color:var(--mt);}
+.rhythm-badge{font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;}
+.rb-carousel{background:rgba(201,168,76,.12);color:var(--g);}
+.rb-single{background:rgba(122,143,168,.12);color:var(--mt);}
+.rb-off{background:rgba(240,236,228,.05);color:rgba(122,143,168,.4);}
+
+.quick-btn{width:100%;padding:11px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:transparent;border:1px solid rgba(201,168,76,.3);color:var(--g);cursor:pointer;transition:all .2s;margin-bottom:8px;text-align:left;display:flex;align-items:center;gap:8px;}
+.quick-btn:hover{background:rgba(201,168,76,.08);}
+.quick-btn span{font-size:14px;}
+
+@media(max-width:900px){.layout{grid-template-columns:1fr;}.strategy{grid-template-columns:repeat(2,1fr);}.side-panel{position:static;}}
+@media(max-width:640px){.strategy{grid-template-columns:1fr;}.stats{flex-wrap:wrap;gap:16px;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hl">
+    <img src="../../assets/logos/v3-logo-3d-alpha.png" alt="V3 Partners" onerror="this.style.display='none'">
+    <nav class="bc">
+      <a href="../../index.html">Content Studio</a>
+      <span>›</span>
+      <strong>Calendário de Conteúdo</strong>
+    </nav>
+  </div>
+  <div class="hb">Mai — Jun 2026</div>
+</header>
+
+<div class="body">
+
+  <!-- STRATEGY PILLARS -->
+  <div style="margin-bottom:12px;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--g);margin-bottom:16px;">5 Pilares de Conteúdo — @eujoaolemosnetto</div>
+    <div class="strategy">
+      <div class="pillar"><div class="pillar-num">01</div><div class="pillar-name">Educação</div><div class="pillar-desc">Explica securitização, tokenização e estruturação para assessores e empresários</div></div>
+      <div class="pillar"><div class="pillar-num">02</div><div class="pillar-name">Mercado</div><div class="pillar-desc">Dados, tendências e oportunidades dos mercados de capitais e real assets</div></div>
+      <div class="pillar"><div class="pillar-num">03</div><div class="pillar-name">Opinião</div><div class="pillar-desc">Thought leadership do João sobre estruturação, M&A e o mercado brasileiro</div></div>
+      <div class="pillar"><div class="pillar-num">04</div><div class="pillar-name">V3 Partners</div><div class="pillar-desc">Verticais, deals, parceiros e o modelo de securitizadora independente</div></div>
+      <div class="pillar"><div class="pillar-num">05</div><div class="pillar-name">Hype</div><div class="pillar-desc">Aproveita matérias do momento e adapta para a perspectiva V3</div></div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat"><div class="stat-n">3–4</div><div class="stat-l">Posts / semana</div></div>
+    <div class="stat"><div class="stat-n">60%</div><div class="stat-l">Carrosséis</div></div>
+    <div class="stat"><div class="stat-n">40%</div><div class="stat-l">Posts únicos</div></div>
+    <div class="stat"><div class="stat-n">70%</div><div class="stat-l">@eujoaolemosnetto</div></div>
+    <div class="stat"><div class="stat-n">30%</div><div class="stat-l">@v3partners</div></div>
+    <div class="stat"><div class="stat-n">Seg · Qua · Sex</div><div class="stat-l">Dias prioritários</div></div>
+  </div>
+
+  <div class="layout">
+    <!-- CALENDAR -->
+    <div>
+      <!-- MONTH NAV -->
+      <div class="month-nav">
+        <div class="month-title" id="month-title">Maio 2026</div>
+        <div class="month-nav-btns">
+          <button class="mnb active" onclick="showMonth(0)">Maio</button>
+          <button class="mnb" onclick="showMonth(1)">Junho</button>
+        </div>
+      </div>
+
+      <!-- LEGEND -->
+      <div class="legend">
+        <div class="leg"><div class="leg-dot leg-carousel"></div>Carrossel</div>
+        <div class="leg"><div class="leg-dot leg-single"></div>Post único</div>
+        <div class="leg"><div class="leg-dot leg-hype"></div>Hype / Matéria</div>
+        <div class="leg"><div class="leg-dot leg-v3"></div>@v3partners</div>
+      </div>
+
+      <!-- CALENDAR HEADER -->
+      <div class="cal-header">
+        <div class="cal-day-name">Seg</div>
+        <div class="cal-day-name">Ter</div>
+        <div class="cal-day-name">Qua</div>
+        <div class="cal-day-name">Qui</div>
+        <div class="cal-day-name">Sex</div>
+        <div class="cal-day-name">Sáb</div>
+        <div class="cal-day-name">Dom</div>
+      </div>
+
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <!-- SIDE PANEL -->
+    <div class="side-panel">
+      <div class="sp-card">
+        <div class="sp-title">Ritmo Semanal</div>
+        <div class="rhythm-row"><span class="rhythm-day">Seg</span><span class="rhythm-badge rb-carousel">Carrossel</span><span class="rhythm-type">Educativo — pilar 1</span></div>
+        <div class="rhythm-row"><span class="rhythm-day">Ter</span><span class="rhythm-badge rb-off">Opcional</span><span class="rhythm-type">Descanso ou stories</span></div>
+        <div class="rhythm-row"><span class="rhythm-day">Qua</span><span class="rhythm-badge rb-single">Post único</span><span class="rhythm-type">Dado de mercado — pilar 2</span></div>
+        <div class="rhythm-row"><span class="rhythm-day">Qui</span><span class="rhythm-badge rb-off">Opcional</span><span class="rhythm-type">Engajamento / resposta</span></div>
+        <div class="rhythm-row"><span class="rhythm-day">Sex</span><span class="rhythm-badge rb-carousel">Carrossel ou único</span><span class="rhythm-type">Hype ou opinião — pilar 3/5</span></div>
+        <div class="rhythm-row"><span class="rhythm-day">Sáb</span><span class="rhythm-badge rb-off">Opcional</span><span class="rhythm-type">V3 Partners institucional</span></div>
+        <div class="rhythm-row"><span class="rhythm-day">Dom</span><span class="rhythm-badge rb-off">Off</span><span class="rhythm-type">Sem postagem</span></div>
+      </div>
+
+      <div class="sp-card">
+        <div class="sp-title">Gerar Agora</div>
+        <button class="quick-btn" onclick="openGen('stories','securitizacao','educacao','O que é securitização e por que patrimônios acima de R$500K precisam conhecer')"><span>📄</span>Carrossel Educativo</button>
+        <button class="quick-btn" onclick="openGen('stories','tokenizacao','hype','Tokenização de ativos reais no Brasil: o que a CVM 88 permite')"><span>📄</span>Carrossel Hype</button>
+        <button class="quick-btn" onclick="openGen('instagram','securitizacao','mercado','')"><span>🖼</span>Post único — Dado</button>
+        <button class="quick-btn" onclick="openGen('instagram','ma-crossborder','opiniao','')"><span>🖼</span>Post único — Opinião</button>
+      </div>
+
+      <div class="sp-card" style="background:rgba(201,168,76,.04);border-color:rgba(201,168,76,.2);">
+        <div class="sp-title">Como funciona</div>
+        <div style="font-size:12px;color:var(--mt);line-height:1.7;">
+          <p style="margin-bottom:8px;"><strong style="color:var(--cr);">1.</strong> Clique em um dia planejado</p>
+          <p style="margin-bottom:8px;"><strong style="color:var(--cr);">2.</strong> O gerador abre com o tema pré-carregado</p>
+          <p style="margin-bottom:8px;"><strong style="color:var(--cr);">3.</strong> Cole uma matéria ou use o contexto sugerido</p>
+          <p style="margin-bottom:8px;"><strong style="color:var(--cr);">4.</strong> Clique Transformar → Claude gera os slides</p>
+          <p><strong style="color:var(--cr);">5.</strong> Exporte os PNGs direto no browser</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CALENDAR DATA ─────────────────────────────────────────────────────────────
+
+const MONTHS = [
+  {
+    name: 'Maio 2026',
+    year: 2026, month: 4, // 0-indexed
+    startDay: 4, // Maio 1 = sexta (0=seg...6=dom) → 4=sex → offset 4
+    days: 31,
+    feriados: { 1: 'Dia do Trabalho' },
+    posts: {
+      5:  { account:'@eujoaolemosnetto', type:'carousel', pilar:'Educação', tema:'securitizacao', title:'O que é securitização — e por que patrimônios acima de R$500K precisam saber', ctx:'Explique securitização de forma simples: o que é, como funciona, por que grandes patrimônios usam isso ao invés do CDB. Conecte com a V3 Partners como estruturadora.' },
+      6:  { account:'@v3partners', type:'single', pilar:'V3', tema:'partners', title:'V3 Partners: 4 verticais, 1 mesa de estruturação', ctx:'Apresente as 4 verticais da V3 Partners de forma institucional: Crédito/Recebíveis, Real Estate, Mineração, M&A Cross-Border. Posicione como boutique independente.' },
+      9:  { account:'@eujoaolemosnetto', type:'single', pilar:'Opinião', tema:'securitizacao', title:'Por que o CDB não é suficiente para patrimônios acima de R$500K', ctx:'Opinião direta do João: CDB remunera o banco, não o investidor. Quem tem mais de R$500K pode e deve ter acesso a estruturações que o assessor comum não conhece.' },
+      12: { account:'@eujoaolemosnetto', type:'carousel', pilar:'Educação', tema:'real-estate', title:'SLB — como transformar imóvel em capital sem vender o ativo', ctx:'Sale-Leaseback: empresa vende o imóvel para um fundo, recebe o capital e continua usando o espaço pagando aluguel. Explique o mecanismo e os benefícios.' },
+      13: { account:'@eujoaolemosnetto', type:'single', pilar:'Mercado', tema:'real-estate', title:'R$15 bi em SLB estruturado nos últimos 24 meses no Brasil', ctx:'Dado de mercado sobre o crescimento do Sale-Leaseback no Brasil. Contextualize com a oportunidade para empresas médias que têm imóvel próprio.' },
+      16: { account:'@eujoaolemosnetto', type:'hype', pilar:'Hype', tema:'ma-crossborder', title:'Matéria da semana — adaptada para a perspectiva V3', ctx:'[Cole a URL ou texto da matéria que você achou interessante esta semana. Eu adapto para a voz do João e para a perspectiva V3.]' },
+      19: { account:'@eujoaolemosnetto', type:'carousel', pilar:'Educação', tema:'ma-crossborder', title:'M&A cross-border — por que dolarizar parte do patrimônio faz sentido', ctx:'Explique como funciona um M&A cross-border: empresas brasileiras captando sócios internacionais ou vendendo participação para fundos americanos e asiáticos. O papel da V3 como estruturadora.' },
+      20: { account:'@v3partners', type:'single', pilar:'V3', tema:'partners', title:'Seja um Partner V3 — o assessor que estrutura, não só indica', ctx:'Apresente o programa de partners da V3: R$197/mês (30% comissionamento) ou R$397/mês PRO (50%). A mesa V3 faz toda a estruturação, o partner só origina e conecta.' },
+      23: { account:'@eujoaolemosnetto', type:'single', pilar:'Opinião', tema:'tokenizacao', title:'Tokenização de ativos reais — o que muda e o que não muda', ctx:'Opinião do João: tokenização é uma camada de liquidez e distribuição. O ativo subjacente ainda precisa de estruturação sólida. Sem a securitização por trás, o token não vale nada.' },
+      26: { account:'@eujoaolemosnetto', type:'carousel', pilar:'Educação', tema:'securitizacao', title:'Recebíveis judiciais — o ativo que assessores não indicam mas deveria', ctx:'Explique como funcionam os recebíveis judiciais/precatórios: o investidor compra o direito de receber uma dívida que o Estado ou empresa deve pagar. Rentabilidade, prazo, risco.' },
+      27: { account:'@eujoaolemosnetto', type:'single', pilar:'Mercado', tema:'mineracao', title:'Lítio, manganês e cobalto — commodities estratégicas que o Brasil ignora', ctx:'Dado sobre o mercado de mineração de commodities estratégicas no Brasil. O Brasil tem as reservas, mas não tem o capital estruturado para explorar. Oportunidade de M&A e securitização.' },
+      30: { account:'@eujoaolemosnetto', type:'hype', pilar:'Hype', tema:'tokenizacao', title:'Matéria da semana — tokenização adaptada para V3', ctx:'[Cole a URL ou texto da matéria mais relevante sobre tokenização, cripto ou mercado de capitais desta semana.]' },
+    }
+  },
+  {
+    name: 'Junho 2026',
+    year: 2026, month: 5,
+    startDay: 0, // Junho 1 = segunda
+    days: 30,
+    feriados: { 11: 'Corpus Christi', 12: 'Corpus Christi (emenda)' },
+    posts: {
+      1:  { account:'@eujoaolemosnetto', type:'carousel', pilar:'Educação', tema:'securitizacao', title:'FIDC — como o fundo que remunera o banco pode remunerar você', ctx:'Explique o que é um FIDC (Fundo de Investimento em Direitos Creditórios), como funciona, quem pode investir e como a V3 estrutura operações de FIDC para empresas originadoras.' },
+      3:  { account:'@eujoaolemosnetto', type:'single', pilar:'Mercado', tema:'securitizacao', title:'Mercado de securitização cresceu 38% em 12 meses no Brasil', ctx:'Dado de crescimento do mercado de securitização no Brasil. CRI, CRA, FIDC — o apetite por crédito privado estruturado nunca foi tão grande. Contextualize com a oportunidade V3.' },
+      6:  { account:'@eujoaolemosnetto', type:'hype', pilar:'Hype', tema:'securitizacao', title:'Matéria da semana — adaptada para V3', ctx:'[Cole a URL ou texto da matéria mais relevante desta semana sobre crédito, mercado de capitais ou estruturação financeira.]' },
+      9:  { account:'@eujoaolemosnetto', type:'carousel', pilar:'Educação', tema:'real-estate', title:'BTS e BTR — imóveis que nascem prontos para o inquilino corporativo', ctx:'Explique Built-to-Suit e Built-to-Rent: o investidor financia a construção de um imóvel personalizado para um inquilino corporativo com contrato de locação pré-assinado. Rentabilidade e estruturação V3.' },
+      10: { account:'@v3partners', type:'single', pilar:'V3', tema:'real-estate', title:'V3 Real Estate — estruturamos o ativo, você só origina o cliente', ctx:'Institucional sobre a vertical de Real Estate da V3: SLB, BTS, BTR, CRI imobiliário. A V3 faz toda a estruturação, o assessor ou sócio partner só traz o cliente.' },
+      13: { account:'@eujoaolemosnetto', type:'hype', pilar:'Hype', tema:'real-estate', title:'Matéria da semana — real estate adaptado para V3', ctx:'[Cole URL ou texto de matéria sobre mercado imobiliário corporativo, fundos imobiliários, shoppings ou galpões logísticos.]' },
+      16: { account:'@eujoaolemosnetto', type:'carousel', pilar:'Educação', tema:'ma-crossborder', title:'LLC nos EUA — como estruturar patrimônio internacional em 2026', ctx:'Explique como funciona uma LLC nos EUA para brasileiros: proteção patrimonial, câmbio, tributação. Como a V3 estrutura a operação cross-border completa via parceiros americanos.' },
+      17: { account:'@eujoaolemosnetto', type:'single', pilar:'Opinião', tema:'ma-crossborder', title:'Dolarizar 20% do patrimônio não é fuga de capital. É gestão de risco', ctx:'Opinião do João: diversificação internacional é obrigação fiduciária para patrimônios acima de R$1M. Como a V3 facilita isso via estruturação cross-border.' },
+      20: { account:'@eujoaolemosnetto', type:'hype', pilar:'Hype', tema:'ma-crossborder', title:'Matéria da semana — M&A adaptado para V3', ctx:'[Cole URL ou texto de matéria sobre fusões e aquisições, fundos internacionais ou deals no Brasil.]' },
+      23: { account:'@eujoaolemosnetto', type:'carousel', pilar:'Educação', tema:'mineracao', title:'Ouro e lítio — como investir em mineração via estruturação financeira', ctx:'Explique como um investidor pode ter exposição a mineração via estruturas como debentures, CRA de mineração ou participação em SPEs. Conecte com a vertical de mineração da V3.' },
+      24: { account:'@v3partners', type:'single', pilar:'V3', tema:'mineracao', title:'V3 Mineração — do lastro físico à distribuição via Bloxs', ctx:'Apresente a vertical de mineração V3: ouro, lítio, metais estratégicos. A infraestrutura Bloxs permite tokenizar o ativo com lastro físico verificável.' },
+      27: { account:'@eujoaolemosnetto', type:'hype', pilar:'Hype', tema:'mineracao', title:'Matéria da semana — mineração/commodities adaptado para V3', ctx:'[Cole URL ou texto de matéria sobre commodities, mineração, metais estratégicos ou transição energética.]' },
+    }
+  }
+];
+
+let currentMonth = 0;
+const today = new Date();
+
+function openGen(module, tema, pilar, ctx) {
+  const base = module === 'stories' ? '../stories/index.html' : '../instagram/index.html';
+  const params = new URLSearchParams({ tema, pilar, ctx: encodeURIComponent(ctx) });
+  window.open(`${base}?${params.toString()}`, '_blank');
+}
+
+function renderCalendar(monthIdx) {
+  const m = MONTHS[monthIdx];
+  document.getElementById('month-title').textContent = m.name;
+
+  // Update nav buttons
+  document.querySelectorAll('.mnb').forEach((b, i) => b.classList.toggle('active', i === monthIdx));
+
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+
+  // Empty cells before start
+  for (let i = 0; i < m.startDay; i++) {
+    const empty = document.createElement('div');
+    empty.className = 'cal-day empty';
+    grid.appendChild(empty);
+  }
+
+  // Days
+  for (let d = 1; d <= m.days; d++) {
+    const cell = document.createElement('div');
+    const isToday = today.getFullYear() === m.year && today.getMonth() === m.month && today.getDate() === d;
+    cell.className = 'cal-day' + (isToday ? ' today' : '');
+
+    const dateEl = document.createElement('div');
+    dateEl.className = 'cal-date';
+    dateEl.textContent = d;
+    cell.appendChild(dateEl);
+
+    // Feriado
+    if (m.feriados && m.feriados[d]) {
+      const fer = document.createElement('div');
+      fer.className = 'feriado-tag';
+      fer.textContent = m.feriados[d];
+      cell.appendChild(fer);
+    }
+
+    // Post
+    if (m.posts && m.posts[d]) {
+      const post = m.posts[d];
+      const card = document.createElement('div');
+      card.className = `post-card ${post.type}${post.account === '@v3partners' ? ' v3-inst' : ''}`;
+
+      const isV3 = post.account === '@v3partners';
+      const acctColor = isV3 ? 'var(--mt)' : 'var(--g)';
+
+      card.innerHTML = `
+        <div class="pc-account" style="color:${acctColor}">${post.account}</div>
+        <span class="pc-type ${post.type}">${post.type === 'carousel' ? 'Carrossel' : post.type === 'hype' ? 'Hype' : 'Post único'}</span>
+        <div class="pc-theme">${post.title}</div>
+        <button class="pc-gerar" onclick="event.stopPropagation();openGen('${post.type === 'single' || post.type === 'hype' && !post.ctx.includes('[Cole') ? 'instagram' : 'stories'}','${post.tema}','${post.pilar.toLowerCase()}',decodeURIComponent('${encodeURIComponent(post.ctx)}'))">Gerar →</button>
+      `;
+      cell.appendChild(card);
+    }
+
+    grid.appendChild(cell);
+  }
+
+  // Trailing empty cells to complete last row
+  const totalCells = m.startDay + m.days;
+  const remainder = totalCells % 7;
+  if (remainder !== 0) {
+    for (let i = 0; i < 7 - remainder; i++) {
+      const empty = document.createElement('div');
+      empty.className = 'cal-day empty';
+      grid.appendChild(empty);
+    }
+  }
+}
+
+function showMonth(idx) {
+  currentMonth = idx;
+  renderCalendar(idx);
+}
+
+renderCalendar(0);
+</script>
+</body>
+</html>

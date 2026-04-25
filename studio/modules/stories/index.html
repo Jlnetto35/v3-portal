@@ -1020,6 +1020,24 @@ document.getElementById('btn-transformar').addEventListener('click', async ()=>{
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 
+// ── URL PARAMS (vindo do calendário) ─────────────────────────────────────────
+(function(){
+  const p=new URLSearchParams(window.location.search);
+  if(p.get('tema')){
+    const t=p.get('tema');
+    S.tema=t;
+    const sel=document.getElementById('sel-tema');
+    if(sel) sel.value=t;
+    S.bg.key=t;
+  }
+  const ctx=p.get('ctx');
+  if(ctx){
+    const decoded=decodeURIComponent(ctx);
+    const ta=document.getElementById('inp-materia');
+    if(ta) ta.value=decoded;
+  }
+})();
+
 renderAbsGrid();
 renderBank();
 renderSlides();
