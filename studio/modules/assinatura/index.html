@@ -473,6 +473,8 @@ function gerarHTML() {
   var nome  = document.getElementById('f-nome').value.trim() || 'Nome Completo';
   var cfld  = document.getElementById('f-cargo').value.trim();
   var cargo = (cfld || cargoSel).toUpperCase();
+  var tel   = document.getElementById('f-tel').value.trim() || '+55 21 98993-7178';
+  var li    = document.getElementById('f-linkedin').value.trim();
 
   htmlOut =
 `<!-- Assinatura V3 Partners · Brandbook Sec. 12 · 600×200 -->
@@ -499,7 +501,7 @@ function gerarHTML() {
         <div style="font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:400;color:#7A8FA8;line-height:1.8;">
           V3 Partners Soluções Ltda<br>
           Rua Visconde de Pirajá, 414, Sala 718 — Ipanema, RJ<br>
-          ' + gTel + ' · v3partners.com.br' + (gLi ? '<br>' + gLi : '') + '
+          ${tel} · v3partners.com.br${li ? '<br>' + li : ''}
         </div>
       </td>
     </tr>
