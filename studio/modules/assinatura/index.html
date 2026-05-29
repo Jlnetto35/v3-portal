@@ -177,6 +177,7 @@ header {
 /* — Coluna texto — */
 .sig-text-col {
   flex: 1;
+  min-width: 0; /* FIX: necessário para overflow funcionar em flex child */
   padding: 0 24px 0 22px;
   display: flex;
   flex-direction: column;
@@ -191,6 +192,9 @@ header {
   color: #F0ECE4;
   line-height: 1.25;
   letter-spacing: -0.1px;
+  white-space: nowrap; /* FIX: impede quebra na exportação PNG */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Cargo: DM Sans 700 · 10px · #C9A84C · CAPS · 0.12em */
@@ -203,6 +207,9 @@ header {
   letter-spacing: 0.12em;
   margin-top: 4px;
   margin-bottom: 12px;
+  white-space: nowrap; /* FIX: impede quebra na exportação PNG */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Dados: DM Sans 400 · 11px · #7A8FA8 · lh 1.8 */
@@ -212,6 +219,8 @@ header {
   font-weight: 400;
   color: #7A8FA8;
   line-height: 1.8;
+  white-space: nowrap; /* FIX: impede que URLs quebrem mid-word no html2canvas */
+  overflow: hidden;
 }
 
 /* HTML OUTPUT */
@@ -431,21 +440,26 @@ function baixarPNG() {
 
   toast('Gerando PNG…');
 
-  html2canvas(document.getElementById('sig'), {
-    scale: 3,
-    backgroundColor: null,
-    useCORS: true,
-    logging: false,
-    imageTimeout: 8000
-  }).then(function(canvas) {
-    var a = document.createElement('a');
-    a.download = 'assinatura-v3-' + slug + '.png';
-    a.href = canvas.toDataURL('image/png');
-    a.click();
-    toast('PNG salvo — ' + a.download);
-  }).catch(function(e) {
-    toast('Erro: abra via servidor local. Use: npx serve .');
-    console.error(e);
+  // FIX: aguarda DM Sans carregar completamente antes de capturar.
+  // Sem isso, html2canvas usa fonte fallback com métricas diferentes
+  // e URLs quebram no meio mesmo sem word-break declarado.
+  document.fonts.ready.then(function() {
+    html2canvas(document.getElementById('sig'), {
+      scale: 3,
+      backgroundColor: null,
+      useCORS: true,
+      logging: false,
+      imageTimeout: 8000
+    }).then(function(canvas) {
+      var a = document.createElement('a');
+      a.download = 'assinatura-v3-' + slug + '.png';
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+      toast('PNG salvo — ' + a.download);
+    }).catch(function(e) {
+      toast('Erro: abra via servidor local. Use: npx serve .');
+      console.error(e);
+    });
   });
 }
 
