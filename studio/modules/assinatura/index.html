@@ -375,7 +375,7 @@ header {
           <div id="sig-dados">
             V3 Partners Soluções Ltda<br>
             Rua Visconde de Pirajá, 414, Sala 718 — Ipanema, RJ<br>
-            <span id="sig-tel">+55 21 98993-7178</span> · v3partners.com.br<span id="sig-li-wrap"><br><span id="sig-linkedin"></span></span>
+            <span id="sig-tel">+55 21 98993-7178</span><span style="white-space:nowrap"> · <span id="sig-site">v3partners.com.br</span></span><span id="sig-li-wrap"><br><span id="sig-linkedin" style="white-space:nowrap"></span></span>
           </div>
         </div>
 
@@ -440,16 +440,19 @@ function baixarPNG() {
 
   toast('Gerando PNG…');
 
-  // FIX: aguarda DM Sans carregar completamente antes de capturar.
-  // Sem isso, html2canvas usa fonte fallback com métricas diferentes
-  // e URLs quebram no meio mesmo sem word-break declarado.
+  // FIX duplo: (1) document.fonts.ready espera fonte no doc principal;
+  // (2) onclone: doc => doc.fonts.ready espera no clone interno do html2canvas
+  // — sem o (2), DM Sans não carrega no clone e o fallback quebra URLs no canvas.
   document.fonts.ready.then(function() {
     html2canvas(document.getElementById('sig'), {
       scale: 3,
       backgroundColor: null,
       useCORS: true,
       logging: false,
-      imageTimeout: 8000
+      imageTimeout: 8000,
+      onclone: function(clonedDoc) {
+        return clonedDoc.fonts.ready;
+      }
     }).then(function(canvas) {
       var a = document.createElement('a');
       a.download = 'assinatura-v3-' + slug + '.png';
