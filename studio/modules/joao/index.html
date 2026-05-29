@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>João Lemos — Marca Pessoal · V3 Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--nd:#09081A;--nb:#111F35;--nc:#162744;--g:#C9A84C;--gl:#E8C97A;--cr:#F0ECE4;--mt:#7A8FA8;}
+body{font-family:'DM Sans',sans-serif;background:var(--nd);color:var(--cr);min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+/* HEADER */
+header{padding:16px 28px;border-bottom:1px solid rgba(201,168,76,.1);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;background:rgba(9,8,26,.97);backdrop-filter:blur(8px);}
+.hl{display:flex;align-items:center;gap:14px;}
+.hl img{height:28px;}
+.bc{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--mt);}
+.bc a{color:var(--mt);text-decoration:none;}.bc a:hover{color:var(--cr);}
+.bc strong{color:var(--cr);font-weight:600;}
+.hb{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);color:var(--g);}
+
+/* LAYOUT */
+.wrap{display:grid;grid-template-columns:320px 1fr;min-height:calc(100vh - 57px);}
+
+/* LEFT */
+.lp{border-right:1px solid rgba(201,168,76,.08);overflow-y:auto;max-height:calc(100vh - 57px);}
+
+/* TEMPLATE PICKER */
+.tpick{padding:20px;}
+.tp-label{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--g);margin-bottom:12px;}
+.tcard{border:1px solid rgba(201,168,76,.12);padding:14px;margin-bottom:8px;cursor:pointer;transition:all .18s;position:relative;}
+.tcard:hover{background:rgba(201,168,76,.04);border-color:rgba(201,168,76,.25);}
+.tcard.active{border-color:var(--g);background:rgba(201,168,76,.06);}
+.tcard.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--g);}
+.tc-name{font-size:13px;font-weight:700;color:var(--cr);margin-bottom:3px;}
+.tc-desc{font-size:11px;color:var(--mt);line-height:1.4;}
+
+/* FORM */
+.fblock{padding:0 20px 20px;}
+.flabel{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--g);margin-bottom:12px;padding-top:16px;border-top:1px solid rgba(240,236,228,.05);display:block;}
+label{display:block;font-size:11px;font-weight:600;color:var(--mt);letter-spacing:.5px;margin-bottom:5px;}
+input[type=text],textarea{width:100%;background:rgba(17,31,53,.8);border:1px solid rgba(201,168,76,.12);color:var(--cr);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;outline:none;transition:border-color .2s;border-radius:0;}
+input:focus,textarea:focus{border-color:rgba(201,168,76,.35);}
+textarea{resize:vertical;line-height:1.55;}
+.f{margin-bottom:12px;}
+
+/* PHOTO UPLOAD */
+.photo-zone{border:1px dashed rgba(201,168,76,.2);padding:20px;text-align:center;cursor:pointer;transition:all .2s;position:relative;margin-bottom:12px;}
+.photo-zone:hover{border-color:rgba(201,168,76,.4);background:rgba(201,168,76,.03);}
+.photo-zone.has-photo{border-style:solid;border-color:rgba(201,168,76,.3);}
+.photo-zone p{font-size:12px;color:var(--mt);}
+.photo-zone .hint{font-size:10px;color:rgba(122,143,168,.45);margin-top:4px;}
+.photo-preview{width:100%;height:80px;object-fit:cover;display:none;margin-bottom:8px;}
+.photo-preview.show{display:block;}
+#photo-input{display:none;}
+.photo-clear{font-size:10px;color:rgba(201,168,76,.5);cursor:pointer;margin-top:6px;display:none;background:none;border:none;font-family:'DM Sans',sans-serif;letter-spacing:1px;}
+.photo-clear.show{display:block;}
+
+/* CHAR COUNT */
+.cc{font-size:10px;color:rgba(122,143,168,.4);text-align:right;margin-top:3px;}
+
+/* EXPORT */
+.exp-bar{padding:16px 20px;background:rgba(17,31,53,.5);border-top:1px solid rgba(201,168,76,.08);position:sticky;bottom:0;}
+.exp-btn{width:100%;padding:13px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;background:var(--g);color:var(--nd);border:none;cursor:pointer;transition:background .2s;}
+.exp-btn:hover{background:var(--gl);}
+.exp-btn:disabled{opacity:.45;cursor:not-allowed;}
+.exp-prog{margin-top:8px;display:none;}
+.exp-track{height:2px;background:rgba(201,168,76,.15);border-radius:2px;overflow:hidden;margin-bottom:4px;}
+.exp-fill{height:100%;width:0%;background:var(--g);border-radius:2px;transition:width .3s;}
+.exp-lbl{font-size:10px;color:var(--mt);}
+
+/* RIGHT */
+.rp{padding:32px;display:flex;flex-direction:column;align-items:center;background:var(--nb);}
+.rp-head{width:100%;max-width:420px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.rp-title{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--g);}
+.cp-btn{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px 16px;cursor:pointer;background:transparent;border:1px solid rgba(122,143,168,.2);color:var(--mt);transition:all .2s;}
+.cp-btn:hover{border-color:rgba(122,143,168,.4);color:var(--cr);}
+
+/* IG FRAME */
+.igf{width:390px;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.igh{background:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #efefef;}
+.iga{width:32px;height:32px;border-radius:50%;background:#09081A;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.iga img{width:26px;height:auto;}
+.ign{font-size:12px;font-weight:700;color:#111;font-family:-apple-system,sans-serif;}
+.igs{font-size:11px;color:#8e8e8e;font-family:-apple-system,sans-serif;}
+.igv{width:390px;height:488px;overflow:hidden;position:relative;}
+#post-preview{width:100%;height:100%;}
+.igd{display:flex;align-items:center;gap:14px;padding:10px 14px 4px;background:#fff;}
+.igico{width:22px;height:22px;color:#111;cursor:pointer;}
+.igc{padding:4px 14px 12px;background:#fff;}
+.igc p{font-size:13px;color:#111;font-family:-apple-system,sans-serif;line-height:1.4;}
+
+.toast{position:fixed;bottom:20px;right:20px;background:var(--g);color:var(--nd);padding:10px 18px;font-size:11px;font-weight:700;letter-spacing:1px;transform:translateY(60px);opacity:0;transition:all .28s;z-index:999;}
+.toast.show{transform:translateY(0);opacity:1;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hl">
+    <img src="../../assets/logos/v3-logo-3d-alpha.png" alt="V3" onerror="this.style.display='none'">
+    <nav class="bc">
+      <a href="../../index.html">Content Studio</a>
+      <span>›</span>
+      <strong>João Lemos — Marca Pessoal</strong>
+    </nav>
+  </div>
+  <div class="hb">@eujoaolemosnetto</div>
+</header>
+
+<div class="wrap">
+
+  <!-- LEFT -->
+  <aside class="lp">
+
+    <div class="tpick">
+      <div class="tp-label">Template</div>
+      <div class="tcard active" data-t="frase" onclick="selectTemplate('frase')">
+        <div class="tc-name">Foto + Frase</div>
+        <div class="tc-desc">Foto sua como fundo. Uma frase. Ouro + escuro.</div>
+      </div>
+      <div class="tcard" data-t="bastidores" onclick="selectTemplate('bastidores')">
+        <div class="tc-name">Bastidores</div>
+        <div class="tc-desc">Você em cena + um insight do dia conectado ao momento.</div>
+      </div>
+      <div class="tcard" data-t="opiniao" onclick="selectTemplate('opiniao')">
+        <div class="tc-name">Opinião</div>
+        <div class="tc-desc">Sem foto. Texto grande. Voz direta — sem filtro.</div>
+      </div>
+    </div>
+
+    <div class="fblock">
+
+      <!-- PHOTO (hidden for opiniao) -->
+      <div id="photo-block">
+        <span class="flabel">Foto</span>
+        <div class="photo-zone" id="photo-zone" onclick="document.getElementById('photo-input').click()">
+          <img class="photo-preview" id="photo-thumb" alt="">
+          <p id="photo-txt">Clique ou arraste sua foto</p>
+          <p class="hint">Mar · Montanha · Surf · Bastidores</p>
+          <input type="file" id="photo-input" accept="image/*">
+        </div>
+        <button class="photo-clear" id="photo-clear" onclick="clearPhoto()">Remover foto</button>
+      </div>
+
+      <!-- FIELDS — dynamic per template -->
+      <div id="fields-container"></div>
+
+    </div>
+
+    <div class="exp-bar">
+      <button class="exp-btn" id="btn-export">Exportar PNG</button>
+      <div class="exp-prog" id="exp-prog">
+        <div class="exp-track"><div class="exp-fill" id="exp-fill"></div></div>
+        <div class="exp-lbl" id="exp-lbl">Gerando...</div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- RIGHT -->
+  <div class="rp">
+    <div class="rp-head">
+      <span class="rp-title">Preview</span>
+      <button class="cp-btn" id="btn-html">Baixar HTML</button>
+    </div>
+
+    <div class="igf">
+      <div class="igh">
+        <div class="iga">
+          <img src="../../assets/logos/v3-symbol-gold-alpha.png" alt="JL" onerror="this.style.display='none'">
+        </div>
+        <div style="flex:1;">
+          <div class="ign">eujoaolemosnetto</div>
+          <div class="igs">João Lemos · V3 Partners</div>
+        </div>
+        <span style="font-size:18px;color:#111;cursor:pointer;">···</span>
+      </div>
+      <div class="igv"><div id="post-preview"></div></div>
+      <div class="igd">
+        <svg class="igico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <svg class="igico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <svg class="igico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        <svg class="igico" style="margin-left:auto;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="igc">
+        <p><strong>eujoaolemosnetto</strong> <span id="caption-preview">João Lemos Netto · Head de Ativos · V3 Partners</span></p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ─────────────────────────────────────────────────────────────────────
+const S = { template:'frase', photo:null, fields:{} };
+
+// ── TEMPLATES ─────────────────────────────────────────────────────────────────
+const TEMPLATES = {
+  frase: {
+    photoRequired: true,
+    fields: [
+      { id:'frase', label:'Frase', type:'textarea', placeholder:'Uma verdade que o mercado não quer ouvir.', rows:3, max:80 },
+      { id:'sub', label:'Linha de apoio (opcional)', type:'text', placeholder:'ex: João Lemos Netto · V3 Partners' }
+    ],
+    render(s, photo) {
+      const bg = photo ? `background:url("${photo}") center/cover no-repeat;` : 'background:#09081A;';
+      const frase = s.frase || 'Uma frase de impacto aqui.';
+      const sub = s.sub || '@eujoaolemosnetto';
+      return `<div style="width:390px;height:488px;${bg}position:relative;overflow:hidden;font-family:'DM Sans',sans-serif;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(9,8,26,.92) 0%,rgba(9,8,26,.3) 50%,rgba(9,8,26,.1) 100%);"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:32px 28px;z-index:2;">
+          <div style="width:32px;height:2px;background:#C9A84C;margin-bottom:16px;"></div>
+          <p style="font-size:26px;font-weight:800;color:#F0ECE4;line-height:1.15;letter-spacing:-.5px;margin-bottom:20px;">${frase}</p>
+          <p style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#C9A84C;">${sub}</p>
+        </div>
+      </div>`;
+    },
+    caption(s){ return s.frase || ''; }
+  },
+
+  bastidores: {
+    photoRequired: true,
+    fields: [
+      { id:'momento', label:'O momento', type:'text', placeholder:'ex: Pós-surf em Ipanema. 6h da manhã.' },
+      { id:'insight', label:'Insight do dia', type:'textarea', placeholder:'O que esse momento te fez pensar sobre mercado, vida ou negócios?', rows:3, max:120 },
+    ],
+    render(s, photo) {
+      const bg = photo ? `background:url("${photo}") center/cover no-repeat;` : 'background:#162744;';
+      const momento = s.momento || 'O momento';
+      const insight = s.insight || 'Insight do dia.';
+      return `<div style="width:390px;height:488px;position:relative;overflow:hidden;font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;">
+        <div style="flex:1;${bg}position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:rgba(9,8,26,.25);"></div>
+          <div style="position:absolute;top:16px;left:20px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(201,168,76,.9);z-index:2;">@eujoaolemosnetto</div>
+        </div>
+        <div style="background:#09081A;padding:20px 24px 24px;flex-shrink:0;">
+          <p style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(201,168,76,.6);margin-bottom:6px;">${momento}</p>
+          <div style="width:24px;height:1px;background:#C9A84C;margin-bottom:10px;"></div>
+          <p style="font-size:14px;color:#F0ECE4;line-height:1.55;margin-bottom:12px;">${insight}</p>
+          <p style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(201,168,76,.5);">João Lemos Netto · V3 Partners</p>
+        </div>
+      </div>`;
+    },
+    caption(s){ return (s.momento ? s.momento + ' — ' : '') + (s.insight || ''); }
+  },
+
+  opiniao: {
+    photoRequired: false,
+    fields: [
+      { id:'opiniao', label:'Opinião', type:'textarea', placeholder:'Uma verdade incômoda. Sem rodeios. Máx 3 linhas.', rows:4, max:140 },
+      { id:'contexto', label:'Contexto (opcional)', type:'text', placeholder:'ex: Mercado de securitização — Abril 2026' },
+    ],
+    render(s) {
+      const op = s.opiniao || 'Uma opinião direta aqui.';
+      const ctx = s.contexto || '';
+      return `<div style="width:390px;height:488px;background:#09081A;position:relative;overflow:hidden;font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;justify-content:center;padding:40px 36px;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#C9A84C,transparent);"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);"></div>
+        <p style="font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(201,168,76,.5);margin-bottom:24px;">@eujoaolemosnetto</p>
+        <p style="font-size:28px;font-weight:800;color:#F0ECE4;line-height:1.2;letter-spacing:-.5px;margin-bottom:24px;">${op}</p>
+        ${ctx ? `<div style="width:32px;height:1px;background:#C9A84C;margin-bottom:12px;"></div><p style="font-size:11px;color:#7A8FA8;line-height:1.5;">${ctx}</p>` : ''}
+        <p style="position:absolute;bottom:28px;right:32px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(201,168,76,.35);">V3 Partners</p>
+      </div>`;
+    },
+    caption(s){ return s.opiniao || ''; }
+  }
+};
+
+// ── PHOTO ─────────────────────────────────────────────────────────────────────
+const photoInput = document.getElementById('photo-input');
+const photoZone  = document.getElementById('photo-zone');
+const photoThumb = document.getElementById('photo-thumb');
+const photoTxt   = document.getElementById('photo-txt');
+const photoClear = document.getElementById('photo-clear');
+
+photoInput.addEventListener('change', () => loadPhoto(photoInput.files[0]));
+photoZone.addEventListener('dragover', e => { e.preventDefault(); photoZone.style.borderColor='rgba(201,168,76,.5)'; });
+photoZone.addEventListener('dragleave', () => photoZone.style.borderColor='');
+photoZone.addEventListener('drop', e => { e.preventDefault(); photoZone.style.borderColor=''; loadPhoto(e.dataTransfer.files[0]); });
+
+function loadPhoto(file) {
+  if (!file || !file.type.startsWith('image/')) return toast('Arquivo inválido');
+  const r = new FileReader();
+  r.onload = e => {
+    S.photo = e.target.result;
+    photoThumb.src = S.photo;
+    photoThumb.classList.add('show');
+    photoTxt.style.display = 'none';
+    photoZone.classList.add('has-photo');
+    photoClear.classList.add('show');
+    renderPost();
+  };
+  r.readAsDataURL(file);
+}
+
+function clearPhoto() {
+  S.photo = null;
+  photoThumb.classList.remove('show');
+  photoTxt.style.display = 'block';
+  photoZone.classList.remove('has-photo');
+  photoClear.classList.remove('show');
+  photoInput.value = '';
+  renderPost();
+}
+
+// ── TEMPLATE SELECT ───────────────────────────────────────────────────────────
+function selectTemplate(id) {
+  S.template = id;
+  document.querySelectorAll('.tcard').forEach(c => c.classList.toggle('active', c.dataset.t === id));
+  const t = TEMPLATES[id];
+  document.getElementById('photo-block').style.display = t.photoRequired ? 'block' : 'none';
+  renderFields();
+  renderPost();
+}
+
+function renderFields() {
+  const t = TEMPLATES[S.template];
+  const c = document.getElementById('fields-container');
+  c.innerHTML = '';
+  if (!t.fields.length) return;
+  const header = document.createElement('span');
+  header.className = 'flabel';
+  header.textContent = 'Conteúdo';
+  c.appendChild(header);
+  t.fields.forEach(f => {
+    const wrap = document.createElement('div');
+    wrap.className = 'f';
+    const lbl = document.createElement('label');
+    lbl.textContent = f.label;
+    wrap.appendChild(lbl);
+    let el;
+    if (f.type === 'textarea') {
+      el = document.createElement('textarea');
+      el.rows = f.rows || 3;
+      el.style.minHeight = (f.rows || 3) * 22 + 'px';
+    } else {
+      el = document.createElement('input');
+      el.type = 'text';
+    }
+    el.placeholder = f.placeholder || '';
+    el.value = S.fields[f.id] || '';
+    el.addEventListener('input', () => { S.fields[f.id] = el.value; debouncedRender(); });
+    wrap.appendChild(el);
+    if (f.max) {
+      const cc = document.createElement('div');
+      cc.className = 'cc';
+      cc.id = 'cc-' + f.id;
+      cc.textContent = `0 / ${f.max}`;
+      el.addEventListener('input', () => { cc.textContent = `${el.value.length} / ${f.max}`; });
+      wrap.appendChild(cc);
+    }
+    c.appendChild(wrap);
+  });
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function renderPost() {
+  const t = TEMPLATES[S.template];
+  const html = t.render(S.fields, S.photo);
+  document.getElementById('post-preview').innerHTML = html;
+  const cap = t.caption(S.fields);
+  document.getElementById('caption-preview').textContent = cap ? cap.slice(0, 80) + (cap.length > 80 ? '...' : '') : 'João Lemos Netto · V3 Partners';
+}
+
+let dbt;
+function debouncedRender() { clearTimeout(dbt); dbt = setTimeout(renderPost, 220); }
+
+// ── EXPORT PNG ────────────────────────────────────────────────────────────────
+document.getElementById('btn-export').addEventListener('click', async () => {
+  if (typeof html2canvas === 'undefined') { toast('html2canvas não carregou'); return; }
+  const btn  = document.getElementById('btn-export');
+  const prog = document.getElementById('exp-prog');
+  const fill = document.getElementById('exp-fill');
+  const lbl  = document.getElementById('exp-lbl');
+  const preview = document.getElementById('post-preview');
+  if (!preview) { toast('Erro: preview não encontrado'); return; }
+  const postEl = preview.firstElementChild;
+  if (!postEl) { toast('Selecione um template primeiro'); return; }
+
+  btn.disabled = true;
+  prog.style.display = 'block';
+  fill.style.width = '20%';
+  lbl.textContent = 'Renderizando...';
+  await new Promise(r => setTimeout(r, 300));
+
+  try {
+    fill.style.width = '60%';
+    const canvas = await html2canvas(postEl, {
+      width: 390,
+      height: 488,
+      scale: 1080 / 390,
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+      backgroundColor: '#09081A',
+      x: 0, y: 0
+    });
+    fill.style.width = '90%';
+    await new Promise(r => setTimeout(r, 100));
+    const a = document.createElement('a');
+    a.download = `joao-${S.template}-${Date.now()}.png`;
+    a.href = canvas.toDataURL('image/png');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    fill.style.width = '100%';
+    lbl.textContent = 'PNG exportado.';
+    toast('PNG baixado — 1080×1350px');
+  } catch(e) {
+    console.error(e);
+    lbl.textContent = 'Erro: ' + e.message;
+    toast('Erro ao exportar');
+  }
+
+  btn.disabled = false;
+  setTimeout(() => { prog.style.display = 'none'; fill.style.width = '0%'; }, 3000);
+});
+
+// ── BAIXAR HTML ───────────────────────────────────────────────────────────────
+document.getElementById('btn-html').addEventListener('click', () => {
+  const t = TEMPLATES[S.template];
+  const postHTML = t.render(S.fields, S.photo);
+  const full = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>João Lemos — ${S.template}</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0;padding:0;}body{background:#09081A;display:flex;align-items:center;justify-content:center;min-height:100vh;}</style>
+</head><body>${postHTML.replace('width:390px;height:488px','width:1080px;height:1350px')}</body></html>`;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([full], {type:'text/html'}));
+  a.download = `joao-${S.template}-${Date.now()}.html`;
+  a.click();
+  toast('HTML baixado');
+});
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+selectTemplate('frase');
+</script>
+</body>
+</html>

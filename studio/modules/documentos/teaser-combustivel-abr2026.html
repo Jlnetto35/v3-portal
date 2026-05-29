@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teaser — Oferta Álcool Combustível · Abr/2026 · V3 Partners</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #09081A;
+  color: #F0ECE4;
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* ── PÁGINA A4 ── */
+.page {
+  width: 794px;
+  min-height: 1123px;
+  margin: 32px auto;
+  background: #09081A;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── HEADER ── */
+.doc-header {
+  background: #111F35;
+  border-bottom: 2px solid #C9A84C;
+  padding: 24px 36px 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.header-logo img {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+.header-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.badge-teaser {
+  font-size: 8px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase;
+  padding: 4px 12px;
+  background: rgba(201,168,76,0.1);
+  border: 1px solid rgba(201,168,76,0.3);
+  color: #C9A84C;
+  display: inline-block;
+}
+.badge-conf {
+  font-size: 7px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  padding: 3px 10px;
+  background: rgba(240,236,228,0.04);
+  border: 1px solid rgba(240,236,228,0.1);
+  color: rgba(240,236,228,0.4);
+  display: inline-block;
+}
+
+/* ── TÍTULO ── */
+.doc-title-block {
+  padding: 28px 36px 24px;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+}
+.doc-eyebrow {
+  font-size: 8px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
+  color: #C9A84C; margin-bottom: 10px; opacity: 0.8;
+}
+.doc-title {
+  font-size: 28px; font-weight: 800; color: #F0ECE4;
+  line-height: 1.1; letter-spacing: -0.5px; margin-bottom: 6px;
+}
+.doc-subtitle {
+  font-size: 11px; color: #7A8FA8; letter-spacing: 0.5px;
+}
+
+/* ── KPI STRIP ── */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+}
+.kpi-item {
+  padding: 16px 20px;
+  border-right: 1px solid rgba(201,168,76,0.08);
+}
+.kpi-item:last-child { border-right: none; }
+.kpi-label {
+  font-size: 7px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  color: #7A8FA8; margin-bottom: 5px;
+}
+.kpi-value {
+  font-size: 13px; font-weight: 700; color: #F0ECE4; line-height: 1.3;
+}
+.kpi-value span { color: #C9A84C; }
+
+/* ── SEÇÃO ── */
+.section {
+  padding: 22px 36px 0;
+}
+.section-last {
+  padding: 22px 36px 28px;
+}
+.section-title {
+  font-size: 8px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
+  color: #7A8FA8; margin-bottom: 14px; padding-bottom: 10px;
+  border-bottom: 1px solid rgba(240,236,228,0.05);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.section-title span {
+  font-size: 8px; color: #243A66; font-weight: 400; letter-spacing: 1px;
+  font-family: monospace;
+}
+
+/* ── TABELA DE PREÇOS ── */
+.price-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.price-table thead tr {
+  background: #111F35;
+}
+.price-table thead th {
+  font-size: 7px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
+  color: #C9A84C; padding: 9px 12px; text-align: left;
+  border-bottom: 1px solid rgba(201,168,76,0.2);
+}
+.price-table thead th:first-child { padding-left: 14px; }
+.price-table thead th:last-child { text-align: right; padding-right: 14px; }
+
+.price-table tbody tr {
+  border-bottom: 1px solid rgba(240,236,228,0.04);
+  transition: background 0.1s;
+}
+.price-table tbody tr:hover { background: rgba(17,31,53,0.4); }
+.price-table tbody td {
+  padding: 8px 12px; color: #7A8FA8; vertical-align: middle;
+}
+.price-table tbody td:first-child {
+  padding-left: 14px; color: #F0ECE4; font-weight: 500; font-size: 11px;
+}
+.price-table tbody td:last-child {
+  text-align: right; padding-right: 14px;
+}
+
+/* Preço */
+.price-val {
+  font-size: 13px; font-weight: 700; color: #F0ECE4;
+  font-family: 'DM Sans', sans-serif;
+}
+.price-val.range { color: #E8C97A; }
+.price-consult {
+  font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: #243A66; padding: 2px 8px; border: 1px solid rgba(36,58,102,0.4);
+  background: rgba(36,58,102,0.15);
+}
+
+/* Produto badge */
+.prod-badge {
+  font-size: 7px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 2px 7px; display: inline-block;
+}
+.prod-ah { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); color: #C9A84C; }
+.prod-aa { background: rgba(232,201,122,0.08); border: 1px solid rgba(232,201,122,0.25); color: #E8C97A; }
+
+/* Modalidade badge */
+.mod-badge {
+  font-size: 7px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  padding: 2px 7px; color: #7A8FA8;
+  background: rgba(122,143,168,0.07); border: 1px solid rgba(122,143,168,0.12);
+  white-space: nowrap;
+}
+.mod-cif { color: #F0ECE4; background: rgba(36,58,102,0.25); border-color: rgba(36,58,102,0.4); }
+.mod-dif { color: #C9A84C; background: rgba(201,168,76,0.06); border-color: rgba(201,168,76,0.15); }
+
+/* Grupo na tabela */
+.group-row td {
+  background: rgba(17,31,53,0.6) !important;
+  font-size: 7px !important; font-weight: 700 !important;
+  letter-spacing: 3px !important; text-transform: uppercase !important;
+  color: #7A8FA8 !important; padding: 6px 14px !important;
+  border-top: 1px solid rgba(201,168,76,0.06) !important;
+}
+
+/* ── GLOSSÁRIO ── */
+.gloss-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.gloss-item {
+  background: #111F35;
+  border: 1px solid rgba(201,168,76,0.08);
+  border-left: 2px solid rgba(201,168,76,0.3);
+  padding: 10px 12px;
+}
+.gloss-term {
+  font-size: 9px; font-weight: 800; color: #C9A84C;
+  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px;
+}
+.gloss-def {
+  font-size: 10px; color: #7A8FA8; line-height: 1.5;
+}
+
+/* ── CONDIÇÕES ── */
+.cond-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.cond-item {
+  background: #111F35;
+  border: 1px solid rgba(201,168,76,0.08);
+  padding: 12px 14px;
+}
+.cond-label {
+  font-size: 7px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  color: #7A8FA8; margin-bottom: 4px;
+}
+.cond-val {
+  font-size: 11px; color: #F0ECE4; font-weight: 500; line-height: 1.45;
+}
+.cond-val strong { color: #C9A84C; }
+
+/* ALERTA */
+.alert-bar {
+  background: rgba(201,168,76,0.06);
+  border: 1px solid rgba(201,168,76,0.15);
+  border-left: 3px solid #C9A84C;
+  padding: 10px 14px;
+  font-size: 10px;
+  color: #7A8FA8;
+  line-height: 1.6;
+}
+.alert-bar strong { color: #F0ECE4; }
+
+/* ── FOOTER ── */
+.doc-footer {
+  margin-top: auto;
+  background: #111F35;
+  border-top: 2px solid rgba(201,168,76,0.15);
+  padding: 16px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.footer-contact { font-size: 10px; color: #7A8FA8; line-height: 1.7; }
+.footer-contact strong { color: #F0ECE4; display: block; font-size: 11px; margin-bottom: 1px; }
+.footer-contact a { color: #C9A84C; text-decoration: none; }
+.footer-slogan {
+  font-size: 8px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(201,168,76,0.35);
+  text-align: right;
+}
+.footer-disclaimer {
+  font-size: 8px; color: rgba(122,143,168,0.4); line-height: 1.5;
+  margin-top: 3px; max-width: 260px; text-align: right;
+}
+
+/* ── SEPARADOR ── */
+.rule { height: 1px; background: rgba(201,168,76,0.08); margin: 0 36px; }
+
+/* ── PRINT ── */
+@media print {
+  body { background: #09081A; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { margin: 0; width: 100%; min-height: 297mm; }
+  @page { size: A4; margin: 0; }
+}
+
+/* ── SCREEN WRAPPER ── */
+@media screen {
+  body { padding: 24px 0 48px; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="header-logo">
+      <img src="../../assets/logos/v3-logo-flat-gold-alpha.png" alt="V3 Partners">
+    </div>
+    <div class="header-right">
+      <span class="badge-teaser">Teaser Cego</span>
+      <span class="badge-conf">Confidencial · Uso Restrito</span>
+    </div>
+  </div>
+
+  <!-- TÍTULO -->
+  <div class="doc-title-block">
+    <div class="doc-eyebrow">Originação de Ativos · V3 Partners · Vertical Commodities</div>
+    <div class="doc-title">Oferta Estruturada<br>Álcool Combustível</div>
+    <div class="doc-subtitle">Centro-Sul Brasil &nbsp;·&nbsp; Referência 14 de Abril de 2026 &nbsp;·&nbsp; Cotações do dia — sujeitas a confirmação</div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-strip">
+    <div class="kpi-item">
+      <div class="kpi-label">Produtos</div>
+      <div class="kpi-value"><span>AH</span> &amp; <span>AA</span></div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-label">Praças</div>
+      <div class="kpi-value">SP · MG · GO · PR · MS</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-label">Faixa de Preço</div>
+      <div class="kpi-value"><span>R$ 3,15</span> – <span>3,55</span>/L</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-label">Modalidades</div>
+      <div class="kpi-value" style="font-size:11px;">FOB · CIF · BP · CANEX</div>
+    </div>
+  </div>
+
+  <!-- TABELA -->
+  <div class="section" style="padding-bottom: 22px;">
+    <div class="section-title">
+      Precificação por Praça e Produto
+      <span>R$/litro · ref. 14/04/2026</span>
+    </div>
+
+    <table class="price-table">
+      <thead>
+        <tr>
+          <th>Praça / Região</th>
+          <th>UF</th>
+          <th>Produto</th>
+          <th>Modalidade</th>
+          <th>Preço (R$/L)</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- SP INTERIOR -->
+        <tr class="group-row"><td colspan="5">Interior de São Paulo</td></tr>
+
+        <tr>
+          <td>Ribeirão Preto</td>
+          <td>SP</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge">FOB Usina</span></td>
+          <td><span class="price-val range">3,36 – 3,50</span></td>
+        </tr>
+        <tr>
+          <td>Araçatuba</td>
+          <td>SP</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge">FOB Usina</span></td>
+          <td><span class="price-val range">3,32 – 3,40</span></td>
+        </tr>
+        <tr>
+          <td>Presidente Prudente</td>
+          <td>SP</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge">FOB Usina</span></td>
+          <td><span class="price-consult">A consultar</span></td>
+        </tr>
+        <tr>
+          <td>Interior SP</td>
+          <td>SP</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge">Base Price (BP)</span></td>
+          <td><span class="price-val">3,30</span></td>
+        </tr>
+        <tr>
+          <td>Interior SP — Diferido</td>
+          <td>SP</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge mod-dif">Diferido</span></td>
+          <td><span class="price-val">3,43</span></td>
+        </tr>
+        <tr>
+          <td>Interior SP</td>
+          <td>SP</td>
+          <td><span class="prod-badge prod-aa">AA</span></td>
+          <td><span class="mod-badge">Anidro FOB</span></td>
+          <td><span class="price-val">3,43</span></td>
+        </tr>
+        <tr>
+          <td>Grande SP — Bombeio</td>
+          <td>SP</td>
+          <td><span class="prod-badge prod-aa">AA</span></td>
+          <td><span class="mod-badge mod-cif">CIF CANEX</span></td>
+          <td><span class="price-val">3,50</span></td>
+        </tr>
+
+        <!-- SUL -->
+        <tr class="group-row"><td colspan="5">Sul — CIF Destino (via produtor regional)</td></tr>
+
+        <tr>
+          <td>Esteio</td>
+          <td>RS</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge mod-cif">CIF Porto</span></td>
+          <td><span class="price-val">3,53</span></td>
+        </tr>
+        <tr>
+          <td>Itajaí</td>
+          <td>SC</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge mod-cif">CIF Porto</span></td>
+          <td><span class="price-val">3,49</span></td>
+        </tr>
+        <tr>
+          <td>Araucária</td>
+          <td>PR</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge mod-cif">CIF Porto</span></td>
+          <td><span class="price-val">3,42</span></td>
+        </tr>
+        <tr>
+          <td>Sarandi / Maringá</td>
+          <td>PR</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge mod-cif">CIF</span></td>
+          <td><span class="price-val">3,41</span></td>
+        </tr>
+        <tr>
+          <td>Cascavel</td>
+          <td>PR</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge mod-cif">CIF</span></td>
+          <td><span class="price-val">3,40</span></td>
+        </tr>
+        <tr>
+          <td>Interior PR</td>
+          <td>PR</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge">FOB</span></td>
+          <td><span class="price-val">3,25</span></td>
+        </tr>
+
+        <!-- CENTRO-OESTE / MINAS -->
+        <tr class="group-row"><td colspan="5">Centro-Oeste e Minas Gerais</td></tr>
+
+        <tr>
+          <td>Minas Gerais — Dentro MG</td>
+          <td>MG</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge">CANEX Dentro</span></td>
+          <td><span class="price-val range">3,40 – 3,48</span></td>
+        </tr>
+        <tr>
+          <td>Minas Gerais — Fora MG</td>
+          <td>MG</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge">CANEX Fora</span></td>
+          <td><span class="price-val">3,45</span></td>
+        </tr>
+        <tr>
+          <td>Mato Grosso do Sul</td>
+          <td>MS</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge">Base Price (BP)</span></td>
+          <td><span class="price-val">3,15</span></td>
+        </tr>
+        <tr>
+          <td>Mato Grosso do Sul</td>
+          <td>MS</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge">CANEX</span></td>
+          <td><span class="price-val">3,35</span></td>
+        </tr>
+        <tr>
+          <td>Mato Grosso do Sul</td>
+          <td>MS</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge">FOB Usina</span></td>
+          <td><span class="price-val range">3,15 – 3,23</span></td>
+        </tr>
+        <tr>
+          <td>Mato Grosso do Sul</td>
+          <td>MS</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge">FOB Usina</span></td>
+          <td><span class="price-consult">A consultar</span></td>
+        </tr>
+        <tr>
+          <td>Goiás — Dentro GO</td>
+          <td>GO</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge">CANEX Dentro</span></td>
+          <td><span class="price-consult">A consultar</span></td>
+        </tr>
+        <tr>
+          <td>Goiás — Fora GO</td>
+          <td>GO</td>
+          <td><span class="prod-badge prod-ah">AH</span></td>
+          <td><span class="mod-badge">CANEX Fora</span></td>
+          <td><span class="price-consult">A consultar</span></td>
+        </tr>
+        <tr>
+          <td>Goiás</td>
+          <td>GO</td>
+          <td><span class="prod-badge prod-aa">AA</span></td>
+          <td><span class="mod-badge">Anidro FOB</span></td>
+          <td><span class="price-val">3,55</span></td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- GLOSSÁRIO -->
+  <div class="section" style="padding-top:20px; padding-bottom:20px;">
+    <div class="section-title">Glossário de Produtos e Modalidades</div>
+    <div class="gloss-grid">
+      <div class="gloss-item">
+        <div class="gloss-term">AH — Álcool Hidratado</div>
+        <div class="gloss-def">Etanol hidratado combustível (EHC). Teor alcoólico mínimo 93,2° INPM. Uso direto em veículos flex.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">AA — Álcool Anidro</div>
+        <div class="gloss-def">Etanol anidro combustível (EAC). Teor mínimo 99,3° INPM. Adicionado à gasolina (mistura obrigatória).</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">FOB Usina</div>
+        <div class="gloss-def">Free On Board. Frete por conta e risco do comprador a partir da planta de origem.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">CIF</div>
+        <div class="gloss-def">Cost, Insurance, Freight. Preço inclui frete e seguro até o destino indicado (porto ou terminal).</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">BP — Base Price</div>
+        <div class="gloss-def">Preço base de referência de mercado, sem tributação diferenciada. Padrão para operações no Estado de SP.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">CANEX / Diferido</div>
+        <div class="gloss-def">CANEX = canal de exportação (regime especial). Diferido = ICMS postergado na cadeia (regime SP).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- CONDIÇÕES COMERCIAIS -->
+  <div class="section-last">
+    <div class="section-title" style="margin-top:2px;">Condições Comerciais</div>
+    <div class="cond-grid">
+      <div class="cond-item">
+        <div class="cond-label">Qualificação do Comprador</div>
+        <div class="cond-val"><strong>CNPJ ativo obrigatório</strong> para acesso à identificação dos fornecedores e início de negociação.</div>
+      </div>
+      <div class="cond-item">
+        <div class="cond-label">Validade das Cotações</div>
+        <div class="cond-val">Preços de referência do dia <strong>14/04/2026</strong>. Cotações spot — sujeitas a confirmação no momento do fechamento.</div>
+      </div>
+      <div class="cond-item">
+        <div class="cond-label">Volume</div>
+        <div class="cond-val">Lotes mínimos e calendário de entrega a negociar conforme praça e modalidade.</div>
+      </div>
+      <div class="cond-item">
+        <div class="cond-label">Pagamento</div>
+        <div class="cond-val">Condições a negociar com o fornecedor. Estruturas de prazo disponíveis para compradores qualificados.</div>
+      </div>
+    </div>
+    <div class="alert-bar">
+      <strong>Este documento não identifica os fornecedores.</strong> A identificação completa das usinas, localização e condições de contrato é fornecida exclusivamente após qualificação do comprador (CNPJ ativo + análise de perfil). Intermediação e estruturação: <strong>V3 Partners</strong>.
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div class="footer-contact">
+      <strong>V3 Partners Soluções Ltda</strong>
+      Para qualificação e acesso completo ao deal:
+      <a href="mailto:joao@v3partners.com.br">joao@v3partners.com.br</a> &nbsp;·&nbsp; +55 21 98993-7178
+      <br>Rua Visconde de Pirajá, 414, Sala 718 — Ipanema, Rio de Janeiro, RJ
+    </div>
+    <div>
+      <div class="footer-slogan">Structured to Perform</div>
+      <div class="footer-disclaimer">Documento confidencial. Proibida reprodução ou distribuição sem autorização da V3 Partners.</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
