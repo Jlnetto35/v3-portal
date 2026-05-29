@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assinatura de Email · V3 Content Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { font-family: 'DM Sans', sans-serif; background: #09081A; color: #F0ECE4; min-height: 100vh; }
+
+/* HEADER */
+header {
+  padding: 18px 40px;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(9,8,26,0.97);
+}
+.nav-left { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+.nav-left img { height: 36px; width: auto; }
+.nav-div { width: 1px; height: 20px; background: rgba(201,168,76,0.18); }
+.nav-lbl { font-size: 9px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #C9A84C; }
+.nav-sub { font-size: 8px; color: #7A8FA8; letter-spacing: 1px; margin-top: 2px; }
+.bc { font-size: 10px; color: #7A8FA8; }
+.bc a { color: rgba(201,168,76,0.55); text-decoration: none; }
+.bc a:hover { color: #C9A84C; }
+.bc span { margin: 0 7px; color: #1e3158; }
+
+/* WORKSPACE */
+.workspace {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  min-height: calc(100vh - 65px);
+}
+
+/* FORM PANEL */
+.fp {
+  background: #0b1525;
+  border-right: 1px solid rgba(201,168,76,0.07);
+  padding: 28px 22px 48px;
+  overflow-y: auto;
+}
+.fp-lbl {
+  font-size: 9px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
+  color: #7A8FA8; margin-bottom: 22px; padding-bottom: 10px;
+  border-bottom: 1px solid rgba(240,236,228,0.05);
+}
+.fld { margin-bottom: 16px; }
+.fld label {
+  display: block; font-size: 9px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: rgba(201,168,76,0.75); margin-bottom: 7px;
+}
+.fld label small { font-weight: 400; color: rgba(122,143,168,0.5); letter-spacing: 1px; font-size: 9px; text-transform: none; }
+.fld input {
+  width: 100%; background: rgba(9,8,26,0.7);
+  border: 1px solid rgba(201,168,76,0.12);
+  border-bottom-color: rgba(201,168,76,0.22);
+  color: #F0ECE4; font-family: 'DM Sans', sans-serif; font-size: 13px;
+  font-weight: 400; padding: 10px 12px; outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.fld input:focus { border-color: rgba(201,168,76,0.4); background: rgba(17,31,53,0.5); }
+.fld input::placeholder { color: rgba(122,143,168,0.35); }
+
+.fsep {
+  font-size: 9px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(36,58,102,0.7); margin: 22px 0 14px;
+  padding-top: 16px; border-top: 1px solid rgba(240,236,228,0.04);
+}
+
+/* CARGO */
+.cg { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.cb {
+  background: rgba(9,8,26,0.6); border: 1px solid rgba(201,168,76,0.1);
+  color: #7A8FA8; font-family: 'DM Sans', sans-serif;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.3px;
+  padding: 9px 8px; cursor: pointer; text-align: left; line-height: 1.4;
+  transition: all 0.15s; text-transform: uppercase;
+}
+.cb:hover { border-color: rgba(201,168,76,0.25); color: #F0ECE4; }
+.cb.on { background: rgba(201,168,76,0.07); border-color: rgba(201,168,76,0.32); color: #C9A84C; }
+
+/* AÇÕES */
+.acts { margin-top: 28px; display: flex; flex-direction: column; gap: 8px; }
+.bg {
+  background: #C9A84C; color: #09081A; border: none;
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 800;
+  letter-spacing: 3px; text-transform: uppercase; padding: 14px 20px;
+  cursor: pointer; transition: background 0.15s; width: 100%;
+}
+.bg:hover { background: #E8C97A; }
+.bg:disabled { opacity: 0.55; cursor: not-allowed; }
+.bo {
+  background: transparent; color: #C9A84C; border: 1px solid rgba(201,168,76,0.25);
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 700;
+  letter-spacing: 2.5px; text-transform: uppercase; padding: 12px 20px;
+  cursor: pointer; transition: all 0.15s; width: 100%;
+}
+.bo:hover { background: rgba(201,168,76,0.05); border-color: rgba(201,168,76,0.42); }
+.bgh {
+  background: transparent; color: rgba(122,143,168,0.55);
+  border: 1px solid rgba(122,143,168,0.1);
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; padding: 11px 20px;
+  cursor: pointer; transition: all 0.15s; width: 100%;
+}
+.bgh:hover { color: #7A8FA8; }
+
+/* PREVIEW PANEL */
+.pp {
+  padding: 40px 48px 48px;
+  display: flex; flex-direction: column; gap: 32px;
+}
+.pp-lbl {
+  font-size: 9px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
+  color: #7A8FA8; padding-bottom: 12px;
+  border-bottom: 1px solid rgba(240,236,228,0.05);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.pp-lbl span { font-size: 9px; color: #1e3158; font-weight: 400; letter-spacing: 1px; font-family: monospace; }
+
+/* CANVAS ÁREA */
+.sig-stage {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* ASSINATURA — BRANDBOOK SEC. 12 — 600 × 200 px */
+#sig {
+  width: 600px;
+  height: 200px;
+  background: #111F35;
+  border-top: 2px solid #C9A84C;
+  border-left: 1px solid rgba(201,168,76,0.14);
+  border-right: 1px solid rgba(201,168,76,0.14);
+  border-bottom: 1px solid rgba(201,168,76,0.14);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* Coluna logo */
+.sig-logo-col {
+  width: 208px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0 14px;
+}
+.sig-logo-col img {
+  width: 180px;
+  height: auto;
+  display: block;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Separador vertical */
+.sig-sep {
+  width: 2px;
+  height: 116px;
+  background: #C9A84C;
+  flex-shrink: 0;
+}
+
+/* Coluna texto */
+.sig-text-col {
+  flex: 1;
+  min-width: 0;
+  padding: 0 24px 0 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#sig-nome {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #F0ECE4;
+  line-height: 1.25;
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#sig-cargo {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #C9A84C;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#sig-dados {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: #7A8FA8;
+  line-height: 1.8;
+  /* FIX: white-space: nowrap previne quebra de URL na exportação PNG.
+     word-break/overflow-wrap removidos — causavam quebra mid-URL no html2canvas
+     quando DM Sans ainda não tinha carregado (fallback font wider). */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* HTML OUTPUT */
+.html-out {
+  display: none;
+  background: #0b1525;
+  border: 1px solid rgba(201,168,76,0.08);
+  max-width: 680px;
+}
+.html-out.open { display: block; }
+.html-out-top {
+  padding: 11px 16px;
+  border-bottom: 1px solid rgba(201,168,76,0.07);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.html-out-lbl { font-size: 9px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #7A8FA8; }
+.copy-btn {
+  background: transparent; border: none; color: #C9A84C;
+  font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; cursor: pointer; padding: 0;
+}
+.copy-btn:hover { opacity: 0.65; }
+.html-out pre {
+  font-size: 9px; color: rgba(122,143,168,0.6); padding: 14px 16px;
+  overflow: auto; max-height: 180px; line-height: 1.55;
+  white-space: pre-wrap; word-break: break-all; font-family: 'Courier New', monospace;
+}
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 28px; right: 28px;
+  background: #162744; border: 1px solid rgba(201,168,76,0.18);
+  border-left: 2px solid #C9A84C;
+  padding: 12px 18px; font-size: 10px; color: #F0ECE4; z-index: 999;
+  opacity: 0; transform: translateY(8px); transition: all 0.25s;
+  pointer-events: none;
+}
+.toast.on { opacity: 1; transform: translateY(0); }
+
+/* NOTA FIXA */
+.fixed-note {
+  font-size: 9px; color: rgba(122,143,168,0.4); letter-spacing: 0.5px;
+  margin-top: 6px; line-height: 1.6; padding-left: 2px;
+}
+.fixed-note strong { color: rgba(201,168,76,0.4); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../../index.html" class="nav-left">
+    <img src="../../assets/logos/v3-logo-3d-alpha.png" alt="V3 Partners">
+    <div class="nav-div"></div>
+    <div>
+      <div class="nav-lbl">Content Studio</div>
+      <div class="nav-sub">V3 Partners · Uso Interno</div>
+    </div>
+  </a>
+  <div class="bc">
+    <a href="../../index.html">Studio</a>
+    <span>/</span>
+    Assinatura de Email
+  </div>
+</header>
+
+<div class="workspace">
+
+  <!-- FORMULÁRIO -->
+  <div class="fp">
+    <div class="fp-lbl">Dados da Assinatura</div>
+
+    <div class="fld">
+      <label>Nome Completo</label>
+      <input type="text" id="f-nome" placeholder="João Lemos Netto" oninput="render()">
+    </div>
+
+    <div class="fld">
+      <label>Cargo</label>
+      <div class="cg">
+        <button class="cb on" data-v="Sócio · Head de Ativos" onclick="pickCargo(this)">Sócio · Head de Ativos</button>
+        <button class="cb" data-v="Sócio · Head Financeiro" onclick="pickCargo(this)">Sócio · Head Financeiro</button>
+        <button class="cb" data-v="Sócio · Compliance" onclick="pickCargo(this)">Sócio · Compliance</button>
+        <button class="cb" data-v="Analista M&A" onclick="pickCargo(this)">Analista M&amp;A</button>
+        <button class="cb" data-v="Analista de Ativos" onclick="pickCargo(this)">Analista de Ativos</button>
+        <button class="cb" data-v="Partner V3" onclick="pickCargo(this)">Partner V3</button>
+      </div>
+    </div>
+
+    <div class="fld">
+      <label>Cargo personalizado <small>— sobrescreve o acima</small></label>
+      <input type="text" id="f-cargo" placeholder="Gestora de Investimentos" oninput="render()">
+    </div>
+
+    <div class="fsep">Dados Institucionais</div>
+
+    <div style="font-size:11px;color:#7A8FA8;line-height:1.8;padding:10px 12px;border-left:2px solid #C9A84C;background:rgba(201,168,76,0.03);margin-bottom:6px;">
+      V3 Partners Soluções Ltda<br>
+      Rua Visconde de Pirajá, 414, Sala 718 — Ipanema, RJ
+    </div>
+    <div class="fixed-note" style="margin-bottom:16px;"><strong>Fixo</strong> — Brandbook Sec. 12</div>
+
+    <div class="fld">
+      <label>Telefone</label>
+      <input type="text" id="f-tel" placeholder="+55 21 98993-7178" oninput="render()">
+    </div>
+
+    <div class="fld">
+      <label>LinkedIn <small>— opcional</small></label>
+      <input type="text" id="f-linkedin" placeholder="linkedin.com/in/joaolemosnetto" oninput="render()">
+    </div>
+
+    <div class="acts">
+      <button class="bg" id="btn-png" onclick="baixarPNG()">Baixar PNG — 600 × 200</button>
+      <button class="bo" onclick="gerarHTML()">Gerar HTML · Gmail / Outlook</button>
+      <button class="bgh" onclick="location.href='../../index.html'">Voltar ao Studio</button>
+    </div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="pp">
+    <div class="pp-lbl">
+      Preview · Tamanho Real
+      <span>600 × 200 px · flat-gold-alpha · DM Sans</span>
+    </div>
+
+    <div class="sig-stage">
+      <div id="sig">
+        <div class="sig-logo-col">
+          <img src="data:image/png;base64,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" alt="V3 Partners Logo">
+        </div>
+        <div class="sig-sep"></div>
+        <div class="sig-text-col">
+          <div id="sig-nome">João Lemos Netto</div>
+          <div id="sig-cargo">SÓCIO · HEAD DE ATIVOS</div>
+          <div id="sig-dados">
+            +55 21 98993-7178<br>
+            linkedin.com/in/joaolemosnetto
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="html-out" id="html-out">
+      <div class="html-out-top">
+        <span class="html-out-lbl">HTML — Gmail / Outlook</span>
+        <button class="copy-btn" onclick="copiarHTML()">Copiar HTML</button>
+      </div>
+      <pre id="html-pre"></pre>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function render() {
+  const nome = document.getElementById('f-nome').value || 'João Lemos Netto';
+  const cargoCustom = document.getElementById('f-cargo').value;
+  const cargo = cargoCustom || document.querySelector('.cb.on').dataset.v;
+  const tel = document.getElementById('f-tel').value || '+55 21 98993-7178';
+  const linkedin = document.getElementById('f-linkedin').value || 'linkedin.com/in/joaolemosnetto';
+
+  document.getElementById('sig-nome').textContent = nome;
+  document.getElementById('sig-cargo').textContent = cargo.toUpperCase();
+  document.getElementById('sig-dados').innerHTML =
+    tel + '<br>' + linkedin;
+}
+
+function pickCargo(btn) {
+  document.querySelectorAll('.cb').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('f-cargo').value = '';
+  render();
+}
+
+function baixarPNG() {
+  const btn = document.getElementById('btn-png');
+  btn.disabled = true;
+  btn.textContent = 'Gerando…';
+
+  const sig = document.getElementById('sig');
+
+  // FIX: aguarda DM Sans carregar completamente antes de capturar.
+  // Sem isso, html2canvas usa fonte fallback (Arial/sans-serif) com métricas
+  // diferentes → texto vaza o container → word-break quebra a URL no meio.
+  document.fonts.ready.then(() => {
+    html2canvas(sig, {
+      backgroundColor: null,
+      scale: 2,
+      logging: false,
+      useCORS: true,
+    }).then(canvas => {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = 'assinatura-v3-600x200.png';
+      link.click();
+      showToast('PNG baixado — 1200 × 400 px (@2x)');
+    }).catch(() => {
+      showToast('Erro ao gerar PNG. Tente novamente.');
+    }).finally(() => {
+      btn.disabled = false;
+      btn.textContent = 'Baixar PNG — 600 × 200';
+    });
+  });
+}
+
+function gerarHTML() {
+  const nome = document.getElementById('f-nome').value || 'João Lemos Netto';
+  const cargoCustom = document.getElementById('f-cargo').value;
+  const cargo = cargoCustom || document.querySelector('.cb.on').dataset.v;
+  const tel = document.getElementById('f-tel').value || '+55 21 98993-7178';
+  const linkedin = document.getElementById('f-linkedin').value || 'linkedin.com/in/joaolemosnetto';
+
+  // FIX: removido word-break:break-word do template de email —
+  // causava quebra de URL em clients de email com renderização inconsistente.
+  const htmlTemplate = `<table cellpadding="0" cellspacing="0" border="0" style="font-family:'DM Sans',Arial,sans-serif;background:#111F35;width:600px;border-top:2px solid #C9A84C;border-left:1px solid rgba(201,168,76,0.14);border-right:1px solid rgba(201,168,76,0.14);border-bottom:1px solid rgba(201,168,76,0.14);">
+  <tr>
+    <td width="208" height="200" style="padding:0 14px;vertical-align:middle;text-align:center;">
+      <img src="[LOGO_URL]" alt="V3 Partners" width="180" style="display:block;border:0;outline:none;text-decoration:none;">
+    </td>
+    <td width="2" height="200" style="background:#C9A84C;"></td>
+    <td height="200" style="padding:0 24px 0 22px;vertical-align:middle;">
+      <p style="font-family:'DM Sans',Arial,sans-serif;font-size:15px;font-weight:600;color:#F0ECE4;line-height:1.25;margin:0 0 4px 0;white-space:nowrap;">${nome}</p>
+      <p style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;font-weight:700;color:#C9A84C;text-transform:uppercase;letter-spacing:0.12em;margin:0 0 12px 0;white-space:nowrap;">${cargo.toUpperCase()}</p>
+      <p style="font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:400;color:#7A8FA8;line-height:1.8;margin:0;white-space:nowrap;">
+        ${tel}<br>${linkedin}
+      </p>
+    </td>
+  </tr>
+</table>`;
+
+  const out = document.getElementById('html-out');
+  out.classList.toggle('open');
+  document.getElementById('html-pre').textContent = htmlTemplate;
+}
+
+function copiarHTML() {
+  const txt = document.getElementById('html-pre').textContent;
+  navigator.clipboard.writeText(txt).then(() => showToast('HTML copiado!'));
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('on');
+  setTimeout(() => toast.classList.remove('on'), 3000);
+}
+
+render();
+</script>
+
+</body>
+</html>
